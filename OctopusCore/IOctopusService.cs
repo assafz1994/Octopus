@@ -1,7 +1,9 @@
-﻿namespace OctopusCore
+﻿using System.Threading.Tasks;
+
+namespace OctopusCore
 {
     public interface IOctopusService
     {
-        void ExecuteQuery(string query);//todo change void to result
+        Task ExecuteQuery(string query);//todo change void to result
     }
 }

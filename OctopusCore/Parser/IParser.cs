@@ -1,7 +1,9 @@
-﻿namespace OctopusCore.Parser
+﻿using System.Threading.Tasks;
+
+namespace OctopusCore.Parser
 {
     public interface IParser
     {
-        QueryInfo ParseQuery(string query);
+        Task<QueryInfo> ParseQuery(string query);
     }
 }

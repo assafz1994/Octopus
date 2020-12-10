@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading.Tasks;
 using OctopusCore.Analyzer;
 using OctopusCore.Executor;
 using OctopusCore.Parser;
@@ -20,12 +21,12 @@ namespace OctopusCore
             _executor = executor;
         }
 
-        public void ExecuteQuery(string query)
+        public async Task ExecuteQuery(string query)
         {
             //todo 
-            var queryInfo = _parser.ParseQuery(query);
-            var workPlan = _analyzer.AnalyzeQuery(queryInfo);
-            var result = _executor.ExecuteWorkPlan(workPlan);
+            var queryInfo = await _parser.ParseQuery(query);
+            var workPlan = await _analyzer.AnalyzeQuery(queryInfo);
+            var result = await _executor.ExecuteWorkPlan(workPlan);
 
             //todo return execution result 
             throw new NotImplementedException();

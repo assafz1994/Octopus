@@ -1,10 +1,11 @@
-﻿using OctopusCore.Analyzer;
+﻿using System.Threading.Tasks;
+using OctopusCore.Analyzer;
 using OctopusCore.Contract;
 
 namespace OctopusCore.Executor
 {
     public interface IExecutor
     {
-        ExecutionResult ExecuteWorkPlan(WorkPlan workPlan);
+        Task<ExecutionResult> ExecuteWorkPlan(WorkPlan workPlan);
     }
 }

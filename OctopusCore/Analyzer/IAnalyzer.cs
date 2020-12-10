@@ -1,9 +1,10 @@
-﻿using OctopusCore.Parser;
+﻿using System.Threading.Tasks;
+using OctopusCore.Parser;
 
 namespace OctopusCore.Analyzer
 {
     public interface IAnalyzer
     {
-        WorkPlan AnalyzeQuery(QueryInfo queryInfo);
+        Task<WorkPlan> AnalyzeQuery(QueryInfo queryInfo);
     }
 }
