@@ -4,10 +4,12 @@ grammar OctopusQL;
  * Parser Rules
  */
 
-r                   : select | insert;
+r                   : select | insert | delete;
 select              : FROM entity entityRep (whereClause)* (selectClause | aggregateClause) ;
 insert : (insertClause)+ INSERT entityReps ;
+delete : (deleteClause)+ DELETE entityReps ;
 insertClause : ENTITY entity COLON entityRep '(' (assignments | select) ')' ;
+deleteClause : ENTITY entity COLON entityRep '(' select ')' ;
 assignments : assignmentList+=assignment (',' assignmentList+=assignment)* ;
 assignment : field EQUALS value ;
 whereClause         : PIPELINE WHERE entityRep fieldsWithDot COMPARATOR value ;
@@ -36,6 +38,7 @@ WHERE : 'where' | 'WHERE' | 'Where' ;
 INCLUDE : 'include' | 'INCLUDE' | 'Include' ;
 ENTITY : 'entity' | 'ENTITY' | 'Entity' ;
 INSERT : 'insert' | 'INSERT' | 'Insert' ;
+DELETE : 'delete' | 'DELETE' | 'Delete' ;
 PIPELINE : '|' ;
 COLON : ':' ;
 ISEQUALS : '==' ;

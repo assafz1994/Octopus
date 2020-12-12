@@ -37,6 +37,16 @@ public interface OctopusQLListener extends ParseTreeListener {
 	 */
 	void exitInsert(OctopusQLParser.InsertContext ctx);
 	/**
+	 * Enter a parse tree produced by {@link OctopusQLParser#delete}.
+	 * @param ctx the parse tree
+	 */
+	void enterDelete(OctopusQLParser.DeleteContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link OctopusQLParser#delete}.
+	 * @param ctx the parse tree
+	 */
+	void exitDelete(OctopusQLParser.DeleteContext ctx);
+	/**
 	 * Enter a parse tree produced by {@link OctopusQLParser#insertClause}.
 	 * @param ctx the parse tree
 	 */
@@ -46,6 +56,16 @@ public interface OctopusQLListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitInsertClause(OctopusQLParser.InsertClauseContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link OctopusQLParser#deleteClause}.
+	 * @param ctx the parse tree
+	 */
+	void enterDeleteClause(OctopusQLParser.DeleteClauseContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link OctopusQLParser#deleteClause}.
+	 * @param ctx the parse tree
+	 */
+	void exitDeleteClause(OctopusQLParser.DeleteClauseContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link OctopusQLParser#assignments}.
 	 * @param ctx the parse tree
