@@ -4,17 +4,24 @@ grammar OctopusQL;
  * Parser Rules
  */
 
-r                   : select ;
+r                   : select | insert;
 select              : FROM entity entityRep (whereClause)* (selectClause | aggregateClause) ;
+insert : (insertClause)+ INSERT entityReps ;
+insertClause : ENTITY entity COLON entityRep '(' (assignments | select) ')' ;
+assignments : assignmentList+=assignment (',' assignmentList+=assignment)* ;
+assignment : field EQUALS value ;
 whereClause         : PIPELINE WHERE entityRep fieldsWithDot COMPARATOR value ;
 fieldsWithDot   : ('.' el+=field)+ ;
 fields          : fieldList+=field (',' fieldList+=field)* ;
+entityReps : entityRepList+=entityRep (',' entityRepList+=entityRep)* ;
 selectClause        : PIPELINE SELECT entityRep (fieldsWithDot)? '(' (fields | all)? ')' (include)* ;
 include             : INCLUDE '(' field '(' (fields | all)? ')' (include)* ')' ;
 aggregateClause     : PIPELINE func '(' entityRep '(' field ')' ')' ;
+values : valueList+=value (',' valueList+=value)* ;
+array : '[' (values)? ']' ;
 func                : 'AVG' | 'SUM' | 'MIN' | 'MAX' ;
 field           : WORD ;
-value               : WORD | TEXT | NUMBER;
+value               : select | WORD | TEXT | NUMBER | ENTREP | array;
 entity              : WORD ;
 entityRep           : ENTREP | WORD;
 all : '*' ;
@@ -22,13 +29,17 @@ all : '*' ;
  * Lexer Rules
  */
 
-COMPARATOR : EQUALS | GT | GTE | LT | LTE ; 
+COMPARATOR : ISEQUALS | GT | GTE | LT | LTE ; 
 SELECT : 'select' | 'SELECT' | 'Select' ;
 FROM : 'from' | 'FROM' | 'From' ;
 WHERE : 'where' | 'WHERE' | 'Where' ;
 INCLUDE : 'include' | 'INCLUDE' | 'Include' ;
+ENTITY : 'entity' | 'ENTITY' | 'Entity' ;
+INSERT : 'insert' | 'INSERT' | 'Insert' ;
 PIPELINE : '|' ;
-EQUALS : '==' ;
+COLON : ':' ;
+ISEQUALS : '==' ;
+EQUALS : '=' ;
 GT : '>' ;
 GTE : '>=' ;
 LT : '<' ;

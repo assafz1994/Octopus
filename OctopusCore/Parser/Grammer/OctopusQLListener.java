@@ -27,6 +27,46 @@ public interface OctopusQLListener extends ParseTreeListener {
 	 */
 	void exitSelect(OctopusQLParser.SelectContext ctx);
 	/**
+	 * Enter a parse tree produced by {@link OctopusQLParser#insert}.
+	 * @param ctx the parse tree
+	 */
+	void enterInsert(OctopusQLParser.InsertContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link OctopusQLParser#insert}.
+	 * @param ctx the parse tree
+	 */
+	void exitInsert(OctopusQLParser.InsertContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link OctopusQLParser#insertClause}.
+	 * @param ctx the parse tree
+	 */
+	void enterInsertClause(OctopusQLParser.InsertClauseContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link OctopusQLParser#insertClause}.
+	 * @param ctx the parse tree
+	 */
+	void exitInsertClause(OctopusQLParser.InsertClauseContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link OctopusQLParser#assignments}.
+	 * @param ctx the parse tree
+	 */
+	void enterAssignments(OctopusQLParser.AssignmentsContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link OctopusQLParser#assignments}.
+	 * @param ctx the parse tree
+	 */
+	void exitAssignments(OctopusQLParser.AssignmentsContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link OctopusQLParser#assignment}.
+	 * @param ctx the parse tree
+	 */
+	void enterAssignment(OctopusQLParser.AssignmentContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link OctopusQLParser#assignment}.
+	 * @param ctx the parse tree
+	 */
+	void exitAssignment(OctopusQLParser.AssignmentContext ctx);
+	/**
 	 * Enter a parse tree produced by {@link OctopusQLParser#whereClause}.
 	 * @param ctx the parse tree
 	 */
@@ -37,25 +77,35 @@ public interface OctopusQLListener extends ParseTreeListener {
 	 */
 	void exitWhereClause(OctopusQLParser.WhereClauseContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link OctopusQLParser#attributesWithDot}.
+	 * Enter a parse tree produced by {@link OctopusQLParser#fieldsWithDot}.
 	 * @param ctx the parse tree
 	 */
-	void enterAttributesWithDot(OctopusQLParser.AttributesWithDotContext ctx);
+	void enterFieldsWithDot(OctopusQLParser.FieldsWithDotContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link OctopusQLParser#attributesWithDot}.
+	 * Exit a parse tree produced by {@link OctopusQLParser#fieldsWithDot}.
 	 * @param ctx the parse tree
 	 */
-	void exitAttributesWithDot(OctopusQLParser.AttributesWithDotContext ctx);
+	void exitFieldsWithDot(OctopusQLParser.FieldsWithDotContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link OctopusQLParser#attributes}.
+	 * Enter a parse tree produced by {@link OctopusQLParser#fields}.
 	 * @param ctx the parse tree
 	 */
-	void enterAttributes(OctopusQLParser.AttributesContext ctx);
+	void enterFields(OctopusQLParser.FieldsContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link OctopusQLParser#attributes}.
+	 * Exit a parse tree produced by {@link OctopusQLParser#fields}.
 	 * @param ctx the parse tree
 	 */
-	void exitAttributes(OctopusQLParser.AttributesContext ctx);
+	void exitFields(OctopusQLParser.FieldsContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link OctopusQLParser#entityReps}.
+	 * @param ctx the parse tree
+	 */
+	void enterEntityReps(OctopusQLParser.EntityRepsContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link OctopusQLParser#entityReps}.
+	 * @param ctx the parse tree
+	 */
+	void exitEntityReps(OctopusQLParser.EntityRepsContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link OctopusQLParser#selectClause}.
 	 * @param ctx the parse tree
@@ -87,6 +137,26 @@ public interface OctopusQLListener extends ParseTreeListener {
 	 */
 	void exitAggregateClause(OctopusQLParser.AggregateClauseContext ctx);
 	/**
+	 * Enter a parse tree produced by {@link OctopusQLParser#values}.
+	 * @param ctx the parse tree
+	 */
+	void enterValues(OctopusQLParser.ValuesContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link OctopusQLParser#values}.
+	 * @param ctx the parse tree
+	 */
+	void exitValues(OctopusQLParser.ValuesContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link OctopusQLParser#array}.
+	 * @param ctx the parse tree
+	 */
+	void enterArray(OctopusQLParser.ArrayContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link OctopusQLParser#array}.
+	 * @param ctx the parse tree
+	 */
+	void exitArray(OctopusQLParser.ArrayContext ctx);
+	/**
 	 * Enter a parse tree produced by {@link OctopusQLParser#func}.
 	 * @param ctx the parse tree
 	 */
@@ -97,15 +167,15 @@ public interface OctopusQLListener extends ParseTreeListener {
 	 */
 	void exitFunc(OctopusQLParser.FuncContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link OctopusQLParser#attribute}.
+	 * Enter a parse tree produced by {@link OctopusQLParser#field}.
 	 * @param ctx the parse tree
 	 */
-	void enterAttribute(OctopusQLParser.AttributeContext ctx);
+	void enterField(OctopusQLParser.FieldContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link OctopusQLParser#attribute}.
+	 * Exit a parse tree produced by {@link OctopusQLParser#field}.
 	 * @param ctx the parse tree
 	 */
-	void exitAttribute(OctopusQLParser.AttributeContext ctx);
+	void exitField(OctopusQLParser.FieldContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link OctopusQLParser#value}.
 	 * @param ctx the parse tree
