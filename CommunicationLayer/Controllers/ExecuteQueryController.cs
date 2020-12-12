@@ -7,11 +7,9 @@ namespace CommunicationLayer.Controllers
     [Route("[controller]")]
     public class ExecuteQueryController : ControllerBase
     { 
-        private readonly ILogger<ExecuteQueryController> _logger;
         //private readonly OctopusService _octopusService;
-        public ExecuteQueryController(ILogger<ExecuteQueryController> logger)
+        public ExecuteQueryController()
         {
-            _logger = logger;
         }
 
         [HttpGet]
@@ -21,7 +19,7 @@ namespace CommunicationLayer.Controllers
 
         [HttpGet]
         [Route("ExecuteQuery")]
-        //Example: https://localhost:44398/executequery/ExecuteQuery?query=noa
+        //Example: https://localhost:44398/executequery/ExecuteQuery?query=blabla
         public string ExecuteQuery(string query)
         {
            // Task resQuery = _octopusService.ExecuteQuery(query);
