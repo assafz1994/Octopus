@@ -10,27 +10,18 @@ namespace OctopusCore.Parser
     {
         public Task<QueryInfo> ParseQuery(string query)
         {
-            try
+            var target = new AntlrInputStream(query);
+            var lexer = new OctopusQLLexer(target);
+            var tokens = new CommonTokenStream(lexer);
+            var parser = new OctopusQLParser(tokens)
             {
-                var target = new AntlrInputStream(query);
-                var lexer = new OctopusQLLexer(target);
-                var tokens = new CommonTokenStream(lexer);
-                var parser = new OctopusQLParser(tokens)
-                {
-                    BuildParseTree = true
-                };
-                //todo: add error handling
-                var tree = parser.r();
-                var queryExtractor = new QueryExtractor();
-                var output = queryExtractor.Visit(tree);
-                return Task.FromResult(output);
-            }
-            catch (Exception exception)
-            {
-                Console.WriteLine(exception.Message);
-                return null;
-            }
-            
+                BuildParseTree = true
+            };
+            //todo: add error handling
+            var tree = parser.r();
+            var queryExtractor = new QueryExtractor();
+            var output = queryExtractor.Visit(tree);
+            return Task.FromResult(output);
         }
     }
 }

@@ -2,6 +2,7 @@
 using System.Runtime.InteropServices.ComTypes;
 using NUnit.Framework;
 using OctopusCore.Parser;
+using OctopusCore.Parser.Filters;
 
 namespace Tests.Parser
 {
@@ -18,24 +19,30 @@ namespace Tests.Parser
         {
             get
             {
-                yield return new TestCaseData(EligibleTest1, new List<int> { 1, 1, 1, 1 }).
-                    SetName("Eligible OrComposite Discount - True Pred");
-                yield return new TestCaseData(EligibleTest2, new List<int> { 5, 1, 1, 1 }).
-                    SetName("Eligible OrComposite Discount - Min Quantity with one true");
-                yield return new TestCaseData(EligibleTest3, new List<int> { 5, 10, 15, 20 }).
-                    SetName("Eligible OrComposite Discount - multiple products 1");
-                yield return new TestCaseData(EligibleTest4, new List<int> { 5, 10, 15, 20 }).
-                    SetName("Eligible OrComposite Discount - multiple products 2");
-                yield return new TestCaseData(EligibleTest5, new List<int> { 5, 10, 15, 20 }).
-                    SetName("Eligible OrComposite Discount - multiple products 3");
-                yield return new TestCaseData(EligibleTest6, new List<int> { 5, 10, 15, 20 }).
-                    SetName("Eligible OrComposite Discount - multiple products 4");
+                yield return new TestCaseData(
+                    "From Person p\r\n| Where p.id == 2\r\n| Select p(id, age, friend)\r\n", 
+                    new SelectQueryInfo()
+                    {
+                        Entity = "Person",
+                        Filters = new List<Filter>()
+                        {
+                            new EqFilter(new List<string>() {"id"}, "2")
+                        },
+                        Fields = new List<string>()
+                        {
+                            "id", "age", "friend"
+                        },
+                        Includes = new List<Include>(),
+                        NestedProperty = new List<string>()
+                    });
+                
             }
         }
         [Test, TestCaseSource(nameof(TestValidSelectQueryInfoParameters))]
-        public void TestValidSelectQueryInfo(string query, SelectQueryInfo selectQueryInfo)
+        public void TestValidSelectQueryInfo(string query, SelectQueryInfo expectedSelectQueryInfo)
         {
-            Assert.AreEqual(selectQueryInfo, );
+            var actualSelectQueryInfo = _parser.ParseQuery(query).Result;
+            Assert.AreEqual(expectedSelectQueryInfo, actualSelectQueryInfo);
         }
     }
 }
