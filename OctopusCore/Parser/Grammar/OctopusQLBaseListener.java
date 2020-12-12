@@ -63,6 +63,18 @@ public class OctopusQLBaseListener implements OctopusQLListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
+	@Override public void enterUpdate(OctopusQLParser.UpdateContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitUpdate(OctopusQLParser.UpdateContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
 	@Override public void enterInsertClause(OctopusQLParser.InsertClauseContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -75,13 +87,13 @@ public class OctopusQLBaseListener implements OctopusQLListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterDeleteClause(OctopusQLParser.DeleteClauseContext ctx) { }
+	@Override public void enterGetClause(OctopusQLParser.GetClauseContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitDeleteClause(OctopusQLParser.DeleteClauseContext ctx) { }
+	@Override public void exitGetClause(OctopusQLParser.GetClauseContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *

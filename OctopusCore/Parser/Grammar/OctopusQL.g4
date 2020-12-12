@@ -4,12 +4,13 @@ grammar OctopusQL;
  * Parser Rules
  */
 
-r                   : select | insert | delete;
+r                   : select | insert | delete | update;
 select              : FROM entity entityRep (whereClause)* (selectClause | aggregateClause) ;
 insert : (insertClause)+ INSERT entityReps ;
-delete : (deleteClause)+ DELETE entityReps ;
+delete : (getClause)+ DELETE entityReps ;
+update : (getClause)+ UPDATE entityRep (fieldsWithDot)? ASSIGN value ;
 insertClause : ENTITY entity COLON entityRep '(' (assignments | select) ')' ;
-deleteClause : ENTITY entity COLON entityRep '(' select ')' ;
+getClause : ENTITY entity COLON entityRep '(' select ')' ;
 assignments : assignmentList+=assignment (',' assignmentList+=assignment)* ;
 assignment : field EQUALS value ;
 whereClause         : PIPELINE WHERE entityRep fieldsWithDot COMPARATOR value ;
@@ -39,6 +40,8 @@ INCLUDE : 'include' | 'INCLUDE' | 'Include' ;
 ENTITY : 'entity' | 'ENTITY' | 'Entity' ;
 INSERT : 'insert' | 'INSERT' | 'Insert' ;
 DELETE : 'delete' | 'DELETE' | 'Delete' ;
+UPDATE : 'update' | 'UPDATE' | 'Update' ;
+ASSIGN : EQUALS | ADD | REMOVE ;
 PIPELINE : '|' ;
 COLON : ':' ;
 ISEQUALS : '==' ;
@@ -47,6 +50,8 @@ GT : '>' ;
 GTE : '>=' ;
 LT : '<' ;
 LTE : '<=' ; 
+ADD : '+=' ;
+REMOVE : '-=' ;
 fragment A          : ('A'|'a') ;
 fragment C          : ('C'|'c') ;
 fragment S          : ('S'|'s') ;
