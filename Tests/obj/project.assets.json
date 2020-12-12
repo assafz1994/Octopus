@@ -2,6 +2,18 @@
   "version": 3,
   "targets": {
     ".NETCoreApp,Version=v3.1": {
+      "Antlr4.Runtime.Standard/4.9.0": {
+        "type": "package",
+        "dependencies": {
+          "NETStandard.Library": "1.6.1"
+        },
+        "compile": {
+          "lib/netstandard1.3/Antlr4.Runtime.Standard.dll": {}
+        },
+        "runtime": {
+          "lib/netstandard1.3/Antlr4.Runtime.Standard.dll": {}
+        }
+      },
       "Microsoft.CodeCoverage/16.5.0": {
         "type": "package",
         "compile": {
@@ -1225,10 +1237,38 @@
         "runtime": {
           "lib/netstandard1.3/System.Xml.XPath.XmlDocument.dll": {}
         }
+      },
+      "OctopusCore/1.0.0": {
+        "type": "project",
+        "framework": ".NETStandard,Version=v2.0",
+        "dependencies": {
+          "Antlr4.Runtime.Standard": "4.9.0"
+        },
+        "compile": {
+          "bin/placeholder/OctopusCore.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/OctopusCore.dll": {}
+        }
       }
     }
   },
   "libraries": {
+    "Antlr4.Runtime.Standard/4.9.0": {
+      "sha512": "OUg4NRd6SRMjuKJHEtkUdOE8vCT78XMA807yiski8MpQ8V/Qu6B6MWy0MN3mN/Awqgo4jANlrrxziazs1g0u8g==",
+      "type": "package",
+      "path": "antlr4.runtime.standard/4.9.0",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "antlr4.runtime.standard.4.9.0.nupkg.sha512",
+        "antlr4.runtime.standard.nuspec",
+        "lib/net35/Antlr4.Runtime.Standard.dll",
+        "lib/net35/Antlr4.Runtime.Standard.xml",
+        "lib/netstandard1.3/Antlr4.Runtime.Standard.dll",
+        "lib/netstandard1.3/Antlr4.Runtime.Standard.xml"
+      ]
+    },
     "Microsoft.CodeCoverage/16.5.0": {
       "sha512": "PM5YLtyN45EyUGePJpaNogndlaQPrMgQQXHKMhMESC6KfSVvt+j7+dxBi8NYC6X6dZVysf7ngwhSW3wwvPJRSQ==",
       "type": "package",
@@ -4613,13 +4653,20 @@
         "system.xml.xpath.xmldocument.4.3.0.nupkg.sha512",
         "system.xml.xpath.xmldocument.nuspec"
       ]
+    },
+    "OctopusCore/1.0.0": {
+      "type": "project",
+      "path": "../OctopusCore/OctopusCore.csproj",
+      "msbuildProject": "../OctopusCore/OctopusCore.csproj"
     }
   },
   "projectFileDependencyGroups": {
     ".NETCoreApp,Version=v3.1": [
+      "Antlr4.Runtime.Standard >= 4.9.0",
       "Microsoft.NET.Test.Sdk >= 16.5.0",
       "NUnit >= 3.12.0",
-      "NUnit3TestAdapter >= 3.16.1"
+      "NUnit3TestAdapter >= 3.16.1",
+      "OctopusCore >= 1.0.0"
     ]
   },
   "packageFolders": {
@@ -4652,7 +4699,11 @@
       "frameworks": {
         "netcoreapp3.1": {
           "targetAlias": "netcoreapp3.1",
-          "projectReferences": {}
+          "projectReferences": {
+            "C:\\Users\\Ohad\\source\\repos\\assafz1994\\Octopus\\OctopusCore\\OctopusCore.csproj": {
+              "projectPath": "C:\\Users\\Ohad\\source\\repos\\assafz1994\\Octopus\\OctopusCore\\OctopusCore.csproj"
+            }
+          }
         }
       },
       "warningProperties": {
@@ -4665,6 +4716,10 @@
       "netcoreapp3.1": {
         "targetAlias": "netcoreapp3.1",
         "dependencies": {
+          "Antlr4.Runtime.Standard": {
+            "target": "Package",
+            "version": "[4.9.0, )"
+          },
           "Microsoft.NET.Test.Sdk": {
             "target": "Package",
             "version": "[16.5.0, )"

@@ -6,9 +6,9 @@ using Antlr4.Runtime;
 
 namespace OctopusCore.Parser
 {
-    class Parser : IParser
+    public class Parser : IParser
     {
-        public async Task<QueryInfo> ParseQuery(string query)
+        public Task<QueryInfo> ParseQuery(string query)
         {
             var target = new AntlrInputStream(query);
             var lexer = new OctopusQLLexer(target);
@@ -21,7 +21,7 @@ namespace OctopusCore.Parser
             var tree = parser.r();
             var queryExtractor = new QueryExtractor();
             var output = queryExtractor.Visit(tree);
-            return output;
+            return Task.FromResult(output);
         }
     }
 }
