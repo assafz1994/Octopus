@@ -65,7 +65,7 @@ public partial class OctopusQLBaseVisitor<Result> : AbstractParseTreeVisitor<Res
 	/// <return>The visitor result.</return>
 	public virtual Result VisitWhereClause([NotNull] OctopusQLParser.WhereClauseContext context) { return VisitChildren(context); }
 	/// <summary>
-	/// Visit a parse tree produced by <see cref="OctopusQLParser.attributesWithDot"/>.
+	/// Visit a parse tree produced by <see cref="OctopusQLParser.fieldsWithDot"/>.
 	/// <para>
 	/// The default implementation returns the result of calling <see cref="AbstractParseTreeVisitor{Result}.VisitChildren(IRuleNode)"/>
 	/// on <paramref name="context"/>.
@@ -73,9 +73,9 @@ public partial class OctopusQLBaseVisitor<Result> : AbstractParseTreeVisitor<Res
 	/// </summary>
 	/// <param name="context">The parse tree.</param>
 	/// <return>The visitor result.</return>
-	public virtual Result VisitAttributesWithDot([NotNull] OctopusQLParser.AttributesWithDotContext context) { return VisitChildren(context); }
+	public virtual Result VisitFieldsWithDot([NotNull] OctopusQLParser.FieldsWithDotContext context) { return VisitChildren(context); }
 	/// <summary>
-	/// Visit a parse tree produced by <see cref="OctopusQLParser.attributes"/>.
+	/// Visit a parse tree produced by <see cref="OctopusQLParser.fields"/>.
 	/// <para>
 	/// The default implementation returns the result of calling <see cref="AbstractParseTreeVisitor{Result}.VisitChildren(IRuleNode)"/>
 	/// on <paramref name="context"/>.
@@ -83,7 +83,7 @@ public partial class OctopusQLBaseVisitor<Result> : AbstractParseTreeVisitor<Res
 	/// </summary>
 	/// <param name="context">The parse tree.</param>
 	/// <return>The visitor result.</return>
-	public virtual Result VisitAttributes([NotNull] OctopusQLParser.AttributesContext context) { return VisitChildren(context); }
+	public virtual Result VisitFields([NotNull] OctopusQLParser.FieldsContext context) { return VisitChildren(context); }
 	/// <summary>
 	/// Visit a parse tree produced by <see cref="OctopusQLParser.selectClause"/>.
 	/// <para>
@@ -125,7 +125,7 @@ public partial class OctopusQLBaseVisitor<Result> : AbstractParseTreeVisitor<Res
 	/// <return>The visitor result.</return>
 	public virtual Result VisitFunc([NotNull] OctopusQLParser.FuncContext context) { return VisitChildren(context); }
 	/// <summary>
-	/// Visit a parse tree produced by <see cref="OctopusQLParser.attribute"/>.
+	/// Visit a parse tree produced by <see cref="OctopusQLParser.field"/>.
 	/// <para>
 	/// The default implementation returns the result of calling <see cref="AbstractParseTreeVisitor{Result}.VisitChildren(IRuleNode)"/>
 	/// on <paramref name="context"/>.
@@ -133,7 +133,7 @@ public partial class OctopusQLBaseVisitor<Result> : AbstractParseTreeVisitor<Res
 	/// </summary>
 	/// <param name="context">The parse tree.</param>
 	/// <return>The visitor result.</return>
-	public virtual Result VisitAttribute([NotNull] OctopusQLParser.AttributeContext context) { return VisitChildren(context); }
+	public virtual Result VisitField([NotNull] OctopusQLParser.FieldContext context) { return VisitChildren(context); }
 	/// <summary>
 	/// Visit a parse tree produced by <see cref="OctopusQLParser.value"/>.
 	/// <para>

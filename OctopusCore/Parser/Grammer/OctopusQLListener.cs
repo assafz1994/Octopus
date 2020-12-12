@@ -61,25 +61,25 @@ public interface IOctopusQLListener : IParseTreeListener {
 	/// <param name="context">The parse tree.</param>
 	void ExitWhereClause([NotNull] OctopusQLParser.WhereClauseContext context);
 	/// <summary>
-	/// Enter a parse tree produced by <see cref="OctopusQLParser.attributesWithDot"/>.
+	/// Enter a parse tree produced by <see cref="OctopusQLParser.fieldsWithDot"/>.
 	/// </summary>
 	/// <param name="context">The parse tree.</param>
-	void EnterAttributesWithDot([NotNull] OctopusQLParser.AttributesWithDotContext context);
+	void EnterFieldsWithDot([NotNull] OctopusQLParser.FieldsWithDotContext context);
 	/// <summary>
-	/// Exit a parse tree produced by <see cref="OctopusQLParser.attributesWithDot"/>.
+	/// Exit a parse tree produced by <see cref="OctopusQLParser.fieldsWithDot"/>.
 	/// </summary>
 	/// <param name="context">The parse tree.</param>
-	void ExitAttributesWithDot([NotNull] OctopusQLParser.AttributesWithDotContext context);
+	void ExitFieldsWithDot([NotNull] OctopusQLParser.FieldsWithDotContext context);
 	/// <summary>
-	/// Enter a parse tree produced by <see cref="OctopusQLParser.attributes"/>.
+	/// Enter a parse tree produced by <see cref="OctopusQLParser.fields"/>.
 	/// </summary>
 	/// <param name="context">The parse tree.</param>
-	void EnterAttributes([NotNull] OctopusQLParser.AttributesContext context);
+	void EnterFields([NotNull] OctopusQLParser.FieldsContext context);
 	/// <summary>
-	/// Exit a parse tree produced by <see cref="OctopusQLParser.attributes"/>.
+	/// Exit a parse tree produced by <see cref="OctopusQLParser.fields"/>.
 	/// </summary>
 	/// <param name="context">The parse tree.</param>
-	void ExitAttributes([NotNull] OctopusQLParser.AttributesContext context);
+	void ExitFields([NotNull] OctopusQLParser.FieldsContext context);
 	/// <summary>
 	/// Enter a parse tree produced by <see cref="OctopusQLParser.selectClause"/>.
 	/// </summary>
@@ -121,15 +121,15 @@ public interface IOctopusQLListener : IParseTreeListener {
 	/// <param name="context">The parse tree.</param>
 	void ExitFunc([NotNull] OctopusQLParser.FuncContext context);
 	/// <summary>
-	/// Enter a parse tree produced by <see cref="OctopusQLParser.attribute"/>.
+	/// Enter a parse tree produced by <see cref="OctopusQLParser.field"/>.
 	/// </summary>
 	/// <param name="context">The parse tree.</param>
-	void EnterAttribute([NotNull] OctopusQLParser.AttributeContext context);
+	void EnterField([NotNull] OctopusQLParser.FieldContext context);
 	/// <summary>
-	/// Exit a parse tree produced by <see cref="OctopusQLParser.attribute"/>.
+	/// Exit a parse tree produced by <see cref="OctopusQLParser.field"/>.
 	/// </summary>
 	/// <param name="context">The parse tree.</param>
-	void ExitAttribute([NotNull] OctopusQLParser.AttributeContext context);
+	void ExitField([NotNull] OctopusQLParser.FieldContext context);
 	/// <summary>
 	/// Enter a parse tree produced by <see cref="OctopusQLParser.value"/>.
 	/// </summary>

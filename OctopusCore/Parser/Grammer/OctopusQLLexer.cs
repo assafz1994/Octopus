@@ -34,7 +34,7 @@ public partial class OctopusQLLexer : Lexer {
 	protected static PredictionContextCache sharedContextCache = new PredictionContextCache();
 	public const int
 		T__0=1, T__1=2, T__2=3, T__3=4, T__4=5, T__5=6, T__6=7, T__7=8, T__8=9, 
-		COMPARISON=10, SELECT=11, FROM=12, WHERE=13, INCLUDE=14, PIPELINE=15, 
+		COMPARATOR=10, SELECT=11, FROM=12, WHERE=13, INCLUDE=14, PIPELINE=15, 
 		EQUALS=16, GT=17, GTE=18, LT=19, LTE=20, WORD=21, NUMBER=22, ENT=23, ENTREP=24, 
 		TEXT=25, WHITESPACE=26;
 	public static string[] channelNames = {
@@ -47,7 +47,7 @@ public partial class OctopusQLLexer : Lexer {
 
 	public static readonly string[] ruleNames = {
 		"T__0", "T__1", "T__2", "T__3", "T__4", "T__5", "T__6", "T__7", "T__8", 
-		"COMPARISON", "SELECT", "FROM", "WHERE", "INCLUDE", "PIPELINE", "EQUALS", 
+		"COMPARATOR", "SELECT", "FROM", "WHERE", "INCLUDE", "PIPELINE", "EQUALS", 
 		"GT", "GTE", "LT", "LTE", "A", "C", "S", "Y", "H", "O", "U", "T", "F", 
 		"R", "M", "W", "E", "LOWERCASE", "UPPERCASE", "WORD", "NUMBER", "ENT", 
 		"ENTREP", "TEXT", "WHITESPACE"
@@ -69,7 +69,7 @@ public partial class OctopusQLLexer : Lexer {
 		"'<='"
 	};
 	private static readonly string[] _SymbolicNames = {
-		null, null, null, null, null, null, null, null, null, null, "COMPARISON", 
+		null, null, null, null, null, null, null, null, null, null, "COMPARATOR", 
 		"SELECT", "FROM", "WHERE", "INCLUDE", "PIPELINE", "EQUALS", "GT", "GTE", 
 		"LT", "LTE", "WORD", "NUMBER", "ENT", "ENTREP", "TEXT", "WHITESPACE"
 	};

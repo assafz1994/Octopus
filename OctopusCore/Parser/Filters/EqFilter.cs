@@ -11,5 +11,10 @@ namespace OctopusCore.Parser.Filters
             FieldNames = fieldNames;
             Expression = expression;
         }
+
+        public EqFilter GetEqFilter(List<string> fieldNames, string expression)
+        {
+            return new EqFilter(fieldNames, expression);
+        }
     }
 }

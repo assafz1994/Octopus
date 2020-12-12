@@ -9,38 +9,61 @@ namespace OctopusCore.Parser
 {
     internal class QueryExtractor : OctopusQLBaseVisitor<QueryInfo>
     {
+        public const string All = "$ALL$";
         public override QueryInfo VisitR([NotNull] OctopusQLParser.RContext context)
         {
             if (context.@select() != null)
             {
-                return VisitSelect(context.@select());
+                return HandleSelect(context.@select());
             }
-            return new QueryInfo();
+            return new SelectQueryInfo();
             // return base.VisitR(context);
         }
 
-        private QueryInfo VisitSelect([NotNull] OctopusQLParser.SelectContext selectContext)
+        private SelectQueryInfo HandleSelect([NotNull] OctopusQLParser.SelectContext selectContext)
         {
-            var entity = selectContext.entity().GetText();
-            var filters = new ArrayList<Filter>();
+            var selectQueryInfo = new SelectQueryInfo();
+            var comparatorToFilter = new Dictionary<string, Func<List<string>, string, Filter>>()
+            {
+                {"==", (list, s) => new EqFilter(list, s)},
+            };
+            selectQueryInfo.Entity = selectContext.entity().GetText();
+            var filters = new List<Filter>();
             foreach (var whereClause in selectContext.whereClause())
             {
-                var fieldNames = new ArrayList<string>();
-                fieldNames.AddRange(whereClause.attributesWithDot()._el.Select(attribute => attribute.GetText()));
+                var fieldNames = new List<string>();
+                fieldNames.AddRange(whereClause.fieldsWithDot()._el.Select(field => field.GetText()));
                 var value = whereClause.value().GetText();
-                var filter = new EqFilter(fieldNames, value);
+                var comparator = whereClause.COMPARATOR().GetText(); 
+                var filter = comparatorToFilter[comparator](fieldNames, value);
                 filters.Add(filter);
             }
-
+            selectQueryInfo.Filters = filters;
+            
             if (selectContext.selectClause() != null)
             {
-                var field = new Field();
-                foreach (var includeContext in selectContext.selectClause().include())
+                var fields = new List<string>();
+                var nestedProperty = new ArrayList<string>();
+                if (selectContext.selectClause().all() != null)
                 {
-                    
+                    fields.Add(All);
                 }
+                else if (selectContext.selectClause().fields() != null)
+                {
+                    fields.AddRange(selectContext.selectClause().fields()._fieldList.Select(fieldContext => fieldContext.GetText()));
+                }
+
+                if (selectContext.selectClause().fieldsWithDot() != null)
+                {
+                    nestedProperty.AddRange(selectContext.selectClause().fieldsWithDot()._el.Select(field => field.GetText()));
+                }
+
+                var includes = selectContext.selectClause().include().Select(includeContext => new Include(includeContext)).ToList();
+                selectQueryInfo.Fields = fields;
+                selectQueryInfo.Includes = includes;
+                selectQueryInfo.NestedProperty = nestedProperty;
             }
-            return null;
+            return selectQueryInfo;
         }
     }
 }

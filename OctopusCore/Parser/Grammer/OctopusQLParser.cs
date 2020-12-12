@@ -37,18 +37,18 @@ public partial class OctopusQLParser : Parser {
 	protected static PredictionContextCache sharedContextCache = new PredictionContextCache();
 	public const int
 		T__0=1, T__1=2, T__2=3, T__3=4, T__4=5, T__5=6, T__6=7, T__7=8, T__8=9, 
-		COMPARISON=10, SELECT=11, FROM=12, WHERE=13, INCLUDE=14, PIPELINE=15, 
+		COMPARATOR=10, SELECT=11, FROM=12, WHERE=13, INCLUDE=14, PIPELINE=15, 
 		EQUALS=16, GT=17, GTE=18, LT=19, LTE=20, WORD=21, NUMBER=22, ENT=23, ENTREP=24, 
 		TEXT=25, WHITESPACE=26;
 	public const int
-		RULE_r = 0, RULE_select = 1, RULE_whereClause = 2, RULE_attributesWithDot = 3, 
-		RULE_attributes = 4, RULE_selectClause = 5, RULE_include = 6, RULE_aggregateClause = 7, 
-		RULE_func = 8, RULE_attribute = 9, RULE_value = 10, RULE_entity = 11, 
-		RULE_entityRep = 12, RULE_all = 13;
+		RULE_r = 0, RULE_select = 1, RULE_whereClause = 2, RULE_fieldsWithDot = 3, 
+		RULE_fields = 4, RULE_selectClause = 5, RULE_include = 6, RULE_aggregateClause = 7, 
+		RULE_func = 8, RULE_field = 9, RULE_value = 10, RULE_entity = 11, RULE_entityRep = 12, 
+		RULE_all = 13;
 	public static readonly string[] ruleNames = {
-		"r", "select", "whereClause", "attributesWithDot", "attributes", "selectClause", 
-		"include", "aggregateClause", "func", "attribute", "value", "entity", 
-		"entityRep", "all"
+		"r", "select", "whereClause", "fieldsWithDot", "fields", "selectClause", 
+		"include", "aggregateClause", "func", "field", "value", "entity", "entityRep", 
+		"all"
 	};
 
 	private static readonly string[] _LiteralNames = {
@@ -57,7 +57,7 @@ public partial class OctopusQLParser : Parser {
 		"'<='"
 	};
 	private static readonly string[] _SymbolicNames = {
-		null, null, null, null, null, null, null, null, null, null, "COMPARISON", 
+		null, null, null, null, null, null, null, null, null, null, "COMPARATOR", 
 		"SELECT", "FROM", "WHERE", "INCLUDE", "PIPELINE", "EQUALS", "GT", "GTE", 
 		"LT", "LTE", "WORD", "NUMBER", "ENT", "ENTREP", "TEXT", "WHITESPACE"
 	};
@@ -243,10 +243,10 @@ public partial class OctopusQLParser : Parser {
 		[System.Diagnostics.DebuggerNonUserCode] public EntityRepContext entityRep() {
 			return GetRuleContext<EntityRepContext>(0);
 		}
-		[System.Diagnostics.DebuggerNonUserCode] public AttributesWithDotContext attributesWithDot() {
-			return GetRuleContext<AttributesWithDotContext>(0);
+		[System.Diagnostics.DebuggerNonUserCode] public FieldsWithDotContext fieldsWithDot() {
+			return GetRuleContext<FieldsWithDotContext>(0);
 		}
-		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode COMPARISON() { return GetToken(OctopusQLParser.COMPARISON, 0); }
+		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode COMPARATOR() { return GetToken(OctopusQLParser.COMPARATOR, 0); }
 		[System.Diagnostics.DebuggerNonUserCode] public ValueContext value() {
 			return GetRuleContext<ValueContext>(0);
 		}
@@ -283,8 +283,8 @@ public partial class OctopusQLParser : Parser {
 			State = 43; Match(PIPELINE);
 			State = 44; Match(WHERE);
 			State = 45; entityRep();
-			State = 46; attributesWithDot();
-			State = 47; Match(COMPARISON);
+			State = 46; fieldsWithDot();
+			State = 47; Match(COMPARATOR);
 			State = 48; value();
 			}
 		}
@@ -299,42 +299,42 @@ public partial class OctopusQLParser : Parser {
 		return _localctx;
 	}
 
-	public partial class AttributesWithDotContext : ParserRuleContext {
-		public AttributeContext _attribute;
-		public IList<AttributeContext> _el = new List<AttributeContext>();
-		[System.Diagnostics.DebuggerNonUserCode] public AttributeContext[] attribute() {
-			return GetRuleContexts<AttributeContext>();
+	public partial class FieldsWithDotContext : ParserRuleContext {
+		public FieldContext _field;
+		public IList<FieldContext> _el = new List<FieldContext>();
+		[System.Diagnostics.DebuggerNonUserCode] public FieldContext[] field() {
+			return GetRuleContexts<FieldContext>();
 		}
-		[System.Diagnostics.DebuggerNonUserCode] public AttributeContext attribute(int i) {
-			return GetRuleContext<AttributeContext>(i);
+		[System.Diagnostics.DebuggerNonUserCode] public FieldContext field(int i) {
+			return GetRuleContext<FieldContext>(i);
 		}
-		public AttributesWithDotContext(ParserRuleContext parent, int invokingState)
+		public FieldsWithDotContext(ParserRuleContext parent, int invokingState)
 			: base(parent, invokingState)
 		{
 		}
-		public override int RuleIndex { get { return RULE_attributesWithDot; } }
+		public override int RuleIndex { get { return RULE_fieldsWithDot; } }
 		[System.Diagnostics.DebuggerNonUserCode]
 		public override void EnterRule(IParseTreeListener listener) {
 			IOctopusQLListener typedListener = listener as IOctopusQLListener;
-			if (typedListener != null) typedListener.EnterAttributesWithDot(this);
+			if (typedListener != null) typedListener.EnterFieldsWithDot(this);
 		}
 		[System.Diagnostics.DebuggerNonUserCode]
 		public override void ExitRule(IParseTreeListener listener) {
 			IOctopusQLListener typedListener = listener as IOctopusQLListener;
-			if (typedListener != null) typedListener.ExitAttributesWithDot(this);
+			if (typedListener != null) typedListener.ExitFieldsWithDot(this);
 		}
 		[System.Diagnostics.DebuggerNonUserCode]
 		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
 			IOctopusQLVisitor<TResult> typedVisitor = visitor as IOctopusQLVisitor<TResult>;
-			if (typedVisitor != null) return typedVisitor.VisitAttributesWithDot(this);
+			if (typedVisitor != null) return typedVisitor.VisitFieldsWithDot(this);
 			else return visitor.VisitChildren(this);
 		}
 	}
 
 	[RuleVersion(0)]
-	public AttributesWithDotContext attributesWithDot() {
-		AttributesWithDotContext _localctx = new AttributesWithDotContext(Context, State);
-		EnterRule(_localctx, 6, RULE_attributesWithDot);
+	public FieldsWithDotContext fieldsWithDot() {
+		FieldsWithDotContext _localctx = new FieldsWithDotContext(Context, State);
+		EnterRule(_localctx, 6, RULE_fieldsWithDot);
 		int _la;
 		try {
 			EnterOuterAlt(_localctx, 1);
@@ -346,8 +346,8 @@ public partial class OctopusQLParser : Parser {
 				{
 				{
 				State = 50; Match(T__0);
-				State = 51; _localctx._attribute = attribute();
-				_localctx._el.Add(_localctx._attribute);
+				State = 51; _localctx._field = field();
+				_localctx._el.Add(_localctx._field);
 				}
 				}
 				State = 54;
@@ -367,48 +367,48 @@ public partial class OctopusQLParser : Parser {
 		return _localctx;
 	}
 
-	public partial class AttributesContext : ParserRuleContext {
-		public AttributeContext _attribute;
-		public IList<AttributeContext> _attrList = new List<AttributeContext>();
-		[System.Diagnostics.DebuggerNonUserCode] public AttributeContext[] attribute() {
-			return GetRuleContexts<AttributeContext>();
+	public partial class FieldsContext : ParserRuleContext {
+		public FieldContext _field;
+		public IList<FieldContext> _fieldList = new List<FieldContext>();
+		[System.Diagnostics.DebuggerNonUserCode] public FieldContext[] field() {
+			return GetRuleContexts<FieldContext>();
 		}
-		[System.Diagnostics.DebuggerNonUserCode] public AttributeContext attribute(int i) {
-			return GetRuleContext<AttributeContext>(i);
+		[System.Diagnostics.DebuggerNonUserCode] public FieldContext field(int i) {
+			return GetRuleContext<FieldContext>(i);
 		}
-		public AttributesContext(ParserRuleContext parent, int invokingState)
+		public FieldsContext(ParserRuleContext parent, int invokingState)
 			: base(parent, invokingState)
 		{
 		}
-		public override int RuleIndex { get { return RULE_attributes; } }
+		public override int RuleIndex { get { return RULE_fields; } }
 		[System.Diagnostics.DebuggerNonUserCode]
 		public override void EnterRule(IParseTreeListener listener) {
 			IOctopusQLListener typedListener = listener as IOctopusQLListener;
-			if (typedListener != null) typedListener.EnterAttributes(this);
+			if (typedListener != null) typedListener.EnterFields(this);
 		}
 		[System.Diagnostics.DebuggerNonUserCode]
 		public override void ExitRule(IParseTreeListener listener) {
 			IOctopusQLListener typedListener = listener as IOctopusQLListener;
-			if (typedListener != null) typedListener.ExitAttributes(this);
+			if (typedListener != null) typedListener.ExitFields(this);
 		}
 		[System.Diagnostics.DebuggerNonUserCode]
 		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
 			IOctopusQLVisitor<TResult> typedVisitor = visitor as IOctopusQLVisitor<TResult>;
-			if (typedVisitor != null) return typedVisitor.VisitAttributes(this);
+			if (typedVisitor != null) return typedVisitor.VisitFields(this);
 			else return visitor.VisitChildren(this);
 		}
 	}
 
 	[RuleVersion(0)]
-	public AttributesContext attributes() {
-		AttributesContext _localctx = new AttributesContext(Context, State);
-		EnterRule(_localctx, 8, RULE_attributes);
+	public FieldsContext fields() {
+		FieldsContext _localctx = new FieldsContext(Context, State);
+		EnterRule(_localctx, 8, RULE_fields);
 		int _la;
 		try {
 			EnterOuterAlt(_localctx, 1);
 			{
-			State = 56; _localctx._attribute = attribute();
-			_localctx._attrList.Add(_localctx._attribute);
+			State = 56; _localctx._field = field();
+			_localctx._fieldList.Add(_localctx._field);
 			State = 61;
 			ErrorHandler.Sync(this);
 			_la = TokenStream.LA(1);
@@ -416,8 +416,8 @@ public partial class OctopusQLParser : Parser {
 				{
 				{
 				State = 57; Match(T__1);
-				State = 58; _localctx._attribute = attribute();
-				_localctx._attrList.Add(_localctx._attribute);
+				State = 58; _localctx._field = field();
+				_localctx._fieldList.Add(_localctx._field);
 				}
 				}
 				State = 63;
@@ -443,11 +443,11 @@ public partial class OctopusQLParser : Parser {
 		[System.Diagnostics.DebuggerNonUserCode] public EntityRepContext entityRep() {
 			return GetRuleContext<EntityRepContext>(0);
 		}
-		[System.Diagnostics.DebuggerNonUserCode] public AttributesWithDotContext attributesWithDot() {
-			return GetRuleContext<AttributesWithDotContext>(0);
+		[System.Diagnostics.DebuggerNonUserCode] public FieldsWithDotContext fieldsWithDot() {
+			return GetRuleContext<FieldsWithDotContext>(0);
 		}
-		[System.Diagnostics.DebuggerNonUserCode] public AttributesContext attributes() {
-			return GetRuleContext<AttributesContext>(0);
+		[System.Diagnostics.DebuggerNonUserCode] public FieldsContext fields() {
+			return GetRuleContext<FieldsContext>(0);
 		}
 		[System.Diagnostics.DebuggerNonUserCode] public AllContext all() {
 			return GetRuleContext<AllContext>(0);
@@ -497,7 +497,7 @@ public partial class OctopusQLParser : Parser {
 			_la = TokenStream.LA(1);
 			if (_la==T__0) {
 				{
-				State = 67; attributesWithDot();
+				State = 67; fieldsWithDot();
 				}
 			}
 
@@ -507,7 +507,7 @@ public partial class OctopusQLParser : Parser {
 			switch (TokenStream.LA(1)) {
 			case WORD:
 				{
-				State = 71; attributes();
+				State = 71; fields();
 				}
 				break;
 			case T__8:
@@ -549,11 +549,11 @@ public partial class OctopusQLParser : Parser {
 
 	public partial class IncludeContext : ParserRuleContext {
 		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode INCLUDE() { return GetToken(OctopusQLParser.INCLUDE, 0); }
-		[System.Diagnostics.DebuggerNonUserCode] public AttributeContext attribute() {
-			return GetRuleContext<AttributeContext>(0);
+		[System.Diagnostics.DebuggerNonUserCode] public FieldContext field() {
+			return GetRuleContext<FieldContext>(0);
 		}
-		[System.Diagnostics.DebuggerNonUserCode] public AttributesContext attributes() {
-			return GetRuleContext<AttributesContext>(0);
+		[System.Diagnostics.DebuggerNonUserCode] public FieldsContext fields() {
+			return GetRuleContext<FieldsContext>(0);
 		}
 		[System.Diagnostics.DebuggerNonUserCode] public AllContext all() {
 			return GetRuleContext<AllContext>(0);
@@ -597,14 +597,14 @@ public partial class OctopusQLParser : Parser {
 			{
 			State = 82; Match(INCLUDE);
 			State = 83; Match(T__2);
-			State = 84; attribute();
+			State = 84; field();
 			State = 85; Match(T__2);
 			State = 88;
 			ErrorHandler.Sync(this);
 			switch (TokenStream.LA(1)) {
 			case WORD:
 				{
-				State = 86; attributes();
+				State = 86; fields();
 				}
 				break;
 			case T__8:
@@ -653,8 +653,8 @@ public partial class OctopusQLParser : Parser {
 		[System.Diagnostics.DebuggerNonUserCode] public EntityRepContext entityRep() {
 			return GetRuleContext<EntityRepContext>(0);
 		}
-		[System.Diagnostics.DebuggerNonUserCode] public AttributeContext attribute() {
-			return GetRuleContext<AttributeContext>(0);
+		[System.Diagnostics.DebuggerNonUserCode] public FieldContext field() {
+			return GetRuleContext<FieldContext>(0);
 		}
 		public AggregateClauseContext(ParserRuleContext parent, int invokingState)
 			: base(parent, invokingState)
@@ -691,7 +691,7 @@ public partial class OctopusQLParser : Parser {
 			State = 101; Match(T__2);
 			State = 102; entityRep();
 			State = 103; Match(T__2);
-			State = 104; attribute();
+			State = 104; field();
 			State = 105; Match(T__3);
 			State = 106; Match(T__3);
 			}
@@ -761,35 +761,35 @@ public partial class OctopusQLParser : Parser {
 		return _localctx;
 	}
 
-	public partial class AttributeContext : ParserRuleContext {
+	public partial class FieldContext : ParserRuleContext {
 		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode WORD() { return GetToken(OctopusQLParser.WORD, 0); }
-		public AttributeContext(ParserRuleContext parent, int invokingState)
+		public FieldContext(ParserRuleContext parent, int invokingState)
 			: base(parent, invokingState)
 		{
 		}
-		public override int RuleIndex { get { return RULE_attribute; } }
+		public override int RuleIndex { get { return RULE_field; } }
 		[System.Diagnostics.DebuggerNonUserCode]
 		public override void EnterRule(IParseTreeListener listener) {
 			IOctopusQLListener typedListener = listener as IOctopusQLListener;
-			if (typedListener != null) typedListener.EnterAttribute(this);
+			if (typedListener != null) typedListener.EnterField(this);
 		}
 		[System.Diagnostics.DebuggerNonUserCode]
 		public override void ExitRule(IParseTreeListener listener) {
 			IOctopusQLListener typedListener = listener as IOctopusQLListener;
-			if (typedListener != null) typedListener.ExitAttribute(this);
+			if (typedListener != null) typedListener.ExitField(this);
 		}
 		[System.Diagnostics.DebuggerNonUserCode]
 		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
 			IOctopusQLVisitor<TResult> typedVisitor = visitor as IOctopusQLVisitor<TResult>;
-			if (typedVisitor != null) return typedVisitor.VisitAttribute(this);
+			if (typedVisitor != null) return typedVisitor.VisitField(this);
 			else return visitor.VisitChildren(this);
 		}
 	}
 
 	[RuleVersion(0)]
-	public AttributeContext attribute() {
-		AttributeContext _localctx = new AttributeContext(Context, State);
-		EnterRule(_localctx, 18, RULE_attribute);
+	public FieldContext field() {
+		FieldContext _localctx = new FieldContext(Context, State);
+		EnterRule(_localctx, 18, RULE_field);
 		try {
 			EnterOuterAlt(_localctx, 1);
 			{

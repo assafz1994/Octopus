@@ -38,7 +38,7 @@ null
 null
 null
 null
-COMPARISON
+COMPARATOR
 SELECT
 FROM
 WHERE
@@ -60,13 +60,13 @@ rule names:
 r
 select
 whereClause
-attributesWithDot
-attributes
+fieldsWithDot
+fields
 selectClause
 include
 aggregateClause
 func
-attribute
+field
 value
 entity
 entityRep

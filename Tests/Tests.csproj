@@ -16,10 +16,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Parser\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\OctopusCore\OctopusCore.csproj" />
   </ItemGroup>
 

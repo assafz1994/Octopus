@@ -50,17 +50,17 @@ public interface IOctopusQLVisitor<Result> : IParseTreeVisitor<Result> {
 	/// <return>The visitor result.</return>
 	Result VisitWhereClause([NotNull] OctopusQLParser.WhereClauseContext context);
 	/// <summary>
-	/// Visit a parse tree produced by <see cref="OctopusQLParser.attributesWithDot"/>.
+	/// Visit a parse tree produced by <see cref="OctopusQLParser.fieldsWithDot"/>.
 	/// </summary>
 	/// <param name="context">The parse tree.</param>
 	/// <return>The visitor result.</return>
-	Result VisitAttributesWithDot([NotNull] OctopusQLParser.AttributesWithDotContext context);
+	Result VisitFieldsWithDot([NotNull] OctopusQLParser.FieldsWithDotContext context);
 	/// <summary>
-	/// Visit a parse tree produced by <see cref="OctopusQLParser.attributes"/>.
+	/// Visit a parse tree produced by <see cref="OctopusQLParser.fields"/>.
 	/// </summary>
 	/// <param name="context">The parse tree.</param>
 	/// <return>The visitor result.</return>
-	Result VisitAttributes([NotNull] OctopusQLParser.AttributesContext context);
+	Result VisitFields([NotNull] OctopusQLParser.FieldsContext context);
 	/// <summary>
 	/// Visit a parse tree produced by <see cref="OctopusQLParser.selectClause"/>.
 	/// </summary>
@@ -86,11 +86,11 @@ public interface IOctopusQLVisitor<Result> : IParseTreeVisitor<Result> {
 	/// <return>The visitor result.</return>
 	Result VisitFunc([NotNull] OctopusQLParser.FuncContext context);
 	/// <summary>
-	/// Visit a parse tree produced by <see cref="OctopusQLParser.attribute"/>.
+	/// Visit a parse tree produced by <see cref="OctopusQLParser.field"/>.
 	/// </summary>
 	/// <param name="context">The parse tree.</param>
 	/// <return>The visitor result.</return>
-	Result VisitAttribute([NotNull] OctopusQLParser.AttributeContext context);
+	Result VisitField([NotNull] OctopusQLParser.FieldContext context);
 	/// <summary>
 	/// Visit a parse tree produced by <see cref="OctopusQLParser.value"/>.
 	/// </summary>

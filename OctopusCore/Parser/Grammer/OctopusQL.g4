@@ -6,14 +6,14 @@ grammar OctopusQL;
 
 r                   : select ;
 select              : FROM entity entityRep (whereClause)* (selectClause | aggregateClause) ;
-whereClause         : PIPELINE WHERE entityRep attributesWithDot COMPARISON value ;
-attributesWithDot   : ('.' el+=attribute)+ ;
-attributes          : attrList+=attribute (',' attrList+=attribute)* ;
-selectClause        : PIPELINE SELECT entityRep (attributesWithDot)? '(' (attributes | all)? ')' (include)* ;
-include             : INCLUDE '(' attribute '(' (attributes | all)? ')' (include)* ')' ;
-aggregateClause     : PIPELINE func '(' entityRep '(' attribute ')' ')' ;
+whereClause         : PIPELINE WHERE entityRep fieldsWithDot COMPARATOR value ;
+fieldsWithDot   : ('.' el+=field)+ ;
+fields          : fieldList+=field (',' fieldList+=field)* ;
+selectClause        : PIPELINE SELECT entityRep (fieldsWithDot)? '(' (fields | all)? ')' (include)* ;
+include             : INCLUDE '(' field '(' (fields | all)? ')' (include)* ')' ;
+aggregateClause     : PIPELINE func '(' entityRep '(' field ')' ')' ;
 func                : 'AVG' | 'SUM' | 'MIN' | 'MAX' ;
-attribute           : WORD ;
+field           : WORD ;
 value               : WORD | TEXT | NUMBER;
 entity              : WORD ;
 entityRep           : ENTREP | WORD;
@@ -22,7 +22,7 @@ all : '*' ;
  * Lexer Rules
  */
 
-COMPARISON : EQUALS | GT | GTE | LT | LTE ; 
+COMPARATOR : EQUALS | GT | GTE | LT | LTE ; 
 SELECT : 'select' | 'SELECT' | 'Select' ;
 FROM : 'from' | 'FROM' | 'From' ;
 WHERE : 'where' | 'WHERE' | 'Where' ;
