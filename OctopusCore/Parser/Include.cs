@@ -37,8 +37,8 @@ namespace OctopusCore.Parser
             if (obj == this) return true;
             return obj is Include include 
                    && Name.Equals(include.Name)
-                   && Fields.Equals(include.Fields)
-                   && Includes.Equals(include.Includes);
+                   && Fields.SequenceEqual(include.Fields)
+                   && Includes.SequenceEqual(include.Includes);
             
         }
 

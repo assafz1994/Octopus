@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Diagnostics;
 using System.Runtime.InteropServices.ComTypes;
 using NUnit.Framework;
 using OctopusCore.Parser;
@@ -41,7 +42,9 @@ namespace Tests.Parser
         [Test, TestCaseSource(nameof(TestValidSelectQueryInfoParameters))]
         public void TestValidSelectQueryInfo(string query, SelectQueryInfo expectedSelectQueryInfo)
         {
-            var actualSelectQueryInfo = _parser.ParseQuery(query).Result;
+            var actualQueryInfo = _parser.ParseQuery(query).Result;
+            Assert.True(actualQueryInfo is SelectQueryInfo);
+            var actualSelectQueryInfo = (SelectQueryInfo) actualQueryInfo;
             Assert.AreEqual(expectedSelectQueryInfo, actualSelectQueryInfo);
         }
     }

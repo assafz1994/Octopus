@@ -97,3 +97,4 @@ C:\Users\Ohad\source\repos\assafz1994\Octopus\Tests\obj\Debug\netcoreapp3.1\Test
 C:\Users\Ohad\source\repos\assafz1994\Octopus\Tests\obj\Debug\netcoreapp3.1\Tests.dll
 C:\Users\Ohad\source\repos\assafz1994\Octopus\Tests\obj\Debug\netcoreapp3.1\Tests.pdb
 C:\Users\Ohad\source\repos\assafz1994\Octopus\Tests\obj\Debug\netcoreapp3.1\Tests.genruntimeconfig.cache
+C:\Users\Ohad\source\repos\assafz1994\Octopus\Tests\bin\Debug\netcoreapp3.1\Microsoft.Bcl.HashCode.dll

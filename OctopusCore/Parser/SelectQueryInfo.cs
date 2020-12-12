@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace OctopusCore.Parser
@@ -16,12 +17,13 @@ namespace OctopusCore.Parser
         {
             if (obj == null) return false;
             if (obj == this) return true;
-            return obj is SelectQueryInfo selectQueryInfo
-                   && Entity.Equals(selectQueryInfo.Entity)
-                   && Fields.Equals(selectQueryInfo.Fields)
-                   && Includes.Equals(selectQueryInfo.Includes)
-                   && Filters.Equals(selectQueryInfo.Filters)
-                   && NestedProperty.Equals(selectQueryInfo.NestedProperty);
+            if (!(obj is SelectQueryInfo selectQueryInfo)) return false;
+            return 
+                    Entity.Equals(selectQueryInfo.Entity)
+                   && Fields.SequenceEqual(selectQueryInfo.Fields)
+                   && Includes.SequenceEqual(selectQueryInfo.Includes)
+                   && Filters.SequenceEqual(selectQueryInfo.Filters)
+                   && NestedProperty.SequenceEqual(selectQueryInfo.NestedProperty);
 
         }
 

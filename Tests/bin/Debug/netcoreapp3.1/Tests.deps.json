@@ -29,6 +29,14 @@
           }
         }
       },
+      "Microsoft.Bcl.HashCode/1.1.0": {
+        "runtime": {
+          "lib/netcoreapp2.1/Microsoft.Bcl.HashCode.dll": {
+            "assemblyVersion": "1.0.0.0",
+            "fileVersion": "4.700.19.56404"
+          }
+        }
+      },
       "Microsoft.CodeCoverage/16.5.0": {
         "runtime": {
           "lib/netcoreapp1.0/Microsoft.VisualStudio.CodeCoverage.Shim.dll": {
@@ -880,7 +888,8 @@
       },
       "OctopusCore/1.0.0": {
         "dependencies": {
-          "Antlr4.Runtime.Standard": "4.9.0"
+          "Antlr4.Runtime.Standard": "4.9.0",
+          "Microsoft.Bcl.HashCode": "1.1.0"
         },
         "runtime": {
           "OctopusCore.dll": {}
@@ -900,6 +909,13 @@
       "sha512": "sha512-OUg4NRd6SRMjuKJHEtkUdOE8vCT78XMA807yiski8MpQ8V/Qu6B6MWy0MN3mN/Awqgo4jANlrrxziazs1g0u8g==",
       "path": "antlr4.runtime.standard/4.9.0",
       "hashPath": "antlr4.runtime.standard.4.9.0.nupkg.sha512"
+    },
+    "Microsoft.Bcl.HashCode/1.1.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-J2G1k+u5unBV+aYcwxo94ip16Rkp65pgWFb0R6zwJipzWNMgvqlWeuI7/+R+e8bob66LnSG+llLJ+z8wI94cHg==",
+      "path": "microsoft.bcl.hashcode/1.1.0",
+      "hashPath": "microsoft.bcl.hashcode.1.1.0.nupkg.sha512"
     },
     "Microsoft.CodeCoverage/16.5.0": {
       "type": "package",
