@@ -39,6 +39,54 @@ public class OctopusQLBaseListener implements OctopusQLListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
+	@Override public void enterInsert(OctopusQLParser.InsertContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitInsert(OctopusQLParser.InsertContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterInsertClause(OctopusQLParser.InsertClauseContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitInsertClause(OctopusQLParser.InsertClauseContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterAssignments(OctopusQLParser.AssignmentsContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitAssignments(OctopusQLParser.AssignmentsContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterAssignment(OctopusQLParser.AssignmentContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitAssignment(OctopusQLParser.AssignmentContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
 	@Override public void enterWhereClause(OctopusQLParser.WhereClauseContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -51,25 +99,37 @@ public class OctopusQLBaseListener implements OctopusQLListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterAttributesWithDot(OctopusQLParser.AttributesWithDotContext ctx) { }
+	@Override public void enterFieldsWithDot(OctopusQLParser.FieldsWithDotContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitAttributesWithDot(OctopusQLParser.AttributesWithDotContext ctx) { }
+	@Override public void exitFieldsWithDot(OctopusQLParser.FieldsWithDotContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterAttributes(OctopusQLParser.AttributesContext ctx) { }
+	@Override public void enterFields(OctopusQLParser.FieldsContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitAttributes(OctopusQLParser.AttributesContext ctx) { }
+	@Override public void exitFields(OctopusQLParser.FieldsContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterEntityReps(OctopusQLParser.EntityRepsContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitEntityReps(OctopusQLParser.EntityRepsContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -111,6 +171,30 @@ public class OctopusQLBaseListener implements OctopusQLListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
+	@Override public void enterValues(OctopusQLParser.ValuesContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitValues(OctopusQLParser.ValuesContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterArray(OctopusQLParser.ArrayContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitArray(OctopusQLParser.ArrayContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
 	@Override public void enterFunc(OctopusQLParser.FuncContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -123,13 +207,13 @@ public class OctopusQLBaseListener implements OctopusQLListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterAttribute(OctopusQLParser.AttributeContext ctx) { }
+	@Override public void enterField(OctopusQLParser.FieldContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitAttribute(OctopusQLParser.AttributeContext ctx) { }
+	@Override public void exitField(OctopusQLParser.FieldContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
