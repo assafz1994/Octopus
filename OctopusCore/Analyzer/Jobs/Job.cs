@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace OctopusCore.Analyzer.Jobs
 {
@@ -9,13 +10,13 @@ namespace OctopusCore.Analyzer.Jobs
         public object Result { get; private set; }
         public bool HasExecuted { get; private set; }
 
-        public void Execute()
+        public async Task ExecuteAsync()
         {
-            Result = ExecuteInternal();
+            Result = await ExecuteInternalAsync();
 
             HasExecuted = true;
         }
 
-        protected abstract object ExecuteInternal();
+        protected abstract Task<object> ExecuteInternalAsync();
     }
 }

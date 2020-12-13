@@ -6,6 +6,6 @@ namespace OctopusCore.Analyzer
 {
     public interface IAnalyzer
     {
-        Task<WorkPlan> AnalyzeQuery(QueryInfo queryInfo);
+        WorkPlan AnalyzeQuery(QueryInfo queryInfo);
     }
 }

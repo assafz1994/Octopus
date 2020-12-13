@@ -14,7 +14,7 @@ namespace OctopusCore.Analyzer
             _databaseConfigurationManager = databaseConfigurationManager;
         }
 
-        public Task<WorkPlan> AnalyzeQuery(QueryInfo queryInfo)
+        public WorkPlan AnalyzeQuery(QueryInfo queryInfo)
         {
             var workPlanBuilder = new WorkPlanBuilder(_databaseConfigurationManager, queryInfo.Entity);
 
@@ -28,7 +28,7 @@ namespace OctopusCore.Analyzer
                 workPlanBuilder.AddProjectionField(field);
             }
 
-            return Task.FromResult(workPlanBuilder.Build());
+            return workPlanBuilder.Build();
         }
     }
 }

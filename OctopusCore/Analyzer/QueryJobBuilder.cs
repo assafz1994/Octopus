@@ -10,13 +10,15 @@ namespace OctopusCore.Analyzer
         private readonly IDbHandler _dbHandler;
         private readonly List<string> _fieldsToSelect;
         private readonly List<Filter> _filters;
+        private readonly string _entityType;
 
-        public QueryJobBuilder(IDbHandler dbHandler)
+        public QueryJobBuilder(IDbHandler dbHandler, string entityType)
         {
             _dbHandler = dbHandler;
 
             _fieldsToSelect = new List<string>();
             _filters = new List<Filter>();
+            _entityType = entityType;
         }
 
         public void AddProjectionField(string fieldName)
@@ -31,7 +33,7 @@ namespace OctopusCore.Analyzer
 
         public QueryJob Build()
         {
-            return new QueryJob(_dbHandler, _fieldsToSelect, _filters);
+            return new QueryJob(_dbHandler, _fieldsToSelect, _filters, _entityType);
         }
     }
 }

@@ -1,10 +1,11 @@
 ﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using OctopusCore.Parser;
 
 namespace OctopusCore.DbHandlers
 {
     public interface IDbHandler
     {
-        object ExecuteQueryWithFilters(IReadOnlyCollection<string> fieldsToSelect, IReadOnlyCollection<Filter> filters); // todo return real object
+        Task<object> ExecuteQueryWithFiltersAsync(IReadOnlyCollection<string> fieldsToSelect, IReadOnlyCollection<Filter> filters,string entityType); // todo return real object
     }
 }

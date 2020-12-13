@@ -6,6 +6,6 @@ namespace OctopusCore.Executor
 {
     public interface IExecutor
     {
-        Task<ExecutionResult> ExecuteWorkPlan(WorkPlan workPlan);
+        Task<ExecutionResult> ExecuteWorkPlanAsync(WorkPlan workPlan);
     }
 }

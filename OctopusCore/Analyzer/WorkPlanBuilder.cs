@@ -13,9 +13,9 @@ namespace OctopusCore.Analyzer
         private readonly Dictionary<string, QueryJobBuilder> _databaseKeyToQueryJobBuilderMappings;
         private readonly string _entityType;
 
-        public WorkPlanBuilder(IDatabaseConfigurationManager databaseDatabaseConfigurationManager, string entityType)
+        public WorkPlanBuilder(IDatabaseConfigurationManager databaseConfigurationManager, string entityType)
         {
-            _databaseConfigurationManager = databaseDatabaseConfigurationManager;
+            _databaseConfigurationManager = databaseConfigurationManager;
             _entityType = entityType;
 
             _databaseKeyToQueryJobBuilderMappings = new Dictionary<string, QueryJobBuilder>();
@@ -38,7 +38,7 @@ namespace OctopusCore.Analyzer
         public WorkPlan Build()
         {
             var queryJobs = _databaseKeyToQueryJobBuilderMappings.Values.Select(builder => builder.Build()).ToList();
-            if (queryJobs.Count > 1) throw new Exception("Query Entity From Multiple DBs is not supported");
+            if (queryJobs.Count > 1) throw new Exception("Query an entity from multiple DBs is not supported");
 
             return new WorkPlan(queryJobs);
         }
@@ -49,7 +49,8 @@ namespace OctopusCore.Analyzer
             if (_databaseKeyToQueryJobBuilderMappings.ContainsKey(fieldDatabaseKey) == false)
             {
                 var dbHandler = _databaseConfigurationManager.ResolveDatabaseHandler(fieldDatabaseKey);
-                _databaseKeyToQueryJobBuilderMappings.Add(fieldDatabaseKey, new QueryJobBuilder(dbHandler));
+                _databaseKeyToQueryJobBuilderMappings.Add(fieldDatabaseKey,
+                    new QueryJobBuilder(dbHandler, _entityType));
             }
 
             return _databaseKeyToQueryJobBuilderMappings[fieldDatabaseKey];
