@@ -1,4 +1,5 @@
 ﻿using System.Threading.Tasks;
+using OctopusCore.Contract;
 using OctopusCore.Parser;
 
 namespace OctopusCore.Analyzer
