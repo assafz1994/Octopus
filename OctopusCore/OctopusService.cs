@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
 using OctopusCore.Analyzer;
 using OctopusCore.Executor;
@@ -10,9 +8,9 @@ namespace OctopusCore
 {
     public class OctopusService : IOctopusService
     {
-        private readonly IParser _parser;
         private readonly IAnalyzer _analyzer;
         private readonly IExecutor _executor;
+        private readonly IParser _parser;
 
         public OctopusService(IParser parser, IAnalyzer analyzer, IExecutor executor)
         {
@@ -23,10 +21,10 @@ namespace OctopusCore
 
         public async Task ExecuteQuery(string query)
         {
-            //todo 
+            
             var queryInfo = await _parser.ParseQuery(query);
-            var workPlan = await _analyzer.AnalyzeQuery(queryInfo);
-            var result = await _executor.ExecuteWorkPlan(workPlan);
+            var workPlan = _analyzer.AnalyzeQuery(queryInfo);
+            var result = await _executor.ExecuteWorkPlanAsync(workPlan);
 
             //todo return execution result 
             throw new NotImplementedException();

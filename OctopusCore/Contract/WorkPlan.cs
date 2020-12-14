@@ -1,10 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Collections.Generic;
+using OctopusCore.Analyzer.Jobs;
 
-namespace OctopusCore.Analyzer
+namespace OctopusCore.Contract
 {
     public class WorkPlan
     {
+        public IReadOnlyCollection<Job> Jobs { get; }
+
+        public WorkPlan(IReadOnlyCollection<Job> jobs)
+        {
+            Jobs = jobs;
+        }
     }
 }
