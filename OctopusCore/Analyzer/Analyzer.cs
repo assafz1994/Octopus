@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Buffers;
+using System.Linq;
 using System.Threading.Tasks;
 using OctopusCore.Configuration;
 using OctopusCore.Contract;
@@ -24,12 +26,12 @@ namespace OctopusCore.Analyzer
 
             var workPlanBuilder = new WorkPlanBuilder(_databaseConfigurationManager, selectQueryInfo.Entity);
 
-            foreach (var queryFilter in selectQueryInfo.Filters)
+            foreach (var queryFilter in selectQueryInfo.Filters?? Enumerable.Empty<Filter>())
             {
                 workPlanBuilder.AddFilter(queryFilter);
             }
 
-            foreach (var field in selectQueryInfo.Fields)
+            foreach (var field in selectQueryInfo.Fields?? Enumerable.Empty<string>())
             {
                 workPlanBuilder.AddProjectionField(field);
             }
