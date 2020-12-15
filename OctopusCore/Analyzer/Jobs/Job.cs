@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
+using OctopusCore.Contract;
 
 namespace OctopusCore.Analyzer.Jobs
 {
@@ -17,6 +18,6 @@ namespace OctopusCore.Analyzer.Jobs
             HasExecuted = true;
         }
 
-        protected abstract Task<object> ExecuteInternalAsync();
+        protected abstract Task<ExecutionResult> ExecuteInternalAsync();
     }
 }

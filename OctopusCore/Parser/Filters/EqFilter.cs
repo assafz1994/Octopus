@@ -10,7 +10,7 @@ namespace OctopusCore.Parser.Filters
         public EqFilter(List<string> fieldNames, string expression)
         {
             FieldNames = fieldNames;
-            Expression = expression;
+            Expression = "\'"+expression+"\'";
         }
         public override bool Equals(object obj)
         {

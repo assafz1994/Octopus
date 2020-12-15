@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using OctopusCore.Contract;
 using OctopusCore.DbHandlers;
 using OctopusCore.Parser;
 
@@ -24,7 +25,7 @@ namespace OctopusCore.Analyzer.Jobs
         }
 
 
-        protected override Task<object> ExecuteInternalAsync()
+        protected override Task<ExecutionResult> ExecuteInternalAsync()
         {
             return _dbHandler.ExecuteQueryWithFiltersAsync(_fieldsToSelect, _filters,_entityType);
         }
