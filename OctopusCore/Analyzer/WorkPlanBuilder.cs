@@ -23,16 +23,14 @@ namespace OctopusCore.Analyzer
 
         public void AddFilter(Filter filter)
         {
-            var queryJobBuilder = GetOrCreateQueryJobBuilder(filter.FieldName);
+            var queryJobBuilder = GetOrCreateQueryJobBuilder(filter.FieldNames.Single());
             queryJobBuilder.AddFilter(filter);
         }
 
-        public void AddProjectionField(Field field)
+        public void AddProjectionField(string fieldName)
         {
-            if (field.Include != null) throw new Exception("Include is not supported");
-
-            var queryJobBuilder = GetOrCreateQueryJobBuilder(field.Name);
-            queryJobBuilder.AddProjectionField(field.Name);
+            var queryJobBuilder = GetOrCreateQueryJobBuilder(fieldName);
+            queryJobBuilder.AddProjectionField(fieldName);
         }
 
         public WorkPlan Build()
