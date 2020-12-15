@@ -2,6 +2,6 @@
 # This .gitignore file was automatically created by Microsoft(R) Visual Studio.
 ################################################################################
 
-/OctopusCore/obj
-/.vs
-/OctopusCore/bin/Debug/netstandard2.0
+/OctopusCore/obj/*
+/.vs/*
+/OctopusCore/bin/*
