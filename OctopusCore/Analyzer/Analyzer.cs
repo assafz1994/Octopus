@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using OctopusCore.Configuration;
 using OctopusCore.Contract;
 using OctopusCore.Parser;
@@ -16,14 +17,19 @@ namespace OctopusCore.Analyzer
 
         public WorkPlan AnalyzeQuery(QueryInfo queryInfo)
         {
-            var workPlanBuilder = new WorkPlanBuilder(_databaseConfigurationManager, queryInfo.Entity);
+            if (!(queryInfo is SelectQueryInfo selectQueryInfo))
+            {
+                throw new Exception("Unsupported query type");
+            }
 
-            foreach (var queryFilter in queryInfo.Filters)
+            var workPlanBuilder = new WorkPlanBuilder(_databaseConfigurationManager, selectQueryInfo.Entity);
+
+            foreach (var queryFilter in selectQueryInfo.Filters)
             {
                 workPlanBuilder.AddFilter(queryFilter);
             }
 
-            foreach (var field in queryInfo.Projection)
+            foreach (var field in selectQueryInfo.Fields)
             {
                 workPlanBuilder.AddProjectionField(field);
             }
