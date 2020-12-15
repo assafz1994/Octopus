@@ -1,9 +1,10 @@
 ﻿using System.Threading.Tasks;
+using OctopusCore.Contract;
 
 namespace OctopusCore
 {
     public interface IOctopusService
     {
-        Task ExecuteQuery(string query);//todo change void to result
+        Task<ExecutionResult> ExecuteQueryAsync(string query);
     }
 }
