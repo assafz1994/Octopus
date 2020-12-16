@@ -8,7 +8,7 @@ namespace OctopusCore.Analyzer.Jobs
 {
     public abstract class Job
     {
-        public object Result { get; private set; }
+        public ExecutionResult Result { get; private set; }
         public bool HasExecuted { get; private set; }
 
         public async Task ExecuteAsync()
