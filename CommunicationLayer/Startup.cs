@@ -9,6 +9,7 @@ using OctopusCore;
 using OctopusCore.Analyzer;
 using OctopusCore.Configuration;
 using OctopusCore.Configuration.Mocks;
+using OctopusCore.DbHandlers;
 using OctopusCore.Executor;
 using OctopusCore.Parser;
 
@@ -51,13 +52,21 @@ namespace CommunicationLayer
                 var entityTypeToFieldNameToDatabaseKeyMappings = new Dictionary<string, Dictionary<string, string>>
                 {
                     {
-                        "Person", new Dictionary<string, string>
+                        "User", new Dictionary<string, string>
                         {
-                            {"Name", "Sql1"}
+                            {"name", "Sql1"},
+                            {"age", "Sql1"},
+                            {"id", "Sql1"}
                         }
                     }
                 };
-                return new DatabaseConfigurationManagerMock(entityTypeToFieldNameToDatabaseKeyMappings);
+
+                var databaseKeyToDbHandlerMappings = new Dictionary<string, IDbHandler>
+                {
+                    {"Sql1", new SqliteDbHandler()}
+                };
+                return new DatabaseConfigurationManagerMock(entityTypeToFieldNameToDatabaseKeyMappings,
+                    databaseKeyToDbHandlerMappings);
             }
         }
 
