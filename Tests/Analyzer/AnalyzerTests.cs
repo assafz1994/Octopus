@@ -6,6 +6,7 @@ using OctopusCore.Analyzer;
 using OctopusCore.Analyzer.Jobs;
 using OctopusCore.Configuration;
 using OctopusCore.Configuration.Mocks;
+using OctopusCore.DbHandlers;
 using OctopusCore.Parser;
 
 namespace Tests
@@ -55,8 +56,13 @@ namespace Tests
                         }
                     }
                 };
+                var databaseKeyToDbHandlerMappings = new Dictionary<string, IDbHandler>
+                {
+                    {DatabaseKey, new SqliteDbHandler()}
+                };
 
-                return new DatabaseConfigurationManagerMock(entityTypeToFieldNameToDatabaseKeyMappings);
+                return new DatabaseConfigurationManagerMock(entityTypeToFieldNameToDatabaseKeyMappings,
+                    databaseKeyToDbHandlerMappings);
             }
         }
 
@@ -71,7 +77,7 @@ namespace Tests
             Assert.AreEqual(1, actualWorkPlan.Jobs.Count);
             var job = actualWorkPlan.Jobs.Single();
             Assert.IsInstanceOf<QueryJob>(job);
-            var queryJob = (QueryJob) job;
+            var queryJob = (QueryJob)job;
             Assert.AreEqual(EntityName, queryJob.EntityType);
             Assert.That(queryJob.FieldsToSelect, Is.EquivalentTo(new[]
             {
