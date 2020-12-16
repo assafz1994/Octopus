@@ -18,7 +18,7 @@ namespace OctopusCore.DbHandlers
             using var connection = new SqliteConnection(GetConnectionString());
             connection.Open();
 
-            var table = entityType;
+            var table = GetTable(entityType);
             var fields = string.Join(",", fieldsToSelect);
             var conditions = ConvertFiltersToWhereStatement(filters);
 
@@ -29,6 +29,12 @@ namespace OctopusCore.DbHandlers
             var result = ExecuteCommand(fieldsToSelect, command);
 
             return Task.FromResult(new ExecutionResult(result));
+        }
+
+        private string GetTable(string entityType)
+        {
+            //assumption: entity is one(e.g. 'User'), table will be many(e.g. 'Users')
+            return entityType + 's';
         }
 
         private string GetFilterOperator(Filter filter)
