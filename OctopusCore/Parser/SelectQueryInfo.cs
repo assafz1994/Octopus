@@ -13,6 +13,11 @@ namespace OctopusCore.Parser
         public List<string> Fields { get; set; }
         public List<Include> Includes { get; set; }
 
+        public SelectQueryInfo()
+        {
+            SubQueries = new Dictionary<string, QueryInfo>();
+        }
+        
         public override bool Equals(object obj)
         {
             if (obj == null) return false;

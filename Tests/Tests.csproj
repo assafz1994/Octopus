@@ -5,7 +5,6 @@
 
     <IsPackable>false</IsPackable>
 
-    <StartupObject>Tests.Class1</StartupObject>
   </PropertyGroup>
 
   <ItemGroup>

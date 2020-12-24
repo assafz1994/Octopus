@@ -9,5 +9,6 @@ namespace OctopusCore.Parser
 
         public string Expression { get; set; }
         
+        public bool IsSubQueried { get; set; }
     }
 }

@@ -51,6 +51,76 @@ public interface IOctopusQLListener : IParseTreeListener {
 	/// <param name="context">The parse tree.</param>
 	void ExitSelect([NotNull] OctopusQLParser.SelectContext context);
 	/// <summary>
+	/// Enter a parse tree produced by <see cref="OctopusQLParser.insert"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	void EnterInsert([NotNull] OctopusQLParser.InsertContext context);
+	/// <summary>
+	/// Exit a parse tree produced by <see cref="OctopusQLParser.insert"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	void ExitInsert([NotNull] OctopusQLParser.InsertContext context);
+	/// <summary>
+	/// Enter a parse tree produced by <see cref="OctopusQLParser.delete"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	void EnterDelete([NotNull] OctopusQLParser.DeleteContext context);
+	/// <summary>
+	/// Exit a parse tree produced by <see cref="OctopusQLParser.delete"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	void ExitDelete([NotNull] OctopusQLParser.DeleteContext context);
+	/// <summary>
+	/// Enter a parse tree produced by <see cref="OctopusQLParser.update"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	void EnterUpdate([NotNull] OctopusQLParser.UpdateContext context);
+	/// <summary>
+	/// Exit a parse tree produced by <see cref="OctopusQLParser.update"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	void ExitUpdate([NotNull] OctopusQLParser.UpdateContext context);
+	/// <summary>
+	/// Enter a parse tree produced by <see cref="OctopusQLParser.insertClause"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	void EnterInsertClause([NotNull] OctopusQLParser.InsertClauseContext context);
+	/// <summary>
+	/// Exit a parse tree produced by <see cref="OctopusQLParser.insertClause"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	void ExitInsertClause([NotNull] OctopusQLParser.InsertClauseContext context);
+	/// <summary>
+	/// Enter a parse tree produced by <see cref="OctopusQLParser.getClause"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	void EnterGetClause([NotNull] OctopusQLParser.GetClauseContext context);
+	/// <summary>
+	/// Exit a parse tree produced by <see cref="OctopusQLParser.getClause"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	void ExitGetClause([NotNull] OctopusQLParser.GetClauseContext context);
+	/// <summary>
+	/// Enter a parse tree produced by <see cref="OctopusQLParser.assignments"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	void EnterAssignments([NotNull] OctopusQLParser.AssignmentsContext context);
+	/// <summary>
+	/// Exit a parse tree produced by <see cref="OctopusQLParser.assignments"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	void ExitAssignments([NotNull] OctopusQLParser.AssignmentsContext context);
+	/// <summary>
+	/// Enter a parse tree produced by <see cref="OctopusQLParser.assignment"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	void EnterAssignment([NotNull] OctopusQLParser.AssignmentContext context);
+	/// <summary>
+	/// Exit a parse tree produced by <see cref="OctopusQLParser.assignment"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	void ExitAssignment([NotNull] OctopusQLParser.AssignmentContext context);
+	/// <summary>
 	/// Enter a parse tree produced by <see cref="OctopusQLParser.whereClause"/>.
 	/// </summary>
 	/// <param name="context">The parse tree.</param>
@@ -81,6 +151,16 @@ public interface IOctopusQLListener : IParseTreeListener {
 	/// <param name="context">The parse tree.</param>
 	void ExitFields([NotNull] OctopusQLParser.FieldsContext context);
 	/// <summary>
+	/// Enter a parse tree produced by <see cref="OctopusQLParser.entityReps"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	void EnterEntityReps([NotNull] OctopusQLParser.EntityRepsContext context);
+	/// <summary>
+	/// Exit a parse tree produced by <see cref="OctopusQLParser.entityReps"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	void ExitEntityReps([NotNull] OctopusQLParser.EntityRepsContext context);
+	/// <summary>
 	/// Enter a parse tree produced by <see cref="OctopusQLParser.selectClause"/>.
 	/// </summary>
 	/// <param name="context">The parse tree.</param>
@@ -110,6 +190,26 @@ public interface IOctopusQLListener : IParseTreeListener {
 	/// </summary>
 	/// <param name="context">The parse tree.</param>
 	void ExitAggregateClause([NotNull] OctopusQLParser.AggregateClauseContext context);
+	/// <summary>
+	/// Enter a parse tree produced by <see cref="OctopusQLParser.values"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	void EnterValues([NotNull] OctopusQLParser.ValuesContext context);
+	/// <summary>
+	/// Exit a parse tree produced by <see cref="OctopusQLParser.values"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	void ExitValues([NotNull] OctopusQLParser.ValuesContext context);
+	/// <summary>
+	/// Enter a parse tree produced by <see cref="OctopusQLParser.array"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	void EnterArray([NotNull] OctopusQLParser.ArrayContext context);
+	/// <summary>
+	/// Exit a parse tree produced by <see cref="OctopusQLParser.array"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	void ExitArray([NotNull] OctopusQLParser.ArrayContext context);
 	/// <summary>
 	/// Enter a parse tree produced by <see cref="OctopusQLParser.func"/>.
 	/// </summary>

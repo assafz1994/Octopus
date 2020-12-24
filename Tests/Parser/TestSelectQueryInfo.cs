@@ -22,7 +22,7 @@ namespace Tests.Parser
             get
             {
                 yield return new TestCaseData(
-                    "From Person p\r\n| Where p.id == 2\r\n| Select p(id, age, friend)\r\n", 
+                    "From Person p\r\n| Where p.id == (From Person p\r\n| Where p.id == 2\r\n| Select p(id, age, friend)\r\n) | Select p(id, age, friend)\r\n", 
                     new SelectQueryInfo()
                     {
                         Entity = "Person",

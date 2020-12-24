@@ -11,6 +11,7 @@ namespace OctopusCore.Parser.Filters
         {
             FieldNames = fieldNames;
             Expression = expression;
+            IsSubQueried = false;
         }
         public override bool Equals(object obj)
         {

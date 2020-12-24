@@ -33,7 +33,17 @@ namespace OctopusCore.Parser
             {
                 var fieldNames = new List<string>();
                 fieldNames.AddRange(whereClause.fieldsWithDot()._el.Select(field => field.GetText().ToLower()));
-                var value = whereClause.value().GetText();
+                string value;
+                if (whereClause.value().select() != null)
+                {
+                    var guid = new Guid().ToString();
+                    selectQueryInfo.SubQueries.Add(guid, HandleSelect(whereClause.value().select()));
+                    value = guid;
+                }
+                else
+                {
+                    value = whereClause.value().GetText();
+                }
                 var comparator = whereClause.COMPARATOR().GetText(); 
                 var filter = comparatorToFilter[comparator](fieldNames, value);
                 filters.Add(filter);
