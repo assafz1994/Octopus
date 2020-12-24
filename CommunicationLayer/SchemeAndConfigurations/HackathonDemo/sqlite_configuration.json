@@ -6,7 +6,7 @@
             "ConnectionString": "Data Source=DataBases\\sqlite_db.db",
             "Entities": [
                 {
-                    "Name": "Person",
+                    "Name": "person",
                     "Fields": [
                         {
                             "Name": "id",
@@ -16,6 +16,23 @@
                         {
                             "Name": "age",
                             "Type": "int",
+                            "ConnectedTo": null
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "Id": "sql2",
+            "DbType": "Sqlite",
+            "ConnectionString": "Data Source=DataBases\\sqlite2_db.db",
+            "Entities": [
+                {
+                    "Name": "person",
+                    "Fields": [
+                        {
+                            "Name": "id",
+                            "Type": "string",
                             "ConnectedTo": null
                         },
                         {

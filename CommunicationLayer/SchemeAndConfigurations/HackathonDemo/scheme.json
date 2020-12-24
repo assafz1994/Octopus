@@ -1,7 +1,7 @@
 {
     "Entities": [
         {
-            "Name": "Person",
+            "Name": "person",
             "Fields": [
                 {
                     "Name": "id",
