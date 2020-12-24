@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Newtonsoft.Json;
-using OctopusCore.Configuration.Scheme;
+using OctopusCore.Configuration;
 using OctopusCore.Parser;
 namespace Tests
 {
@@ -46,7 +46,47 @@ namespace Tests
                     }
                 }
             };
+            var configuration = new DbConfigurations()
+            {
+                Configurations = new List<DbConfiguration>()
+                {
+                    new DbConfiguration()
+                    {
+                        ConnectionString = "Data Source=DataBases\\sqlite_db.db",
+                        DbType = DbType.Sqlite,
+                        Entities = new List<Entity>()
+                        {
+                            new Entity()
+                            {
+                                Fields = new List<Field>()
+                                {
+                                    new Field()
+                                    {
+                                        ConnectedTo = null,
+                                        Name = "Id",
+                                        Type = "string"
+                                    },
+                                    new Field()
+                                    {
+                                        ConnectedTo = null,
+                                        Name = "age",
+                                        Type = "int"
+                                    },
+                                    new Field()
+                                    {
+                                        ConnectedTo = null,
+                                        Name = "name",
+                                        Type = "string"
+                                    }
+                                },
+                                Name = "Person"
+                            }
+                        }
+                    }
+                }
+            };
             var a = JsonConvert.SerializeObject(s);
+            var b = JsonConvert.SerializeObject(configuration);
             Console.Out.WriteLine("");
         }
     }

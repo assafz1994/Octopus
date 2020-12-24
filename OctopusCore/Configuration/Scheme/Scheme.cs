@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace OctopusCore.Configuration.Scheme
+namespace OctopusCore.Configuration
 {
     public class Scheme
     {

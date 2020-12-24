@@ -13,5 +13,15 @@
     <ProjectReference Include="..\OctopusCore\OctopusCore.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="SchemeAndConfigurations\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Update="SchemeAndConfigurations\**">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
 
 </Project>

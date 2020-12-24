@@ -1,8 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Collections.Generic;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
 
-namespace OctopusCore.Configuration.Scheme
+namespace OctopusCore.Configuration
 {
     public class DbConfigurations
     {
@@ -12,7 +12,11 @@ namespace OctopusCore.Configuration.Scheme
     public class DbConfiguration
     {
         public string Id { get; set; }
-        public string DbType { get; set; }
+
+        [JsonConverter(typeof(StringEnumConverter))]
+
+        public DbType DbType { get; set; }
+
         public string ConnectionString { get; set; }
         public List<Entity> Entities { get; set; }
     }

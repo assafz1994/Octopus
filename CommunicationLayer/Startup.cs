@@ -8,7 +8,7 @@ using Microsoft.Extensions.Hosting;
 using OctopusCore;
 using OctopusCore.Analyzer;
 using OctopusCore.Configuration;
-using OctopusCore.Configuration.Mocks;
+using OctopusCore.Configuration.ConfigurationProviders;
 using OctopusCore.DbHandlers;
 using OctopusCore.Executor;
 using OctopusCore.Parser;
@@ -40,34 +40,18 @@ namespace CommunicationLayer
 
         public void ConfigureContainer(ContainerBuilder builder)
         {
+            var reader = new ConfigurationAndSchemeReader(Configuration["DbConfigurationFilePath"],
+                Configuration["SchemeFilePath"]);
+
+            builder.RegisterInstance(reader.DbConfigurations).As<DbConfigurations>();
+            builder.RegisterInstance(reader.Scheme).As<Scheme>();
+            builder.RegisterType<DbHandlersResolver>().As<IDbHandlersResolver>();
+            builder.RegisterType<AnalyzerConfigurationProvider>().As<IAnalyzerConfigurationProvider>();
             builder.RegisterType<Parser>().As<IParser>();
-            builder.RegisterInstance(CreateDatabaseConfigurationManagerMock())
-                .As<IDatabaseConfigurationManager>();
             builder.RegisterType<Analyzer>().As<IAnalyzer>();
             builder.RegisterType<Executor>().As<IExecutor>();
             builder.RegisterType<OctopusService>().As<IOctopusService>();
 
-            IDatabaseConfigurationManager CreateDatabaseConfigurationManagerMock()
-            {
-                var entityTypeToFieldNameToDatabaseKeyMappings = new Dictionary<string, Dictionary<string, string>>
-                {
-                    {
-                        "User", new Dictionary<string, string>
-                        {
-                            {"name", "Sql1"},
-                            {"age", "Sql1"},
-                            {"id", "Sql1"}
-                        }
-                    }
-                };
-
-                var databaseKeyToDbHandlerMappings = new Dictionary<string, IDbHandler>
-                {
-                    {"Sql1", new SqliteDbHandler()}
-                };
-                return new DatabaseConfigurationManagerMock(entityTypeToFieldNameToDatabaseKeyMappings,
-                    databaseKeyToDbHandlerMappings);
-            }
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
