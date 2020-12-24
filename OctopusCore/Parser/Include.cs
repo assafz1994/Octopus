@@ -26,7 +26,7 @@ namespace OctopusCore.Parser
             }
             else if (includeContext.fields() != null)
             {
-                Fields.AddRange(includeContext.fields()._fieldList.Select(fieldContext => fieldContext.GetText()));
+                Fields.AddRange(includeContext.fields()._fieldList.Select(fieldContext => fieldContext.GetText().ToLower()));
             }
             Includes.AddRange(includeContext.include().Select(x => new Include(x)));
         }

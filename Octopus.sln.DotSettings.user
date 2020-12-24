@@ -14,4 +14,9 @@
   &lt;TestAncestor&gt;&#xD;
     &lt;TestId&gt;NUnit3x::2E3C7ED0-A529-4CA0-BC78-7B9F9DA2AFA1::.NETCoreApp,Version=v3.1::Tests.Parser.TestSelectQueryInfo.TestValidSelectQueryInfo&lt;/TestId&gt;&#xD;
   &lt;/TestAncestor&gt;&#xD;
+&lt;/SessionState&gt;</s:String>
+	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=eac9cc33_002D825f_002D4a7f_002Da822_002D38d5c3187b40/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" Name="TestValidSelectQueryInfo #3" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;&#xD;
+  &lt;TestAncestor&gt;&#xD;
+    &lt;TestId&gt;NUnit3x::2E3C7ED0-A529-4CA0-BC78-7B9F9DA2AFA1::.NETCoreApp,Version=v3.1::Tests.Parser.TestSelectQueryInfo.TestValidSelectQueryInfo&lt;/TestId&gt;&#xD;
+  &lt;/TestAncestor&gt;&#xD;
 &lt;/SessionState&gt;</s:String></wpf:ResourceDictionary>
