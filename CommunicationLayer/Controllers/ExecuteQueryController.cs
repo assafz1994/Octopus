@@ -1,6 +1,5 @@
 ﻿using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using Newtonsoft.Json;
 using OctopusCore;
 
 namespace CommunicationLayer.Controllers
@@ -18,7 +17,7 @@ namespace CommunicationLayer.Controllers
         [HttpGet]
         [HttpPost]
         [Route("ExecuteQuery")]
-        //Example: https://localhost:44398/ExecuteQuery?query=blabla
+        //Example: https://localhost:44398/executequery/?query=from User u | where u.name == Assaf |select u(name,age)
         public async Task<string> ExecuteQueryAsync(string query)
         {
             if (string.IsNullOrEmpty(query))
@@ -28,8 +27,7 @@ namespace CommunicationLayer.Controllers
 
             var result = await _octopusService.ExecuteQueryAsync(query);
 
-            return result.ToString();//todo return an actual response.
-            //{Type: result.Type , Results: result.EntityResults.Values}
+            return result;
         }
     }
 }

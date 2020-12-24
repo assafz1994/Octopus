@@ -16,23 +16,6 @@ namespace OctopusCore.Contract
             EntityResults = entityResults;
         }
 
-        public override string ToString()//todo change the result format, this is just for a demo
-        {
-            if (EntityResults == null)
-            {
-                return "";
-            }
-            return JsonConvert.SerializeObject(EntityResults.Values.Select(x => x.Fields));
-
-            //var stringBuilder = new StringBuilder();
-            //foreach (var entity in EntityResults.Values)
-            //{
-            //    stringBuilder.Append($"[{GetEntityString(entity)}]\n");
-            //}
-
-            //return stringBuilder.ToString();
-        }
-
         public List<Dictionary<string, dynamic>> GetFields()
         {
             return EntityResults.Values.Select(x => x.Fields).ToList();
