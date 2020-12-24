@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using OctopusCore.Analyzer.Jobs;
+using OctopusCore.Contract;
 using OctopusCore.DbHandlers;
 using OctopusCore.Parser;
 
@@ -11,6 +12,7 @@ namespace OctopusCore.Analyzer
         private readonly List<string> _fieldsToSelect;
         private readonly List<Filter> _filters;
         private readonly string _entityType;
+        private Dictionary<string, WorkPlan> _subQueriesWorkPlans;
 
         public QueryJobBuilder(IDbHandler dbHandler, string entityType)
         {
@@ -19,6 +21,7 @@ namespace OctopusCore.Analyzer
             _fieldsToSelect = new List<string>();
             _filters = new List<Filter>();
             _entityType = entityType;
+            _subQueriesWorkPlans = new Dictionary<string, WorkPlan>();
         }
 
         public void AddProjectionField(string fieldName)
@@ -30,10 +33,14 @@ namespace OctopusCore.Analyzer
         {
             _filters.Add(filter);
         }
+        public void AddWorkPlan(string guid, WorkPlan workPlan)
+        {
+            _subQueriesWorkPlans.Add(guid, workPlan);
+        }
 
         public QueryJob Build()
         {
-            return new QueryJob(_dbHandler, _fieldsToSelect, _filters, _entityType);
+            return new QueryJob(_dbHandler, _fieldsToSelect, _filters, _entityType, _subQueriesWorkPlans);
         }
     }
 }
