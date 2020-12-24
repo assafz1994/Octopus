@@ -37,7 +37,7 @@ namespace OctopusCore.Parser
                 var isQueried = false;
                 if (whereClause.value().select() != null)
                 {
-                    var guid = new Guid().ToString();
+                    var guid = System.Guid.NewGuid().ToString();
                     selectQueryInfo.SubQueries.Add(guid, HandleSelect(whereClause.value().select()));
                     value = guid;
                     isQueried = true;
