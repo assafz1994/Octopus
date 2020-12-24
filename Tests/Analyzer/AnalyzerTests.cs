@@ -5,6 +5,8 @@ using NUnit.Framework;
 using OctopusCore.Analyzer;
 using OctopusCore.Analyzer.Jobs;
 using OctopusCore.Configuration;
+using OctopusCore.Configuration.ConfigurationProviders;
+using OctopusCore.Configuration.Mocks;
 using OctopusCore.DbHandlers;
 using OctopusCore.Parser;
 
@@ -28,8 +30,11 @@ namespace Tests
             var builder = new ContainerBuilder();
             builder.RegisterType<Analyzer>().As<IAnalyzer>();
 
-            var databaseConfigurationManagerMock = CreateDatabaseConfigurationManagerMock();
-            builder.RegisterInstance(databaseConfigurationManagerMock).As<IDatabaseConfigurationManager>();
+            var analyzerConfigurationProvider = CreateAnalyzerConfigurationProviderMock();
+            builder.RegisterInstance(analyzerConfigurationProvider).As<IAnalyzerConfigurationProvider>();
+
+            var dbHandlerResolverMock = CreateDbHandlerResolverMock();
+            builder.RegisterInstance(dbHandlerResolverMock).As<IDbHandlersResolver>();
 
             _container = builder.Build();
 
@@ -43,7 +48,7 @@ namespace Tests
                 }
             };
 
-            IDatabaseConfigurationManager CreateDatabaseConfigurationManagerMock()
+            IAnalyzerConfigurationProvider CreateAnalyzerConfigurationProviderMock()
             {
                 var entityTypeToFieldNameToDatabaseKeyMappings = new Dictionary<string, Dictionary<string, string>>
                 {
@@ -55,14 +60,18 @@ namespace Tests
                         }
                     }
                 };
-                var databaseKeyToDbHandlerMappings = new Dictionary<string, IDbHandler>
-                {
-                    {DatabaseKey, new SqliteDbHandler(null)}
-                };
-
-                return new DatabaseConfigurationManagerMock(entityTypeToFieldNameToDatabaseKeyMappings,
-                    databaseKeyToDbHandlerMappings);
+            
+                return new AnalyzerConfigurationProviderMock(entityTypeToFieldNameToDatabaseKeyMappings);
             }
+        }
+
+        private static IDbHandlersResolver CreateDbHandlerResolverMock()
+        {
+            var databaseKeyToDbHandlerMappings = new Dictionary<string, IDbHandler>
+            {
+                {DatabaseKey, new SqliteDbHandler(null)}
+            };
+            return new DbHandlerResolverMock(databaseKeyToDbHandlerMappings);
         }
 
 
