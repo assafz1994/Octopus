@@ -43,7 +43,7 @@ namespace OctopusCore.Analyzer
             var jobs = new List<Job>(_databaseKeyToQueryJobBuilderMappings.Values.Select(builder => builder.Build()));
             if (jobs.Count > 1)
             {
-                var unionQueryJob = new UnionQueryJob(jobs);
+                var unionQueryJob = new UnionQueryJob(new List<Job>(jobs));
                 jobs.Add(unionQueryJob);
             }
 
