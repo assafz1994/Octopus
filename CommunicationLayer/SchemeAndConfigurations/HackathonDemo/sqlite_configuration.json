@@ -6,7 +6,7 @@
             "ConnectionString": "Data Source=DataBases\\sqlite_db.db",
             "Entities": [
                 {
-                    "Name": "Person",
+                    "Name": "person",
                     "Fields": [
                         {
                             "Name": "id",
