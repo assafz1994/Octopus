@@ -17,18 +17,18 @@ namespace OctopusCore.Analyzer.Jobs
         }
         protected override Task<ExecutionResult> ExecuteInternalAsync()
         {
-            var jobsEntityResults = Jobs.SelectMany(x => x.Result.EntityResults);
-            var outputEntityResult = new Dictionary<string, EntityResult>();
-            
-            // go through all the guids and entityResults that are in all the jobs received
-            foreach (var guidToEntityResult in jobsEntityResults)
+            var jobsEntityResults = Jobs.Select(x => x.Result.EntityResults);
+            var hashSet = new HashSet<string>(jobsEntityResults.First().Keys);
+            foreach (var entityResult in jobsEntityResults)
             {
-                // if it's the first time to encounter this object, add it to the dictionary
-                if (!outputEntityResult.ContainsKey(guidToEntityResult.Key))
-                {
-                    outputEntityResult[guidToEntityResult.Key] = new EntityResult(new Dictionary<string, dynamic>());
-                }
-                // add all the fields to the output object
+                hashSet.IntersectWith(entityResult.Keys);    
+            }
+            var intersection = hashSet.ToList();
+            var outputEntityResult = intersection.ToDictionary(guid => guid, guid => new EntityResult(new Dictionary<string, object>()));
+            // go through all the guids and entityResults that are in all the jobs received
+            foreach (var guidToEntityResult in jobsEntityResults.SelectMany(x => x))
+            {
+                if (!intersection.Contains(guidToEntityResult.Key)) continue;
                 foreach (var field in guidToEntityResult.Value.Fields)
                 {
                     outputEntityResult[guidToEntityResult.Key].Fields.Add(field.Key, field.Value);
