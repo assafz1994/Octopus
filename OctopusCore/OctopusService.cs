@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
+using Newtonsoft.Json;
 using OctopusCore.Analyzer;
 using OctopusCore.Contract;
 using OctopusCore.Executor;
@@ -28,12 +29,12 @@ namespace OctopusCore
                 var workPlan = _analyzer.AnalyzeQuery(queryInfo);
 
                 var executionResult = await _executor.ExecuteWorkPlanAsync(workPlan);
-                return executionResult.ToString();
+                return JsonConvert.SerializeObject(new {isSuccessful = true, result = executionResult.GetFields()});
             }
             catch (Exception ex)
             {
                 // status: boolean, res: string
-                return 
+                return JsonConvert.SerializeObject(new {isSuccessful = false, message = ex.Message});
             }
 
           

@@ -32,9 +32,12 @@ namespace OctopusCore.Contract
 
             //return stringBuilder.ToString();
         }
-        
-       
-        
+
+        public List<Dictionary<string, dynamic>> GetFields()
+        {
+            return EntityResults.Values.Select(x => x.Fields).ToList();
+        }
+
         private string GetEntityString(EntityResult entityResult)
         {
             var entityStringBuilder = new StringBuilder();
