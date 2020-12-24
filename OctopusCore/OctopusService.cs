@@ -33,7 +33,6 @@ namespace OctopusCore
             }
             catch (Exception ex)
             {
-                // status: boolean, res: string
                 return JsonConvert.SerializeObject(new {isSuccessful = false, message = ex.Message});
             }
 
