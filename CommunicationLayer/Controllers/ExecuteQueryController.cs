@@ -1,7 +1,6 @@
-﻿using System.Runtime.InteropServices.WindowsRuntime;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
 using OctopusCore;
 
 namespace CommunicationLayer.Controllers
@@ -30,6 +29,7 @@ namespace CommunicationLayer.Controllers
             var result = await _octopusService.ExecuteQueryAsync(query);
 
             return result.ToString();//todo return an actual response.
+            //{Type: result.Type , Results: result.EntityResults.Values}
         }
     }
 }

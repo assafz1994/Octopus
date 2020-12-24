@@ -20,13 +20,23 @@ namespace OctopusCore
             _executor = executor;
         }
 
-        public async Task<ExecutionResult> ExecuteQueryAsync(string query)
+        public async Task<string> ExecuteQueryAsync(string query)
         {
+            try
+            {
+                var queryInfo = await _parser.ParseQuery(query);
+                var workPlan = _analyzer.AnalyzeQuery(queryInfo);
 
-            var queryInfo = await _parser.ParseQuery(query);
-            var workPlan = _analyzer.AnalyzeQuery(queryInfo);
+                var executionResult = await _executor.ExecuteWorkPlanAsync(workPlan);
+                return executionResult.ToString();
+            }
+            catch (Exception ex)
+            {
+                // status: boolean, res: string
+                return 
+            }
 
-            return await _executor.ExecuteWorkPlanAsync(workPlan);
+          
         }
     }
 }
