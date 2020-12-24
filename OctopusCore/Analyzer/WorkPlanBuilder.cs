@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using OctopusCore.Analyzer.Jobs;
 using OctopusCore.Configuration;
 using OctopusCore.Configuration.ConfigurationProviders;
 using OctopusCore.Contract;
@@ -39,10 +40,14 @@ namespace OctopusCore.Analyzer
 
         public WorkPlan Build()
         {
-            var queryJobs = _databaseKeyToQueryJobBuilderMappings.Values.Select(builder => builder.Build()).ToList();
-            if (queryJobs.Count > 1) throw new Exception("Query an entity from multiple DBs is not supported");
+            var jobs = new List<Job>(_databaseKeyToQueryJobBuilderMappings.Values.Select(builder => builder.Build()));
+            if (jobs.Count > 1)
+            {
+                var unionQueryJob = new UnionQueryJob(jobs);
+                jobs.Add(unionQueryJob);
+            }
 
-            return new WorkPlan(queryJobs);
+            return new WorkPlan(jobs);
         }
 
         private QueryJobBuilder GetOrCreateQueryJobBuilder(string fieldName)
