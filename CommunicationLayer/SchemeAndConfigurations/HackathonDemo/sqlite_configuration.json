@@ -22,27 +22,46 @@
                 }
             ]
         },
-        {
-            "Id": "sql2",
-            "DbType": "Sqlite",
-            "ConnectionString": "Data Source=DataBases\\sqlite2_db.db",
-            "Entities": [
-                {
-                    "Name": "person",
-                    "Fields": [
-                        {
-                            "Name": "id",
-                            "Type": "string",
-                            "ConnectedTo": null
-                        },
-                        {
-                            "Name": "name",
-                            "Type": "string",
-                            "ConnectedTo": null
-                        }
-                    ]
-                }
+      {
+        "Id": "sql2",
+        "DbType": "Sqlite",
+        "ConnectionString": "Data Source=DataBases\\sqlite2_db.db",
+        "Entities": [
+          {
+            "Name": "person",
+            "Fields": [
+              {
+                "Name": "id",
+                "Type": "string",
+                "ConnectedTo": null
+              },
+              {
+                "Name": "name",
+                "Type": "string",
+                "ConnectedTo": null
+              }
             ]
-        }
+          }
+        ]
+      },
+      {
+        "Id": "neo4j",
+        "DbType": "Neo4j",
+        "ConnectionString": "http://localhost:7474/",
+        "Username": "neo4j",
+        "Password": "1234",
+        "Entities": [
+          {
+            "Name": "person",
+            "Fields": [
+              {
+                "Name": "email",
+                "Type": "int",
+                "ConnectedTo": null
+              }
+            ]
+          }
+        ]
+      }
     ]
 }

@@ -6,6 +6,7 @@ namespace OctopusCore.Configuration
 {
     public enum DbType
     {
-        Sqlite,Neo4j
+        Sqlite,
+        Neo4j
     }
 }
