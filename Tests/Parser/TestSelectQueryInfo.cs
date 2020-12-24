@@ -25,7 +25,6 @@ namespace Tests.Parser
                     "From Person p\r\n| Where p.id == 2\r\n| Select p(id, age, friend)\r\n", 
                     new SelectQueryInfo()
                     {
-                        SubQueries = new Dictionary<string, QueryInfo>(),
                         Entity = "person",
                         Filters = new List<Filter>()
                         {
