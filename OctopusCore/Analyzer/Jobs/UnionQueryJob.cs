@@ -19,13 +19,14 @@ namespace OctopusCore.Analyzer.Jobs
         {
             var jobsEntityResults = Jobs.Select(x => x.Result.EntityResults);
             var hashSet = new HashSet<string>(jobsEntityResults.First().Keys);
+            // get guids that are in all of the results
             foreach (var entityResult in jobsEntityResults)
             {
                 hashSet.IntersectWith(entityResult.Keys);    
             }
             var intersection = hashSet.ToList();
             var outputEntityResult = intersection.ToDictionary(guid => guid, guid => new EntityResult(new Dictionary<string, object>()));
-            // go through all the guids and entityResults that are in all the jobs received
+            // go through entities that are in all of the results
             foreach (var guidToEntityResult in jobsEntityResults.SelectMany(x => x))
             {
                 if (!intersection.Contains(guidToEntityResult.Key)) continue;
