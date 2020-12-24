@@ -17,6 +17,23 @@
                             "Name": "age",
                             "Type": "int",
                             "ConnectedTo": null
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "Id": "sql2",
+            "DbType": "Sqlite",
+            "ConnectionString": "Data Source=DataBases\\sqlite2_db.db",
+            "Entities": [
+                {
+                    "Name": "person",
+                    "Fields": [
+                        {
+                            "Name": "id",
+                            "Type": "string",
+                            "ConnectedTo": null
                         },
                         {
                             "Name": "name",

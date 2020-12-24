@@ -16,7 +16,14 @@
 
 
   <ItemGroup>
+    <ApplicationDefinition Remove="DataBases\sqlite2_db.db" />
+  </ItemGroup>
+
+
+
+  <ItemGroup>
     <None Remove="DataBases\demoDb.db" />
+    <None Remove="DataBases\sqlite2_db.db" />
     <None Remove="DataBases\sqlite_db.db" />
   </ItemGroup>
 
@@ -24,6 +31,9 @@
 
   <ItemGroup>
     <Content Include="DataBases\demoDb.db">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="DataBases\sqlite2_db.db">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="DataBases\sqlite_db.db">
