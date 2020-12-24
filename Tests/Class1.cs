@@ -21,73 +21,7 @@ namespace Tests
             // };
             // var a2 = a1.Select(x => (SelectQueryInfo) parser.ParseQuery(x).Result).ToList();
             // Console.WriteLine();
-
-            var s = new Scheme()
-            {
-                Entities = new List<Entity>()
-                {
-                    new Entity()
-                    {
-                        Name = "Person", Fields = new List<Field>
-                        {
-                            new Field
-                            {
-                                Name = "id",
-                                ConnectedTo = null,
-                                Type = "string"
-                            },
-                            new Field
-                            {
-                                Name = "age",
-                                ConnectedTo = null,
-                                Type = "string"
-                            }
-                        }
-                    }
-                }
-            };
-            var configuration = new DbConfigurations()
-            {
-                Configurations = new List<DbConfiguration>()
-                {
-                    new DbConfiguration()
-                    {
-                        ConnectionString = "Data Source=DataBases\\sqlite_db.db",
-                        DbType = DbType.Sqlite,
-                        Entities = new List<Entity>()
-                        {
-                            new Entity()
-                            {
-                                Fields = new List<Field>()
-                                {
-                                    new Field()
-                                    {
-                                        ConnectedTo = null,
-                                        Name = "Id",
-                                        Type = "string"
-                                    },
-                                    new Field()
-                                    {
-                                        ConnectedTo = null,
-                                        Name = "age",
-                                        Type = "int"
-                                    },
-                                    new Field()
-                                    {
-                                        ConnectedTo = null,
-                                        Name = "name",
-                                        Type = "string"
-                                    }
-                                },
-                                Name = "Person"
-                            }
-                        }
-                    }
-                }
-            };
-            var a = JsonConvert.SerializeObject(s);
-            var b = JsonConvert.SerializeObject(configuration);
-            Console.Out.WriteLine("");
+            // Console.Out.WriteLine("");
         }
     }
 }
