@@ -28,10 +28,7 @@ namespace OctopusCore.Configuration
             return result;
         }
 
-        public string GetFieldDatabaseKey(string entityType, string fieldName)
-        {
-            return "";
-        }
+        
 
         private IDbHandler CreateDbHandler(DbConfiguration dbConfiguration, Scheme scheme)
         {
@@ -39,8 +36,9 @@ namespace OctopusCore.Configuration
             switch (dbConfiguration.DbType)
             {
                 case DbType.Sqlite:
-                    var provider = new SqliteConfigurationProvider(scheme, dbConfiguration);
-                    return new SqliteDbHandler(provider);
+                    return new SqliteDbHandler(new SqliteConfigurationProvider(scheme, dbConfiguration));
+                case DbType.Neo4j:
+                    return new Neo4jDbHandler(new Neo4jConfigurationProvider(scheme, dbConfiguration));
                 default:
                     throw new NotSupportedException($"unsupported dataBaseType : {dbConfiguration.DbType}");
             }
