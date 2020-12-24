@@ -27,12 +27,12 @@ namespace OctopusCore.Parser
             {
                 {"==", (list, s) => new EqFilter(list, s)},
             };
-            selectQueryInfo.Entity = selectContext.entity().GetText();
+            selectQueryInfo.Entity = selectContext.entity().GetText().ToLower();
             var filters = new List<Filter>();
             foreach (var whereClause in selectContext.whereClause())
             {
                 var fieldNames = new List<string>();
-                fieldNames.AddRange(whereClause.fieldsWithDot()._el.Select(field => field.GetText()));
+                fieldNames.AddRange(whereClause.fieldsWithDot()._el.Select(field => field.GetText().ToLower()));
                 var value = whereClause.value().GetText();
                 var comparator = whereClause.COMPARATOR().GetText(); 
                 var filter = comparatorToFilter[comparator](fieldNames, value);
@@ -50,12 +50,12 @@ namespace OctopusCore.Parser
                 }
                 else if (selectContext.selectClause().fields() != null)
                 {
-                    fields.AddRange(selectContext.selectClause().fields()._fieldList.Select(fieldContext => fieldContext.GetText()));
+                    fields.AddRange(selectContext.selectClause().fields()._fieldList.Select(fieldContext => fieldContext.GetText().ToLower()));
                 }
 
                 if (selectContext.selectClause().fieldsWithDot() != null)
                 {
-                    nestedProperty.AddRange(selectContext.selectClause().fieldsWithDot()._el.Select(field => field.GetText()));
+                    nestedProperty.AddRange(selectContext.selectClause().fieldsWithDot()._el.Select(field => field.GetText().ToLower()));
                 }
 
                 var includes = selectContext.selectClause().include().Select(includeContext => new Include(includeContext)).ToList();

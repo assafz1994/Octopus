@@ -17,7 +17,7 @@ namespace CommunicationLayer.Controllers
         [HttpGet]
         [HttpPost]
         [Route("ExecuteQuery")]
-        //Example: https://localhost:44398/executequery/?query=from User u | where u.name == Assaf |select u(name,age)
+        //Example: https://localhost:44398/executequery/?query=from Person u | where u.Name == Assaf |select u(Name,Age)
         public async Task<string> ExecuteQueryAsync(string query)
         {
             if (string.IsNullOrEmpty(query))
