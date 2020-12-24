@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using OctopusCore.Configuration;
+using OctopusCore.Configuration.ConfigurationProviders;
 using OctopusCore.Contract;
 using OctopusCore.Parser;
 
@@ -9,14 +10,17 @@ namespace OctopusCore.Analyzer
 {
     internal class WorkPlanBuilder
     {
-        private readonly IDatabaseConfigurationManager _databaseConfigurationManager;
         private readonly Dictionary<string, QueryJobBuilder> _databaseKeyToQueryJobBuilderMappings;
         private readonly string _entityType;
+        private readonly IAnalyzerConfigurationProvider _analyzerConfigurationProvider;
+        private readonly IDbHandlersResolver _dbHandlersResolver;
 
-        public WorkPlanBuilder(IDatabaseConfigurationManager databaseConfigurationManager, string entityType)
+        public WorkPlanBuilder(IDbHandlersResolver dbHandlersResolver,
+            IAnalyzerConfigurationProvider analyzerConfigurationProvider, string entityType)
         {
-            _databaseConfigurationManager = databaseConfigurationManager;
             _entityType = entityType;
+            _dbHandlersResolver = dbHandlersResolver;
+            _analyzerConfigurationProvider = analyzerConfigurationProvider;
 
             _databaseKeyToQueryJobBuilderMappings = new Dictionary<string, QueryJobBuilder>();
         }
@@ -43,10 +47,10 @@ namespace OctopusCore.Analyzer
 
         private QueryJobBuilder GetOrCreateQueryJobBuilder(string fieldName)
         {
-            var fieldDatabaseKey = _databaseConfigurationManager.GetFieldDatabaseKey(_entityType, fieldName);
+            var fieldDatabaseKey = _analyzerConfigurationProvider.GetFieldDatabaseKey(_entityType, fieldName);
             if (_databaseKeyToQueryJobBuilderMappings.ContainsKey(fieldDatabaseKey) == false)
             {
-                var dbHandler = _databaseConfigurationManager.ResolveDatabaseHandler(fieldDatabaseKey);
+                var dbHandler = _dbHandlersResolver.ResolveDbHandler(fieldDatabaseKey);
                 _databaseKeyToQueryJobBuilderMappings.Add(fieldDatabaseKey,
                     new QueryJobBuilder(dbHandler, _entityType));
             }

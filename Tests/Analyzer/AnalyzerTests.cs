@@ -5,7 +5,6 @@ using NUnit.Framework;
 using OctopusCore.Analyzer;
 using OctopusCore.Analyzer.Jobs;
 using OctopusCore.Configuration;
-using OctopusCore.Configuration.Mocks;
 using OctopusCore.DbHandlers;
 using OctopusCore.Parser;
 
@@ -58,7 +57,7 @@ namespace Tests
                 };
                 var databaseKeyToDbHandlerMappings = new Dictionary<string, IDbHandler>
                 {
-                    {DatabaseKey, new SqliteDbHandler()}
+                    {DatabaseKey, new SqliteDbHandler(null)}
                 };
 
                 return new DatabaseConfigurationManagerMock(entityTypeToFieldNameToDatabaseKeyMappings,

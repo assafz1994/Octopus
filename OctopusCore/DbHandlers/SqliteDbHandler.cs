@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Data.Sqlite;
+using OctopusCore.Configuration.ConfigurationProviders;
 using OctopusCore.Contract;
 using OctopusCore.Parser;
 using OctopusCore.Parser.Filters;
@@ -12,13 +13,20 @@ namespace OctopusCore.DbHandlers
 {
     public class SqliteDbHandler : IDbHandler
     {
+        private readonly SqliteConfigurationProvider _configurationProvider;
+
+        public SqliteDbHandler(SqliteConfigurationProvider configurationProvider)
+        {
+            _configurationProvider = configurationProvider;
+        }
+
         public Task<ExecutionResult> ExecuteQueryWithFiltersAsync(IReadOnlyCollection<string> fieldsToSelect,
             IReadOnlyCollection<Filter> filters, string entityType)
         {
-            using var connection = new SqliteConnection(GetConnectionString());
+            using var connection = new SqliteConnection(_configurationProvider.ConnectionString);
             connection.Open();
 
-            var table = GetTable(entityType);
+            var table = _configurationProvider.GetTableName(entityType);
             var fields = string.Join(",", fieldsToSelect);
             var conditions = ConvertFiltersToWhereStatement(filters);
 
@@ -31,12 +39,6 @@ namespace OctopusCore.DbHandlers
             return Task.FromResult(new ExecutionResult(entityType, result));
         }
 
-        private string GetTable(string entityType)
-        {
-            //assumption: entity is one(e.g. 'User'), table will be many(e.g. 'Users')
-            return entityType + 's';
-        }
-
         private string GetFilterOperator(Filter filter)
         {
             if (filter is EqFilter) return "=";
@@ -44,11 +46,6 @@ namespace OctopusCore.DbHandlers
             throw new ArgumentException("Filter type is not supported");
         }
 
-        private string GetConnectionString()
-        {
-            //todo should receive this from Configuration
-            return "Data Source=DataBases\\demoDb.db";
-        }
 
         private static Dictionary<string, EntityResult> ExecuteCommand(IReadOnlyCollection<string> fieldsToSelect,
             SqliteCommand command)
@@ -58,7 +55,7 @@ namespace OctopusCore.DbHandlers
 
             while (reader.Read())
             {
-                var fieldToValueMap = new EntityResult(fieldsToSelect.ToDictionary(field => field, field => reader[field]));
+                var fieldToValueMap = new EntityResult(fieldsToSelect.ToDictionary(field => field, field => reader[field.ToLower()]));
 
                 output.Add(reader["guid"].ToString(), fieldToValueMap);
             }
@@ -76,10 +73,8 @@ namespace OctopusCore.DbHandlers
         private string ConvertFiltersToWhereStatement(IReadOnlyCollection<Filter> filters)
         {
             if (filters.Count == 0)
-            {
                 //todo check why 'true' not working. think about alternative
                 return "1=1";
-            }
 
             var filtersAsString = new List<string>();
             foreach (var filter in filters)

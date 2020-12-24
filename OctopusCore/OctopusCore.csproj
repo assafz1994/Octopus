@@ -5,15 +5,32 @@
     <LangVersion>latest</LangVersion>
   </PropertyGroup>
 
+
+
+  <ItemGroup>
+    <ApplicationDefinition Include="DataBases\**">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </ApplicationDefinition>
+  </ItemGroup>
+
+
+
   <ItemGroup>
     <None Remove="DataBases\demoDb.db" />
+    <None Remove="DataBases\sqlite_db.db" />
   </ItemGroup>
+
+
 
   <ItemGroup>
     <Content Include="DataBases\demoDb.db">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="DataBases\sqlite_db.db">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
+
 
   <ItemGroup>
     <PackageReference Include="Antlr4.Runtime.Standard" Version="4.9.0" />
@@ -21,6 +38,11 @@
     <PackageReference Include="Microsoft.Bcl.HashCode" Version="1.1.0" />
     <PackageReference Include="Microsoft.Data.SQLite" Version="1.1.0" />
     <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
+  </ItemGroup>
+
+
+  <ItemGroup>
+    <Folder Include="Configuration\Mocks\" />
   </ItemGroup>
 
 </Project>

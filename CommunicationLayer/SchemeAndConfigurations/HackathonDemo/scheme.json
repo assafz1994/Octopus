@@ -1,0 +1,25 @@
+{
+    "Entities": [
+        {
+            "Name": "Person",
+            "Fields": [
+                {
+                    "Name": "id",
+                    "Type": "string",
+                    "ConnectedTo": null
+                },
+                {
+                    "Name": "age",
+                    "Type": "string",
+                    "ConnectedTo": null
+                },
+                {
+                    "Name": "name",
+                    "Type": "string",
+                    "ConnectedTo": null
+                }
+                
+            ]
+        }
+    ]
+}
