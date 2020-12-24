@@ -32,11 +32,11 @@ namespace OctopusCore.DbHandlers
 
             var command = connection.CreateCommand();
             //todo prevent sql injection
-            command.CommandText = "SELECT " + fields + " FROM " + table + " WHERE " + conditions;
+            command.CommandText = "SELECT " + fields +",guid FROM " + table + " WHERE " + conditions;
 
             var result = ExecuteCommand(fieldsToSelect, command);
 
-            return Task.FromResult(new ExecutionResult(result));
+            return Task.FromResult(new ExecutionResult(entityType, result));
         }
 
         private string GetFilterOperator(Filter filter)
@@ -47,17 +47,17 @@ namespace OctopusCore.DbHandlers
         }
 
 
-        private static List<Dictionary<string, object>> ExecuteCommand(IReadOnlyCollection<string> fieldsToSelect,
+        private static Dictionary<string, EntityResult> ExecuteCommand(IReadOnlyCollection<string> fieldsToSelect,
             SqliteCommand command)
         {
             using var reader = command.ExecuteReader();
-            var output = new List<Dictionary<string, object>>();
+            var output = new Dictionary<string, EntityResult>();
 
             while (reader.Read())
             {
-                var fieldToValueMap = fieldsToSelect.ToDictionary(field => field, field => reader[field.ToLower()]);
+                var fieldToValueMap = new EntityResult(fieldsToSelect.ToDictionary(field => field, field => reader[field.ToLower()]));
 
-                output.Add(fieldToValueMap);
+                output.Add(reader["guid"].ToString(), fieldToValueMap);
             }
 
             return output;
