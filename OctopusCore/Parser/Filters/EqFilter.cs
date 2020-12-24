@@ -13,6 +13,13 @@ namespace OctopusCore.Parser.Filters
             Expression = expression;
             IsSubQueried = false;
         }
+        public EqFilter(List<string> fieldNames, string expression, bool isQueried)
+        {
+            FieldNames = fieldNames;
+            Expression = expression;
+            IsSubQueried = isQueried;
+        }
+
         public override bool Equals(object obj)
         {
             if (obj == null) return false;
