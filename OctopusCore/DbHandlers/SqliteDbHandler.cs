@@ -25,14 +25,15 @@ namespace OctopusCore.DbHandlers
         {
             using var connection = new SqliteConnection(_configurationProvider.ConnectionString);
             connection.Open();
-
+            var fieldsToSelectWithGuid = new List<string>(fieldsToSelect);
+            fieldsToSelectWithGuid.Add("guid");
             var table = _configurationProvider.GetTableName(entityType);
-            var fields = string.Join(",", fieldsToSelect);
+            var fields = string.Join(",", fieldsToSelectWithGuid);
             var conditions = ConvertFiltersToWhereStatement(filters);
 
             var command = connection.CreateCommand();
             //todo prevent sql injection
-            command.CommandText = "SELECT " + fields +",guid FROM " + table + " WHERE " + conditions;
+            command.CommandText = "SELECT " + fields +" FROM " + table + " WHERE " + conditions;
 
             var result = ExecuteCommand(fieldsToSelect, command);
 
