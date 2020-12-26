@@ -64,12 +64,6 @@ namespace OctopusCore.DbHandlers
             return output;
         }
 
-        //when expression represents field of type string, it expect it to be surround by ' '.
-        //if field is type int, this is not needed, but still works both way, so for simplicity we do this conversion for every expression
-        private string ConvertExpression(string expression)
-        {
-            return "\'" + expression + "\'";
-        }
 
         private string ConvertFiltersToWhereStatement(IReadOnlyCollection<Filter> filters)
         {
@@ -83,7 +77,7 @@ namespace OctopusCore.DbHandlers
                 if (filter.FieldNames.Count > 1) throw new ArgumentException("Fields with Include are not supported");
 
                 var filterAsString = new StringBuilder().Append(filter.FieldNames[0]).Append(GetFilterOperator(filter))
-                    .Append(ConvertExpression(filter.Expression)).ToString();
+                    .Append(filter.Expression).ToString();
                 filtersAsString.Add(filterAsString);
             }
 
