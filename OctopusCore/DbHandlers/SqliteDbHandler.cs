@@ -14,10 +14,12 @@ namespace OctopusCore.DbHandlers
     public class SqliteDbHandler : IDbHandler
     {
         private readonly SqliteConfigurationProvider _configurationProvider;
+        private readonly Dictionary<FilterType, string> _filterTypeToOperatorRepresentation;
 
         public SqliteDbHandler(SqliteConfigurationProvider configurationProvider)
         {
             _configurationProvider = configurationProvider;
+            _filterTypeToOperatorRepresentation = new Dictionary<FilterType, string> {{FilterType.Eq, "="}};
         }
 
         public Task<ExecutionResult> ExecuteQueryWithFiltersAsync(IReadOnlyCollection<string> fieldsToSelect,
@@ -25,26 +27,29 @@ namespace OctopusCore.DbHandlers
         {
             using var connection = new SqliteConnection(_configurationProvider.ConnectionString);
             connection.Open();
-            var fieldsToSelectWithGuid = new List<string>(fieldsToSelect);
-            fieldsToSelectWithGuid.Add("guid");
+            var fieldsToSelectWithGuid = new List<string>(fieldsToSelect) {"guid"};
             var table = _configurationProvider.GetTableName(entityType);
             var fields = string.Join(",", fieldsToSelectWithGuid);
             var conditions = ConvertFiltersToWhereStatement(filters);
 
             var command = connection.CreateCommand();
-            //todo prevent sql injection
-            command.CommandText = "SELECT " + fields +" FROM " + table + " WHERE " + conditions;
+            command.CommandText = SetCommandText(fields, table, conditions);
 
             var result = ExecuteCommand(fieldsToSelect, command);
 
             return Task.FromResult(new ExecutionResult(entityType, result));
         }
 
+        private static string SetCommandText(string fields, string table, string conditions)
+        {
+            return conditions == null
+                ? $"SELECT {fields} FROM {table}"
+                : $"SELECT {fields} FROM {table} WHERE {conditions}";
+        }
+
         private string GetFilterOperator(Filter filter)
         {
-            if (filter is EqFilter) return "=";
-
-            throw new ArgumentException("Filter type is not supported");
+            return _filterTypeToOperatorRepresentation[filter.Type];
         }
 
 
@@ -56,7 +61,8 @@ namespace OctopusCore.DbHandlers
 
             while (reader.Read())
             {
-                var fieldToValueMap = new EntityResult(fieldsToSelect.ToDictionary(field => field, field => reader[field.ToLower()]));
+                var fieldToValueMap =
+                    new EntityResult(fieldsToSelect.ToDictionary(field => field, field => reader[field.ToLower()]));
 
                 output.Add(reader["guid"].ToString(), fieldToValueMap);
             }
@@ -68,8 +74,7 @@ namespace OctopusCore.DbHandlers
         private string ConvertFiltersToWhereStatement(IReadOnlyCollection<Filter> filters)
         {
             if (filters.Count == 0)
-                //todo check why 'true' not working. think about alternative
-                return "1=1";
+                return null;
 
             var filtersAsString = new List<string>();
             foreach (var filter in filters)
