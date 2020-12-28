@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Data.Sqlite;
+using OctopusCore.Common;
 using OctopusCore.Configuration.ConfigurationProviders;
 using OctopusCore.Contract;
 using OctopusCore.Parser;
@@ -22,22 +23,24 @@ namespace OctopusCore.DbHandlers
             _filterTypeToOperatorRepresentation = new Dictionary<FilterType, string> {{FilterType.Eq, "="}};
         }
 
-        public Task<ExecutionResult> ExecuteQueryWithFiltersAsync(IReadOnlyCollection<string> fieldsToSelect,
+        public async Task<ExecutionResult> ExecuteQueryWithFiltersAsync(IReadOnlyCollection<string> fieldsToSelect,
             IReadOnlyCollection<Filter> filters, string entityType)
         {
             using var connection = new SqliteConnection(_configurationProvider.ConnectionString);
             connection.Open();
-            var fieldsToSelectWithGuid = new List<string>(fieldsToSelect) {"guid"};
-            var table = _configurationProvider.GetTableName(entityType);
+            var fieldsToSelectWithGuid = new List<string>(fieldsToSelect) {StringConstants.Guid};
             var fields = string.Join(",", fieldsToSelectWithGuid);
+            var table = _configurationProvider.GetTableName(entityType);
             var conditions = ConvertFiltersToWhereStatement(filters);
 
             var command = connection.CreateCommand();
             command.CommandText = SetCommandText(fields, table, conditions);
 
-            var result = ExecuteCommand(fieldsToSelect, command);
+            //fieldsToSelect are the fields that will be shown to the user.
+            //Guid field is inside the command that will be executed, but it won't be shown to the user
+            var result = await ExecuteCommand(fieldsToSelect, command);
 
-            return Task.FromResult(new ExecutionResult(entityType, result));
+            return new ExecutionResult(entityType, result);
         }
 
         private static string SetCommandText(string fields, string table, string conditions)
@@ -53,18 +56,18 @@ namespace OctopusCore.DbHandlers
         }
 
 
-        private static Dictionary<string, EntityResult> ExecuteCommand(IReadOnlyCollection<string> fieldsToSelect,
+        private static async Task<Dictionary<string, EntityResult>> ExecuteCommand(IReadOnlyCollection<string> fieldsToSelect,
             SqliteCommand command)
         {
-            using var reader = command.ExecuteReader();
+            using var reader = await command.ExecuteReaderAsync();
             var output = new Dictionary<string, EntityResult>();
 
-            while (reader.Read())
+            while (await reader.ReadAsync())
             {
                 var fieldToValueMap =
                     new EntityResult(fieldsToSelect.ToDictionary(field => field, field => reader[field.ToLower()]));
 
-                output.Add(reader["guid"].ToString(), fieldToValueMap);
+                output.Add(reader[StringConstants.Guid].ToString(), fieldToValueMap);
             }
 
             return output;
