@@ -43,6 +43,29 @@
                     ]
                 }
             ]
+        },
+        {
+            "Id": "cassandra1",
+            "DbType": "Cassandra",
+            "ConnectionString": "127.0.0.1",
+            "KeySpace" : "c1",
+            "Entities": [
+                {
+                    "Name": "car",
+                    "Fields": [
+                        {
+                            "Name": "company",
+                            "Type": "string",
+                            "ConnectedTo": null
+                        },
+                        {
+                            "Name": "year",
+                            "Type": "int",
+                            "ConnectedTo": null
+                        }
+                    ]
+                }
+            ]
         }
     ]
 }

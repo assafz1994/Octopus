@@ -18,7 +18,22 @@
                     "Type": "string",
                     "ConnectedTo": null
                 }
-                
+
+            ]
+        },
+        {
+            "Name": "car",
+            "Fields": [
+                {
+                    "Name": "company",
+                    "Type": "string",
+                    "ConnectedTo": null
+                },
+                {
+                    "Name": "year",
+                    "Type": "string",
+                    "ConnectedTo": null
+                }
             ]
         }
     ]
