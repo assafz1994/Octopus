@@ -39,8 +39,11 @@ namespace OctopusCore.Configuration
             switch (dbConfiguration.DbType)
             {
                 case DbType.Sqlite:
-                    var provider = new SqliteConfigurationProvider(scheme, dbConfiguration);
-                    return new SqliteDbHandler(provider);
+                    var sqliteConfigurationProvider = new SqliteConfigurationProvider(scheme, dbConfiguration);
+                    return new SqliteDbHandler(sqliteConfigurationProvider);
+                case DbType.Cassandra:
+                    var cassandraConfigurationProvider = new CassandraConfigurationProvider(scheme, dbConfiguration);
+                    return new CassandraDbHandler(cassandraConfigurationProvider);
                 default:
                     throw new NotSupportedException($"unsupported dataBaseType : {dbConfiguration.DbType}");
             }

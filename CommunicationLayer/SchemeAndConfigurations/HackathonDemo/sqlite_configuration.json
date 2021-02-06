@@ -45,10 +45,10 @@
             ]
         },
         {
-            "Id": "cassandra1",
+            "Id": "c1",
             "DbType": "Cassandra",
             "ConnectionString": "127.0.0.1",
-            "KeySpace" : "c1",
+            "KeySpace": "c1",
             "Entities": [
                 {
                     "Name": "car",
