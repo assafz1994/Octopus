@@ -39,8 +39,11 @@ namespace OctopusCore.Configuration
             switch (dbConfiguration.DbType)
             {
                 case DbType.Sqlite:
-                    var provider = new SqliteConfigurationProvider(scheme, dbConfiguration);
-                    return new SqliteDbHandler(provider);
+                    var sqliteProvider = new SqliteConfigurationProvider(scheme, dbConfiguration);
+                    return new SqliteDbHandler(sqliteProvider);
+                case DbType.MongoDB:
+                    var MongoDBprovider = new MongoDBConfigurationProvider(scheme, dbConfiguration);
+                    return new MongoDBHandler(MongoDBprovider);
                 default:
                     throw new NotSupportedException($"unsupported dataBaseType : {dbConfiguration.DbType}");
             }
