@@ -56,7 +56,7 @@
             "Fields": [
               {
                 "Name": "email",
-                "Type": "int",
+                "Type": "string",
                 "ConnectedTo": null
               }
             ]

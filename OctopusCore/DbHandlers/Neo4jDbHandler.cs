@@ -27,22 +27,29 @@ namespace OctopusCore.DbHandlers
 
             await client.ConnectAsync(); //todo check if it should happen only once
             var fieldsNames = fieldsToSelect.ToList().Append("guid").ToList();
-            var fields = fieldsNames.Select(x => $"e.{x}");
-            var query = client.Cypher.Match($"(e:{entityType})");
+            var queryFields = fieldsNames.Select(GetQueryField);
+            var query = client.Cypher.Match(GetQueryEntity(entityType));
             if (filters.Any())
             {
-                var wheres = filters.Select(x => $"e.{x.FieldNames.First()} = {x.Expression}");
-                query = query.Where(string.Join(" and ", wheres));
+                var where = filters.Select(GetQueryCondition);
+                query = query.Where(string.Join(" and ", where));
             }
             //.Where("person.email='a@gmail.com'")
 
-            var result = await query.Return<List<string>>($"[{string.Join(",", fields)}]").ResultsAsync;
+            var result = await query.Return<List<string>>($"[{string.Join(",", queryFields)}]").ResultsAsync;
 
+            var entityResults = BuildResultsDictionary(result, fieldsNames);
+
+            return new ExecutionResult(entityType, entityResults);
+        }
+
+        private static Dictionary<string, EntityResult> BuildResultsDictionary(IEnumerable<List<string>> result, List<string> fieldsNames)
+        {
             var entityResults = new Dictionary<string, EntityResult>();
             foreach (var nodeFields in result)
             {
                 var dict = new Dictionary<string, dynamic>();
-                for (int i = 0; i < fieldsNames.Count; i++)
+                for (var i = 0; i < fieldsNames.Count; i++)
                 {
                     dict.Add(fieldsNames[i], nodeFields[i]);
                 }
@@ -51,10 +58,24 @@ namespace OctopusCore.DbHandlers
                 dict.Remove("guid");
                 var entityResult = new EntityResult(dict);
                 entityResults.Add(guid, entityResult);
-
             }
 
-            return new ExecutionResult(entityType, entityResults);
+            return entityResults;
+        }
+
+        private static string GetQueryCondition(Filter filter)
+        {
+            return $"e.{filter.FieldNames.First()} = {filter.Expression}";
+        }
+
+        private static string GetQueryEntity(string entityType)
+        {
+            return $"(e:{entityType})";
+        }
+
+        private static string GetQueryField(string x)
+        {
+            return $"e.{x}";
         }
     }
 }
