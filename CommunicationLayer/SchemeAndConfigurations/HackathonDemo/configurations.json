@@ -58,6 +58,11 @@
                 "Name": "email",
                 "Type": "string",
                 "ConnectedTo": null
+              },
+              {
+                "Name": "hobby",
+                "Type": "string",
+                "ConnectedTo": null
               }
             ]
           }

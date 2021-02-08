@@ -38,7 +38,7 @@ namespace OctopusCore.Configuration
                 case DbType.Sqlite:
                     return new SqliteDbHandler(new SqliteConfigurationProvider(scheme, dbConfiguration));
                 case DbType.Neo4j:
-                    return new Neo4jDbHandler(new Neo4jConfigurationProvider(scheme, dbConfiguration));
+                    return new Neo4JDbHandler(new Neo4jConfigurationProvider(scheme, dbConfiguration));
                 default:
                     throw new NotSupportedException($"unsupported dataBaseType : {dbConfiguration.DbType}");
             }
