@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Data.Sqlite;
+using OctopusCore.Common;
 using OctopusCore.Configuration.ConfigurationProviders;
 using OctopusCore.Contract;
 using OctopusCore.Parser;
@@ -14,68 +15,69 @@ namespace OctopusCore.DbHandlers
     public class SqliteDbHandler : IDbHandler
     {
         private readonly SqliteConfigurationProvider _configurationProvider;
+        private readonly Dictionary<FilterType, string> _filterTypeToOperatorRepresentation;
 
         public SqliteDbHandler(SqliteConfigurationProvider configurationProvider)
         {
             _configurationProvider = configurationProvider;
+            _filterTypeToOperatorRepresentation = new Dictionary<FilterType, string> {{FilterType.Eq, "="}};
         }
 
-        public Task<ExecutionResult> ExecuteQueryWithFiltersAsync(IReadOnlyCollection<string> fieldsToSelect,
+        public async Task<ExecutionResult> ExecuteQueryWithFiltersAsync(IReadOnlyCollection<string> fieldsToSelect,
             IReadOnlyCollection<Filter> filters, string entityType)
         {
             using var connection = new SqliteConnection(_configurationProvider.ConnectionString);
             connection.Open();
-            var fieldsToSelectWithGuid = new List<string>(fieldsToSelect);
-            fieldsToSelectWithGuid.Add("guid");
-            var table = _configurationProvider.GetTableName(entityType);
+            var fieldsToSelectWithGuid = new List<string>(fieldsToSelect) {StringConstants.Guid};
             var fields = string.Join(",", fieldsToSelectWithGuid);
+            var table = _configurationProvider.GetTableName(entityType);
             var conditions = ConvertFiltersToWhereStatement(filters);
 
             var command = connection.CreateCommand();
-            //todo prevent sql injection
-            command.CommandText = "SELECT " + fields +" FROM " + table + " WHERE " + conditions;
+            command.CommandText = SetCommandText(fields, table, conditions);
 
-            var result = ExecuteCommand(fieldsToSelect, command);
+            //fieldsToSelect are the fields that will be shown to the user.
+            //Guid field is inside the command that will be executed, but it won't be shown to the user
+            var result = await ExecuteCommand(fieldsToSelect, command);
 
-            return Task.FromResult(new ExecutionResult(entityType, result));
+            return new ExecutionResult(entityType, result);
+        }
+
+        private static string SetCommandText(string fields, string table, string conditions)
+        {
+            return conditions == null
+                ? $"SELECT {fields} FROM {table}"
+                : $"SELECT {fields} FROM {table} WHERE {conditions}";
         }
 
         private string GetFilterOperator(Filter filter)
         {
-            if (filter is EqFilter) return "=";
-
-            throw new ArgumentException("Filter type is not supported");
+            return _filterTypeToOperatorRepresentation[filter.Type];
         }
 
 
-        private static Dictionary<string, EntityResult> ExecuteCommand(IReadOnlyCollection<string> fieldsToSelect,
+        private static async Task<Dictionary<string, EntityResult>> ExecuteCommand(IReadOnlyCollection<string> fieldsToSelect,
             SqliteCommand command)
         {
-            using var reader = command.ExecuteReader();
+            using var reader = await command.ExecuteReaderAsync();
             var output = new Dictionary<string, EntityResult>();
 
-            while (reader.Read())
+            while (await reader.ReadAsync())
             {
-                var fieldToValueMap = new EntityResult(fieldsToSelect.ToDictionary(field => field, field => reader[field.ToLower()]));
+                var fieldToValueMap =
+                    new EntityResult(fieldsToSelect.ToDictionary(field => field, field => reader[field.ToLower()]));
 
-                output.Add(reader["guid"].ToString(), fieldToValueMap);
+                output.Add(reader[StringConstants.Guid].ToString(), fieldToValueMap);
             }
 
             return output;
         }
 
-        //when expression represents field of type string, it expect it to be surround by ' '.
-        //if field is type int, this is not needed, but still works both way, so for simplicity we do this conversion for every expression
-        private string ConvertExpression(string expression)
-        {
-            return "\'" + expression + "\'";
-        }
 
         private string ConvertFiltersToWhereStatement(IReadOnlyCollection<Filter> filters)
         {
             if (filters.Count == 0)
-                //todo check why 'true' not working. think about alternative
-                return "1=1";
+                return null;
 
             var filtersAsString = new List<string>();
             foreach (var filter in filters)
@@ -83,7 +85,7 @@ namespace OctopusCore.DbHandlers
                 if (filter.FieldNames.Count > 1) throw new ArgumentException("Fields with Include are not supported");
 
                 var filterAsString = new StringBuilder().Append(filter.FieldNames[0]).Append(GetFilterOperator(filter))
-                    .Append(ConvertExpression(filter.Expression)).ToString();
+                    .Append(filter.Expression).ToString();
                 filtersAsString.Add(filterAsString);
             }
 
