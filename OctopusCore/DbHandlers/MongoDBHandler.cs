@@ -42,9 +42,10 @@ namespace OctopusCore.DbHandlers
 
         private Dictionary<string, EntityResult> ExecuteCommand(IMongoCollection<BsonDocument> collection, ProjectionDefinition<BsonDocument> project, FilterDefinition<BsonDocument> conditions)
         {
-            List<BsonDocument> res = (conditions == null) ? collection.Find(_ => true).Project(project).ToList() :  collection.Find(conditions).Project(project).ToList();
+            List<BsonDocument> result = (conditions == null) ? collection.Find(_ => true).Project(project).ToList() :  collection.Find(conditions).Project(project).ToList();
             Dictionary<string, EntityResult> entityResults = new Dictionary<string, EntityResult>();
-            foreach (var entity in res){
+            foreach (var entity in result)
+            {
                 var entityWithOutGuid = entity.ToDictionary();
                 entityWithOutGuid.Remove("guid");
                 entityResults.Add(entity["guid"].ToString(), new EntityResult(entityWithOutGuid));
@@ -68,6 +69,7 @@ namespace OctopusCore.DbHandlers
                     project = project.Include(columnName);
                 }
             }
+
             return project;
         }
 
@@ -116,8 +118,8 @@ namespace OctopusCore.DbHandlers
                         }
                 }
                 filterOutput = (filterOutput == null) ? filterOp : filterOutput & filterOp;
-
             }
+
             return filterOutput;
         }
     }
