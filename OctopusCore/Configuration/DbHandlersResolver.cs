@@ -28,10 +28,7 @@ namespace OctopusCore.Configuration
             return result;
         }
 
-        public string GetFieldDatabaseKey(string entityType, string fieldName)
-        {
-            return "";
-        }
+        
 
         private IDbHandler CreateDbHandler(DbConfiguration dbConfiguration, Scheme scheme)
         {
@@ -44,6 +41,8 @@ namespace OctopusCore.Configuration
                 case DbType.MongoDB:
                     var MongoDBprovider = new MongoDBConfigurationProvider(scheme, dbConfiguration);
                     return new MongoDBHandler(MongoDBprovider);
+                case DbType.Neo4j:
+                    return new Neo4JDbHandler(new Neo4jConfigurationProvider(scheme, dbConfiguration));
                 default:
                     throw new NotSupportedException($"unsupported dataBaseType : {dbConfiguration.DbType}");
             }
