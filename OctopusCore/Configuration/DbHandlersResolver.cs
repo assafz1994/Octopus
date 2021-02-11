@@ -36,7 +36,11 @@ namespace OctopusCore.Configuration
             switch (dbConfiguration.DbType)
             {
                 case DbType.Sqlite:
-                    return new SqliteDbHandler(new SqliteConfigurationProvider(scheme, dbConfiguration));
+                    var sqliteProvider = new SqliteConfigurationProvider(scheme, dbConfiguration);
+                    return new SqliteDbHandler(sqliteProvider);
+                case DbType.MongoDB:
+                    var MongoDBprovider = new MongoDBConfigurationProvider(scheme, dbConfiguration);
+                    return new MongoDBHandler(MongoDBprovider);
                 case DbType.Neo4j:
                     return new Neo4JDbHandler(new Neo4jConfigurationProvider(scheme, dbConfiguration));
                 default:
