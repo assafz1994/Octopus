@@ -1,5 +1,7 @@
 ﻿using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
+using Octopus.Common;
 using OctopusCore;
 
 namespace CommunicationLayer.Controllers
@@ -22,12 +24,12 @@ namespace CommunicationLayer.Controllers
         {
             if (string.IsNullOrEmpty(query))
             {
-                return string.Empty;
+                return JsonConvert.SerializeObject(OctopusResponse.CreateFailure("Empty Query"));
             }
 
-            var result = await _octopusService.ExecuteQueryAsync(query);
+            var response = await _octopusService.ExecuteQueryAsync(query);
 
-            return result;
+            return JsonConvert.SerializeObject(response);
         }
     }
 }
