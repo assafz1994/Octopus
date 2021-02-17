@@ -23,14 +23,12 @@ namespace OctopusCore.DbHandlers
             var cluster = Cluster.Builder()
                 .AddContactPoint(_configurationProvider.ConnectionString)
                 .Build();
-           
             var fieldsToSelectWithGuid = fieldsToSelect.ToList().Append("guid").ToList();
             var fields = string.Join(",", fieldsToSelectWithGuid);
-            var table = _configurationProvider.GetTableName(entityType, filters);
+            // var table = _configurationProvider.GetTableName(entityType, filters);
             var conditions = ConvertFiltersToWhereStatement(filters);
             var session = cluster.Connect(_configurationProvider.KeySpace);
-            var query = $"SELECT {fields} FROM {table} {conditions}";
-            
+            var query = _configurationProvider.AssembleQuery(entityType, fields, filters, conditions);
             var rs = session.Execute(query);
             var result = ExecuteCommand(fieldsToSelect, rs);
             return Task.FromResult(new ExecutionResult(entityType, result));

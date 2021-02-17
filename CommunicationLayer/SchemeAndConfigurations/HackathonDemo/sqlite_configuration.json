@@ -1,50 +1,6 @@
 {
     "Configurations": [
         {
-            "Id": "sql1",
-            "DbType": "Sqlite",
-            "ConnectionString": "Data Source=DataBases\\sqlite_db.db",
-            "Entities": [
-                {
-                    "Name": "person",
-                    "Fields": [
-                        {
-                            "Name": "id",
-                            "Type": "string",
-                            "ConnectedTo": null
-                        },
-                        {
-                            "Name": "age",
-                            "Type": "int",
-                            "ConnectedTo": null
-                        }
-                    ]
-                }
-            ]
-        },
-        {
-            "Id": "sql2",
-            "DbType": "Sqlite",
-            "ConnectionString": "Data Source=DataBases\\sqlite2_db.db",
-            "Entities": [
-                {
-                    "Name": "person",
-                    "Fields": [
-                        {
-                            "Name": "id",
-                            "Type": "string",
-                            "ConnectedTo": null
-                        },
-                        {
-                            "Name": "name",
-                            "Type": "string",
-                            "ConnectedTo": null
-                        }
-                    ]
-                }
-            ]
-        },
-        {
             "Id": "c1",
             "DbType": "Cassandra",
             "ConnectionString": "127.0.0.1",
@@ -65,6 +21,7 @@
                         }
                     ],
                     "TablesByFields": [
+                        [],
                         [ "company" ],
                         [ "year" ]
                     ]
@@ -89,9 +46,9 @@
                         }
                     ],
                     "TablesByFields": [
+                        [],
                         [ "id" ],
-                        [ "age" ],
-                        [ "name" ]
+                        [ "id" , "age"]
                     ]
                 }
             ]
