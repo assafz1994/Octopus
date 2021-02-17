@@ -13,6 +13,7 @@ namespace OctopusCore.Configuration
     {
         public string Name { get; set; }
         public List<Field> Fields { get; set; }
+        public List<List<string>> TablesByFields { get; set; }
     }
 
     public class Field

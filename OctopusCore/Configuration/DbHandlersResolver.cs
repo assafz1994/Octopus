@@ -43,6 +43,9 @@ namespace OctopusCore.Configuration
                     return new MongoDBHandler(MongoDBprovider);
                 case DbType.Neo4j:
                     return new Neo4JDbHandler(new Neo4jConfigurationProvider(scheme, dbConfiguration));
+                case DbType.Cassandra:
+                    var cassandraConfigurationProvider = new CassandraConfigurationProvider(scheme, dbConfiguration);
+                    return new CassandraDbHandler(cassandraConfigurationProvider);
                 default:
                     throw new NotSupportedException($"unsupported dataBaseType : {dbConfiguration.DbType}");
             }

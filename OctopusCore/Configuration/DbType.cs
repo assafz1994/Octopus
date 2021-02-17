@@ -7,6 +7,7 @@ namespace OctopusCore.Configuration
     public enum DbType
     {
         Sqlite,
+        Cassandra,
         MongoDB,
         Neo4j
     }
