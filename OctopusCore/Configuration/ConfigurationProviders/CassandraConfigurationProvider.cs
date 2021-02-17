@@ -42,7 +42,7 @@ namespace OctopusCore.Configuration.ConfigurationProviders
                 }
                );
             return table != null
-                ? $"SELECT {fields} FROM {entityType}_by_{string.Join(",", table)} { conditions}"
+                ? $"SELECT {fields} FROM {entityType}_table_by_{string.Join("_", table)} {conditions}"
                 : $"SELECT {fields} FROM {entityType}_table {conditions} ALLOW FILTERING";
         }
     }

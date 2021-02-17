@@ -33,6 +33,7 @@ namespace OctopusCore.DbHandlers
             var result = ExecuteCommand(fieldsToSelect, rs);
             return Task.FromResult(new ExecutionResult(entityType, result));
         }
+
         private string ConvertFiltersToWhereStatement(IReadOnlyCollection<Filter> filters)
         {
             if (filters.Count == 0) return "";
@@ -43,14 +44,22 @@ namespace OctopusCore.DbHandlers
                 if (filter.FieldNames.Count > 1) throw new ArgumentException("Fields with Include are not supported");
 
                 var filterAsString = new StringBuilder().Append(filter.FieldNames[0]).Append(GetFilterOperator(filter))
-                    .Append($"'{filter.Expression}'").ToString();
+                    .Append(GetExpression(filter.Expression)).ToString();
                 filtersAsString.Add(filterAsString);
             }
 
             var conditions = string.Join(" and ", filtersAsString);
             return $"WHERE {conditions}";
         }
-        private string GetFilterOperator(Filter filter)
+
+        private static string GetExpression(string expression)
+        {
+            if (!expression.StartsWith("\"") || !expression.EndsWith("\"")) return expression;
+            var res = expression.Trim('"');
+            return $"'{res}'";
+        }
+
+        private static string GetFilterOperator(Filter filter)
         {
             if (filter is EqFilter) return "=";
 

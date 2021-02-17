@@ -7,26 +7,6 @@
             "KeySpace": "c1",
             "Entities": [
                 {
-                    "Name": "car",
-                    "Fields": [
-                        {
-                            "Name": "company",
-                            "Type": "string",
-                            "ConnectedTo": null
-                        },
-                        {
-                            "Name": "year",
-                            "Type": "int",
-                            "ConnectedTo": null
-                        }
-                    ],
-                    "TablesByFields": [
-                        [],
-                        [ "company" ],
-                        [ "year" ]
-                    ]
-                },
-                {
                     "Name": "person",
                     "Fields": [
                         {
