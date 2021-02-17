@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 
 namespace OctopusCore.Parser.Filters
 {
@@ -11,15 +10,19 @@ namespace OctopusCore.Parser.Filters
         {
             FieldNames = fieldNames;
             Expression = expression;
+            Type = FilterType.Eq;
         }
+
+        public override FilterType Type { get; }
+
         public override bool Equals(object obj)
         {
             if (obj == null) return false;
             if (obj == this) return true;
             return obj is EqFilter eqFilter
                    && FieldNames.SequenceEqual(eqFilter.FieldNames)
-                   && Expression.Equals(eqFilter.Expression);
-
+                   && Expression.Equals(eqFilter.Expression)
+                   && Type.Equals(eqFilter.Type);
         }
 
         protected bool Equals(EqFilter other)
@@ -29,7 +32,7 @@ namespace OctopusCore.Parser.Filters
 
         public override int GetHashCode()
         {
-            return HashCode.Combine(FieldNames, Expression);
+            return HashCode.Combine(FieldNames, Expression, Type);
         }
     }
 }

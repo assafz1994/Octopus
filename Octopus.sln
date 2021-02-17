@@ -4,8 +4,17 @@ VisualStudioVersion = 16.0.29926.136
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OctopusCore", "OctopusCore\OctopusCore.csproj", "{2DFFFFEF-988A-4235-AAFA-B8A07AEE776A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CommunicationLayer", "CommunicationLayer\CommunicationLayer.csproj", "{BD1666E6-1B8A-4085-AC4F-3679DF7526AB}"
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tests", "Tests\Tests.csproj", "{2E3C7ED0-A529-4CA0-BC78-7B9F9DA2AFA1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CommunicationLayer", "CommunicationLayer\CommunicationLayer.csproj", "{BD1666E6-1B8A-4085-AC4F-3679DF7526AB}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tests", "Tests\Tests.csproj", "{2E3C7ED0-A529-4CA0-BC78-7B9F9DA2AFA1}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OctopusClient", "OctopusClient\OctopusClient.csproj", "{010A37A1-430E-4538-98F0-56774A799EA7}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Octopus.Common", "Octopus.Common\Octopus.Common.csproj", "{AC349FF5-FF33-48F4-BAFC-1DA24171D925}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Demos", "Demos", "{83A5387D-F1C9-4A68-86BD-6DC110DB26FF}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OctopusDemo", "OctopusDemo\OctopusDemo.csproj", "{F47CCC4F-7F8E-4518-A097-0C98DE7AE829}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -25,9 +34,24 @@ Global
 		{2E3C7ED0-A529-4CA0-BC78-7B9F9DA2AFA1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2E3C7ED0-A529-4CA0-BC78-7B9F9DA2AFA1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2E3C7ED0-A529-4CA0-BC78-7B9F9DA2AFA1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{010A37A1-430E-4538-98F0-56774A799EA7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{010A37A1-430E-4538-98F0-56774A799EA7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{010A37A1-430E-4538-98F0-56774A799EA7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{010A37A1-430E-4538-98F0-56774A799EA7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AC349FF5-FF33-48F4-BAFC-1DA24171D925}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AC349FF5-FF33-48F4-BAFC-1DA24171D925}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AC349FF5-FF33-48F4-BAFC-1DA24171D925}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AC349FF5-FF33-48F4-BAFC-1DA24171D925}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F47CCC4F-7F8E-4518-A097-0C98DE7AE829}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F47CCC4F-7F8E-4518-A097-0C98DE7AE829}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F47CCC4F-7F8E-4518-A097-0C98DE7AE829}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F47CCC4F-7F8E-4518-A097-0C98DE7AE829}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{F47CCC4F-7F8E-4518-A097-0C98DE7AE829} = {83A5387D-F1C9-4A68-86BD-6DC110DB26FF}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {BF81885D-9E84-47A3-B3E3-27627F25C4A7}
