@@ -63,6 +63,35 @@
                             "Type": "int",
                             "ConnectedTo": null
                         }
+                    ],
+                    "TablesByFields": [
+                        [ "company" ],
+                        [ "year" ]
+                    ]
+                },
+                {
+                    "Name": "person",
+                    "Fields": [
+                        {
+                            "Name": "id",
+                            "Type": "string",
+                            "ConnectedTo": null
+                        },
+                        {
+                            "Name": "age",
+                            "Type": "int",
+                            "ConnectedTo": null
+                        },
+                        {
+                            "Name": "name",
+                            "Type": "string",
+                            "ConnectedTo": null
+                        }
+                    ],
+                    "TablesByFields": [
+                        [ "id" ],
+                        [ "age" ],
+                        [ "name" ]
                     ]
                 }
             ]
