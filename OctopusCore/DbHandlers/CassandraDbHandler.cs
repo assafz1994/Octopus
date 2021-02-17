@@ -75,9 +75,7 @@ namespace OctopusCore.DbHandlers
                 var fieldToValueMap = new EntityResult(fieldsToSelect.ToDictionary(field => field, field => row.GetValue(typeof(object), field)));
                 output.Add(row.GetValue(typeof(object), "guid").ToString(), fieldToValueMap);
             }
-            
             return output;
-
         }
     }
 }

@@ -17,15 +17,6 @@ namespace OctopusCore.Configuration.ConfigurationProviders
             Entities = dbConfiguration.Entities;
         }
 
-        public string GetTableName(string entityType, IReadOnlyCollection<Filter> filters)
-        {
-            if (filters.Count == 0) return $"{entityType}_table";
-            var tableByField = Entities.First(x => x.Name.Equals(entityType)).Fields;
-            return filters.Count > 0 
-                ? $"{entityType}_by_{filters.First().FieldNames.First()}_table" 
-                : $"{entityType}_table";
-        }
-
         public string AssembleQuery(string entityType, string fields, IReadOnlyCollection<Filter> filters, string conditions)
         {
             var entity = Entities.First(x => x.Name == entityType);
