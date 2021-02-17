@@ -28,10 +28,7 @@ namespace OctopusCore.Configuration
             return result;
         }
 
-        public string GetFieldDatabaseKey(string entityType, string fieldName)
-        {
-            return "";
-        }
+        
 
         private IDbHandler CreateDbHandler(DbConfiguration dbConfiguration, Scheme scheme)
         {
@@ -39,8 +36,13 @@ namespace OctopusCore.Configuration
             switch (dbConfiguration.DbType)
             {
                 case DbType.Sqlite:
-                    var sqliteConfigurationProvider = new SqliteConfigurationProvider(scheme, dbConfiguration);
-                    return new SqliteDbHandler(sqliteConfigurationProvider);
+                    var sqliteProvider = new SqliteConfigurationProvider(scheme, dbConfiguration);
+                    return new SqliteDbHandler(sqliteProvider);
+                case DbType.MongoDB:
+                    var MongoDBprovider = new MongoDBConfigurationProvider(scheme, dbConfiguration);
+                    return new MongoDBHandler(MongoDBprovider);
+                case DbType.Neo4j:
+                    return new Neo4JDbHandler(new Neo4jConfigurationProvider(scheme, dbConfiguration));
                 case DbType.Cassandra:
                     var cassandraConfigurationProvider = new CassandraConfigurationProvider(scheme, dbConfiguration);
                     return new CassandraDbHandler(cassandraConfigurationProvider);

@@ -1,40 +1,29 @@
 {
-    "Entities": [
+  "Entities": [
+    {
+      "Name": "person",
+      "Fields": [
         {
-            "Name": "person",
-            "Fields": [
-                {
-                    "Name": "id",
-                    "Type": "string",
-                    "ConnectedTo": null
-                },
-                {
-                    "Name": "age",
-                    "Type": "string",
-                    "ConnectedTo": null
-                },
-                {
-                    "Name": "name",
-                    "Type": "string",
-                    "ConnectedTo": null
-                }
-
-            ]
+          "Name": "id",
+          "Type": "string",
+          "ConnectedTo": null
         },
         {
-            "Name": "car",
-            "Fields": [
-                {
-                    "Name": "company",
-                    "Type": "string",
-                    "ConnectedTo": null
-                },
-                {
-                    "Name": "year",
-                    "Type": "string",
-                    "ConnectedTo": null
-                }
-            ]
+          "Name": "age",
+          "Type": "string",
+          "ConnectedTo": null
+        },
+        {
+          "Name": "name",
+          "Type": "string",
+          "ConnectedTo": null
+        },
+        {
+          "Name": "email",
+          "Type": "string",
+          "ConnectedTo": null
         }
-    ]
+      ]
+    }
+  ]
 }

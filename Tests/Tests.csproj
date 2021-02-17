@@ -5,7 +5,7 @@
 
     <IsPackable>false</IsPackable>
 
-    <StartupObject>Tests.Class1</StartupObject>
+    <StartupObject></StartupObject>
   </PropertyGroup>
 
   <ItemGroup>
@@ -17,6 +17,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\OctopusClient\OctopusClient.csproj" />
     <ProjectReference Include="..\OctopusCore\OctopusCore.csproj" />
   </ItemGroup>
 
