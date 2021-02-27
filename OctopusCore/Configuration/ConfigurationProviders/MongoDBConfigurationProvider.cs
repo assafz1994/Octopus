@@ -12,9 +12,9 @@ namespace OctopusCore.Configuration.ConfigurationProviders
             ConnectionString = dbConfiguration.ConnectionString;
         }
 
-        public string GetTableName(string entityType)
+        public string GetCollectionName(string entityType)
         {
-            return entityType + "_table";
+            return entityType;
         }
     }
 }

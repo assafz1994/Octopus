@@ -13,20 +13,26 @@ namespace OctopusDemo
         static async Task Main(string[] args)
         {
             const string defaultEndpoint = "http://localhost:5000";
-            Console.WriteLine($"Enter the Octopus Server Endpoint(Default is {defaultEndpoint}. leave empty to use the defalut value):");
+            Console.WriteLine($"Enter the Octopus Server Endpoint(Default is {defaultEndpoint}. leave empty to use the default value):");
             var endpoint = Console.ReadLine();
             if (string.IsNullOrWhiteSpace(endpoint))
             {
                 endpoint = defaultEndpoint;
             }
             var input = "";
-            while (input?.Equals("exit",StringComparison.InvariantCultureIgnoreCase) == false)
+            while (true)
             {
                 try
                 {
                     Console.WriteLine("Enter Query or Write Exit:");
                     input = Console.ReadLine();
-                   // input = @"from Person p | where p.name == ""Assaf"" | where p.age == 26 |select p(name,age)";
+
+                    if (input?.Equals("exit", StringComparison.InvariantCultureIgnoreCase) == true)
+                    {
+                        Console.WriteLine("Thank you for using OctopusDB! See you next time");
+                        break;
+                    }
+                    // input = @"from Person p | where p.name == ""Assaf"" | where p.age == 26 |select p(name,age)";
                     using (var client = new OctopusClient(endpoint))
                     {
                         var entities = await client.ExecuteQuery(input);
@@ -35,7 +41,7 @@ namespace OctopusDemo
                         foreach (var entity in entities)
                         {
                             Console.WriteLine($"Entity {entityCount}:");
-                            foreach (KeyValuePair<string,object> kvp in entity)
+                            foreach (KeyValuePair<string, object> kvp in entity)
                             {
                                 string name = kvp.Key;
                                 object value = kvp.Value;
