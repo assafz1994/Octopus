@@ -17,6 +17,11 @@
           "Name": "name",
           "Type": "string",
           "ConnectedTo": null
+        },
+        {
+          "Name": "hobby",
+          "Type": "string",
+          "ConnectedTo": null
         }
       ]
     }

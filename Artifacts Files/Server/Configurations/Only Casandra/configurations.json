@@ -23,12 +23,19 @@
                             "Name": "name",
                             "Type": "string",
                             "ConnectedTo": null
+                        },
+                        {
+                            "Name": "hobby",
+                            "Type": "string",
+                            "ConnectedTo": null
                         }
+
                     ],
                     "TablesByFields": [
                         [],
                         [ "id" ],
-                        [ "id" , "age"]
+                        [ "id" , "age"],
+                        [ "hobby"]
                     ]
                 }
             ]

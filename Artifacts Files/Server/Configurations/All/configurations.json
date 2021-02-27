@@ -62,6 +62,33 @@
           ]
         }
       ]
-    }
+    },
+    {
+      "Id": "c1",
+      "DbType": "Cassandra",
+      "ConnectionString": "127.0.0.1",
+      "KeySpace": "c1",
+      "Entities": [
+          {
+              "Name": "person",
+              "Fields": [
+                  {
+                      "Name": "id",
+                      "Type": "string",
+                      "ConnectedTo": null
+                  },
+                  {
+                      "Name": "hobby",
+                      "Type": "string",
+                      "ConnectedTo": null
+                  }
+              ],
+              "TablesByFields": [
+                  [],
+                  [ "hobby" ]
+              ]
+          }
+      ]
+  }
   ]
 }
