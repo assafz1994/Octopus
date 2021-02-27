@@ -1,0 +1,31 @@
+{
+    "Configurations": [
+        {
+            "Id": "sql1",
+            "DbType": "Sqlite",
+            "ConnectionString": "Data Source=DataBases\\sqlite_db.db",
+            "Entities": [
+                {
+                    "Name": "person",
+                    "Fields": [
+                        {
+                            "Name": "id",
+                            "Type": "string",
+                            "ConnectedTo": null
+                        },
+                        {
+                            "Name": "age",
+                            "Type": "int",
+                            "ConnectedTo": null
+                        },
+                        {
+                          "Name": "name",
+                          "Type": "string",
+                          "ConnectedTo": null
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+}
