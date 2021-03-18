@@ -8,6 +8,8 @@ namespace OctopusCore.Executor
     {
         public async Task<ExecutionResult> ExecuteWorkPlanAsync(WorkPlan workPlan)
         {
+            foreach (var subQueryWorkPlan in workPlan.SubQueryWorkPlans.Values) await ExecuteWorkPlanAsync(subQueryWorkPlan);
+            
             foreach (var job in workPlan.Jobs) await job.ExecuteAsync();
 
             return workPlan.Jobs.Last().Result as ExecutionResult;

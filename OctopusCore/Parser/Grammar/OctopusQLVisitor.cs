@@ -44,6 +44,48 @@ public interface IOctopusQLVisitor<Result> : IParseTreeVisitor<Result> {
 	/// <return>The visitor result.</return>
 	Result VisitSelect([NotNull] OctopusQLParser.SelectContext context);
 	/// <summary>
+	/// Visit a parse tree produced by <see cref="OctopusQLParser.insert"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitInsert([NotNull] OctopusQLParser.InsertContext context);
+	/// <summary>
+	/// Visit a parse tree produced by <see cref="OctopusQLParser.delete"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitDelete([NotNull] OctopusQLParser.DeleteContext context);
+	/// <summary>
+	/// Visit a parse tree produced by <see cref="OctopusQLParser.update"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitUpdate([NotNull] OctopusQLParser.UpdateContext context);
+	/// <summary>
+	/// Visit a parse tree produced by <see cref="OctopusQLParser.insertClause"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitInsertClause([NotNull] OctopusQLParser.InsertClauseContext context);
+	/// <summary>
+	/// Visit a parse tree produced by <see cref="OctopusQLParser.getClause"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitGetClause([NotNull] OctopusQLParser.GetClauseContext context);
+	/// <summary>
+	/// Visit a parse tree produced by <see cref="OctopusQLParser.assignments"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitAssignments([NotNull] OctopusQLParser.AssignmentsContext context);
+	/// <summary>
+	/// Visit a parse tree produced by <see cref="OctopusQLParser.assignment"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitAssignment([NotNull] OctopusQLParser.AssignmentContext context);
+	/// <summary>
 	/// Visit a parse tree produced by <see cref="OctopusQLParser.whereClause"/>.
 	/// </summary>
 	/// <param name="context">The parse tree.</param>
@@ -62,6 +104,12 @@ public interface IOctopusQLVisitor<Result> : IParseTreeVisitor<Result> {
 	/// <return>The visitor result.</return>
 	Result VisitFields([NotNull] OctopusQLParser.FieldsContext context);
 	/// <summary>
+	/// Visit a parse tree produced by <see cref="OctopusQLParser.entityReps"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitEntityReps([NotNull] OctopusQLParser.EntityRepsContext context);
+	/// <summary>
 	/// Visit a parse tree produced by <see cref="OctopusQLParser.selectClause"/>.
 	/// </summary>
 	/// <param name="context">The parse tree.</param>
@@ -79,6 +127,18 @@ public interface IOctopusQLVisitor<Result> : IParseTreeVisitor<Result> {
 	/// <param name="context">The parse tree.</param>
 	/// <return>The visitor result.</return>
 	Result VisitAggregateClause([NotNull] OctopusQLParser.AggregateClauseContext context);
+	/// <summary>
+	/// Visit a parse tree produced by <see cref="OctopusQLParser.values"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitValues([NotNull] OctopusQLParser.ValuesContext context);
+	/// <summary>
+	/// Visit a parse tree produced by <see cref="OctopusQLParser.array"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitArray([NotNull] OctopusQLParser.ArrayContext context);
 	/// <summary>
 	/// Visit a parse tree produced by <see cref="OctopusQLParser.func"/>.
 	/// </summary>

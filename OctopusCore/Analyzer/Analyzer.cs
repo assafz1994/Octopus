@@ -25,13 +25,22 @@ namespace OctopusCore.Analyzer
 
             var workPlanBuilder = new WorkPlanBuilder(_dbHandlersResolver,_analyzerConfigurationProvider, selectQueryInfo.Entity);
 
+            var subQueryWorkPlans = selectQueryInfo.SubQueries.ToDictionary(v => v.Key, v => AnalyzeQuery(v.Value));
             foreach (var queryFilter in selectQueryInfo.Filters ?? Enumerable.Empty<Filter>())
+            {
                 workPlanBuilder.AddFilter(queryFilter);
-
+                if (queryFilter.IsSubQueried)
+                {
+                    workPlanBuilder.AddSubQueriedWorkPlan(queryFilter, queryFilter.Expression, subQueryWorkPlans[queryFilter.Expression]);
+                }
+            }
+            
             foreach (var field in selectQueryInfo.Fields ?? Enumerable.Empty<string>())
                 workPlanBuilder.AddProjectionField(field);
 
-            return workPlanBuilder.Build();
+            var workPlan = workPlanBuilder.Build();
+            workPlan.SubQueryWorkPlans = subQueryWorkPlans;
+            return workPlan;
         }
     }
 }

@@ -10,6 +10,15 @@ namespace OctopusCore.Parser.Filters
         {
             FieldNames = fieldNames;
             Expression = expression;
+            IsSubQueried = false;
+            Type = FilterType.Eq;
+        }
+        
+        public EqFilter(List<string> fieldNames, string expression, bool isQueried)
+        {
+            FieldNames = fieldNames;
+            Expression = expression;
+            IsSubQueried = isQueried;
             Type = FilterType.Eq;
         }
 
@@ -22,6 +31,7 @@ namespace OctopusCore.Parser.Filters
             return obj is EqFilter eqFilter
                    && FieldNames.SequenceEqual(eqFilter.FieldNames)
                    && Expression.Equals(eqFilter.Expression)
+                   && IsSubQueried.Equals(eqFilter.IsSubQueried);
                    && Type.Equals(eqFilter.Type);
         }
 

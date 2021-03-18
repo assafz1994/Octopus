@@ -38,6 +38,12 @@ namespace OctopusCore.Analyzer
             queryJobBuilder.AddProjectionField(fieldName);
         }
 
+        public void AddSubQueriedWorkPlan(Filter filter, string guid, WorkPlan workPlan)
+        {
+            var queryJobBuilder = GetOrCreateQueryJobBuilder(filter.FieldNames.Single());
+            queryJobBuilder.AddWorkPlan(guid, workPlan);
+        }
+
         public WorkPlan Build()
         {
             var jobs = new List<Job>(_databaseKeyToQueryJobBuilderMappings.Values.Select(builder => builder.Build()));

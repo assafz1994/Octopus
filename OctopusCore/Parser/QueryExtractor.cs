@@ -23,9 +23,9 @@ namespace OctopusCore.Parser
         private SelectQueryInfo HandleSelect([NotNull] OctopusQLParser.SelectContext selectContext)
         {
             var selectQueryInfo = new SelectQueryInfo();
-            var comparatorToFilter = new Dictionary<string, Func<List<string>, string, Filter>>()
+            var comparatorToFilter = new Dictionary<string, Func<List<string>, string, bool, Filter>>()
             {
-                {"==", (list, s) => new EqFilter(list, s)},
+                {"==", (list, s, b) => new EqFilter(list, s, b)},
             };
             selectQueryInfo.Entity = selectContext.entity().GetText().ToLower();
             var filters = new List<Filter>();
@@ -33,9 +33,21 @@ namespace OctopusCore.Parser
             {
                 var fieldNames = new List<string>();
                 fieldNames.AddRange(whereClause.fieldsWithDot()._el.Select(field => field.GetText().ToLower()));
-                var value = whereClause.value().GetText();
+                string value;
+                var isQueried = false;
+                if (whereClause.value().select() != null)
+                {
+                    var guid = System.Guid.NewGuid().ToString();
+                    selectQueryInfo.SubQueries.Add(guid, HandleSelect(whereClause.value().select()));
+                    value = guid;
+                    isQueried = true;
+                }
+                else
+                {
+                    value = whereClause.value().GetText();
+                }
                 var comparator = whereClause.COMPARATOR().GetText(); 
-                var filter = comparatorToFilter[comparator](fieldNames, value);
+                var filter = comparatorToFilter[comparator](fieldNames, value, isQueried);
                 filters.Add(filter);
             }
             selectQueryInfo.Filters = filters;
