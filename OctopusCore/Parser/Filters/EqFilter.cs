@@ -6,7 +6,7 @@ namespace OctopusCore.Parser.Filters
 {
     public class EqFilter : Filter
     {
-        public EqFilter(List<string> fieldNames, string expression)
+        public EqFilter(List<string> fieldNames, dynamic expression)
         {
             FieldNames = fieldNames;
             Expression = expression;
@@ -14,7 +14,7 @@ namespace OctopusCore.Parser.Filters
             Type = FilterType.Eq;
         }
         
-        public EqFilter(List<string> fieldNames, string expression, bool isQueried)
+        public EqFilter(List<string> fieldNames, dynamic expression, bool isQueried)
         {
             FieldNames = fieldNames;
             Expression = expression;
@@ -28,10 +28,10 @@ namespace OctopusCore.Parser.Filters
         {
             if (obj == null) return false;
             if (obj == this) return true;
-            return obj is EqFilter eqFilter
-                   && FieldNames.SequenceEqual(eqFilter.FieldNames)
+            var eqFilter = (EqFilter) obj;
+            return FieldNames.SequenceEqual(eqFilter.FieldNames)
                    && Expression.Equals(eqFilter.Expression)
-                   && IsSubQueried.Equals(eqFilter.IsSubQueried);
+                   && IsSubQueried.Equals(eqFilter.IsSubQueried)
                    && Type.Equals(eqFilter.Type);
         }
 
