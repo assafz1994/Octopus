@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+ <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
@@ -45,10 +45,18 @@
   <ItemGroup>
     <PackageReference Include="Antlr4.Runtime.Standard" Version="4.9.0" />
     <PackageReference Include="Autofac" Version="6.1.0" />
+    <PackageReference Include="CassandraCSharpDriver" Version="3.16.2" />
     <PackageReference Include="Microsoft.Bcl.HashCode" Version="1.1.0" />
     <PackageReference Include="Microsoft.CSharp" Version="4.7.0" />
     <PackageReference Include="Microsoft.Data.SQLite" Version="1.1.0" />
+    <PackageReference Include="MongoDB.Driver" Version="2.11.6" />
+    <PackageReference Include="Neo4jClient" Version="4.0.3" />
     <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
+  </ItemGroup>
+
+
+  <ItemGroup>
+    <ProjectReference Include="..\Octopus.Common\Octopus.Common.csproj" />
   </ItemGroup>
 
 </Project>

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using OctopusCore.Parser.Filters;
 
 namespace OctopusCore.Parser
 {
@@ -10,5 +11,7 @@ namespace OctopusCore.Parser
         public string Expression { get; set; }
         
         public bool IsSubQueried { get; set; }
+
+        public abstract FilterType Type { get; }
     }
 }

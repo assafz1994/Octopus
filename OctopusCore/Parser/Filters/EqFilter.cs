@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 
 namespace OctopusCore.Parser.Filters
 {
@@ -12,13 +11,18 @@ namespace OctopusCore.Parser.Filters
             FieldNames = fieldNames;
             Expression = expression;
             IsSubQueried = false;
+            Type = FilterType.Eq;
         }
+        
         public EqFilter(List<string> fieldNames, string expression, bool isQueried)
         {
             FieldNames = fieldNames;
             Expression = expression;
             IsSubQueried = isQueried;
+            Type = FilterType.Eq;
         }
+
+        public override FilterType Type { get; }
 
         public override bool Equals(object obj)
         {
@@ -28,7 +32,17 @@ namespace OctopusCore.Parser.Filters
                    && FieldNames.SequenceEqual(eqFilter.FieldNames)
                    && Expression.Equals(eqFilter.Expression)
                    && IsSubQueried.Equals(eqFilter.IsSubQueried);
+                   && Type.Equals(eqFilter.Type);
+        }
 
+        protected bool Equals(EqFilter other)
+        {
+            return Equals(FieldNames, other.FieldNames) && Expression == other.Expression;
+        }
+
+        public override int GetHashCode()
+        {
+            return HashCode.Combine(FieldNames, Expression, Type);
         }
     }
 }
