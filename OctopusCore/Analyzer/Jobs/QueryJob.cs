@@ -34,7 +34,15 @@ namespace OctopusCore.Analyzer.Jobs
             {
                 if (filter.IsSubQueried)
                 {
-                    filter.Expression = SubQueryWorkPlans[filter.Expression].Jobs.Last().Result.EntityResults.Values.First().Fields.Values.First().ToString();
+                    var lastJob = SubQueryWorkPlans[(string)filter.Expression].Jobs.Last();
+                    var expression = lastJob.Result.EntityResults.Values.First().Fields.Values.First();
+
+                    if (expression is string)
+                    {
+                        expression = $"\"{expression}\"";
+                    }
+
+                    filter.Expression = expression;
                 }
             }
             return _dbHandler.ExecuteQueryWithFiltersAsync(FieldsToSelect, Filters, EntityType);

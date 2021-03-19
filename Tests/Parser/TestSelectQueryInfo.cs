@@ -173,12 +173,7 @@ namespace Tests.Parser
             var actualQueryInfo = _parser.ParseQuery(query).Result;
             Assert.True(actualQueryInfo is SelectQueryInfo);
             var actualSelectQueryInfo = (SelectQueryInfo) actualQueryInfo;
-            Assert.AreEqual(expectedSelectQueryInfo.Entity, actualSelectQueryInfo.Entity);
-            // CollectionAssert.AreEquivalent(expectedSelectQueryInfo.SubQueries, actualSelectQueryInfo.SubQueries);
-            // CollectionAssert.AreEquivalent(expectedSelectQueryInfo.Filters, actualSelectQueryInfo.Filters);
-            // CollectionAssert.AreEquivalent(expectedSelectQueryInfo.NestedProperty, actualSelectQueryInfo.NestedProperty);
-            // CollectionAssert.AreEquivalent(expectedSelectQueryInfo.Fields, actualSelectQueryInfo.Fields);
-            // CollectionAssert.AreEquivalent(expectedSelectQueryInfo.Includes, actualSelectQueryInfo.Includes);
+            Assert.AreEqual(expectedSelectQueryInfo, actualSelectQueryInfo);
         }
     }
 }
