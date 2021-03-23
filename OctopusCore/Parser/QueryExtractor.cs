@@ -16,8 +16,54 @@ namespace OctopusCore.Parser
             {
                 return HandleSelect(context.@select());
             }
+            if (context.@insert() != null)
+            {
+                return HandleInsert(context.@insert());
+            }
             return new SelectQueryInfo();
             // return base.VisitR(context);
+        }
+
+        private InsertQueryInfo HandleInsert(OctopusQLParser.InsertContext insert)
+        {
+            var parserEntities = new List<ParserEntity>();
+            
+            foreach (var insertClauseContext in insert.insertClause())
+            {
+                if (insertClauseContext.assignments() == null)
+                {
+                    throw new Exception("insert with selection is not supported");
+                }
+
+                var entityType = insertClauseContext.entity().GetText();
+                var entityName = insertClauseContext.entityRep().GetText();
+                var fields = new Dictionary<string, dynamic>();
+                foreach (var assignmentContext in insertClauseContext.assignments()._assignmentList)
+                {
+                    dynamic value;
+                    if (assignmentContext.value().NUMBER() != null)
+                    {
+                        value = int.Parse(assignmentContext.value().GetText());
+                    }
+                    else
+                    {
+                        value = assignmentContext.value().GetText();
+                    }
+
+                    fields[assignmentContext.field().GetText()] = value;
+                }
+                parserEntities.Add(new ParserEntity(entityType, entityName, fields));
+            }
+
+            var entityReps = insert.entityReps()._entityRepList.Select(x => x.GetText()).ToList();
+            var entityNames = parserEntities.Select(x => x.EntityName);
+            var set1 = new HashSet<string>(entityReps);
+            var set2 = new HashSet<string>(entityNames);
+            if (!set1.SetEquals(set2))
+            {
+                throw new Exception("length must be the same");
+            }
+            return new InsertQueryInfo(parserEntities, entityReps);
         }
 
         private SelectQueryInfo HandleSelect([NotNull] OctopusQLParser.SelectContext selectContext)
