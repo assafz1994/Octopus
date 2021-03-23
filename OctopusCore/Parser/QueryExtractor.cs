@@ -35,7 +35,7 @@ namespace OctopusCore.Parser
                     throw new Exception("insert with selection is not supported");
                 }
 
-                var entityType = insertClauseContext.entity().GetText();
+                var entityType = insertClauseContext.entity().GetText().ToLower();
                 var entityName = insertClauseContext.entityRep().GetText();
                 var fields = new Dictionary<string, dynamic>();
                 foreach (var assignmentContext in insertClauseContext.assignments()._assignmentList)
@@ -50,13 +50,13 @@ namespace OctopusCore.Parser
                         value = assignmentContext.value().GetText();
                     }
 
-                    fields[assignmentContext.field().GetText()] = value;
+                    fields[assignmentContext.field().GetText().ToLower()] = value;
                 }
                 parserEntities.Add(new ParserEntity(entityType, entityName, fields));
             }
 
             var entityReps = insert.entityReps()._entityRepList.Select(x => x.GetText()).ToList();
-            var entityNames = parserEntities.Select(x => x.EntityName);
+            var entityNames = parserEntities.Select(x => x.EntityName).ToList();
             var set1 = new HashSet<string>(entityReps);
             var set2 = new HashSet<string>(entityNames);
             if (!set1.SetEquals(set2))

@@ -4,15 +4,26 @@
     &lt;TestId&gt;NUnit3x::2E3C7ED0-A529-4CA0-BC78-7B9F9DA2AFA1::.NETCoreApp,Version=v3.1::Tests.Parser.TestSelectQueryInfo&lt;/TestId&gt;&#xD;
   &lt;/TestAncestor&gt;&#xD;
 &lt;/SessionState&gt;</s:String>
+	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=465d493e_002D2de8_002D4d63_002D884d_002Dafcc3ce7dbb8/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" Name="TestValidInsertQueryInfo" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;&#xD;
+  &lt;TestAncestor&gt;&#xD;
+    &lt;TestId&gt;NUnit3x::2E3C7ED0-A529-4CA0-BC78-7B9F9DA2AFA1::.NETCoreApp,Version=v3.1::Tests.Parser.TestInsertQueryInfo.TestValidInsertQueryInfo&lt;/TestId&gt;&#xD;
+  &lt;/TestAncestor&gt;&#xD;
+&lt;/SessionState&gt;</s:String>
 	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=88dc7e5e_002D845c_002D42b7_002D8e92_002D3fe8e5a70eea/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" Name="TestValidSelectQueryInfo" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;&#xD;
   &lt;TestAncestor&gt;&#xD;
     &lt;TestId&gt;NUnit3x::2E3C7ED0-A529-4CA0-BC78-7B9F9DA2AFA1::.NETCoreApp,Version=v3.1::Tests.Parser.TestSelectQueryInfo.TestValidSelectQueryInfo&lt;/TestId&gt;&#xD;
     &lt;TestId&gt;NUnit3x::2E3C7ED0-A529-4CA0-BC78-7B9F9DA2AFA1::.NETCoreApp,Version=v3.1::Tests.AnalyzerTests&lt;/TestId&gt;&#xD;
   &lt;/TestAncestor&gt;&#xD;
 &lt;/SessionState&gt;</s:String>
+	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=bc372496_002D6766_002D4bd0_002D84f4_002D8f3adef3856a/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" Name="TestValidInsertQueryInfo #2" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;&#xD;
+  &lt;TestAncestor&gt;&#xD;
+    &lt;TestId&gt;NUnit3x::2E3C7ED0-A529-4CA0-BC78-7B9F9DA2AFA1::.NETCoreApp,Version=v3.1::Tests.Parser.TestInsertQueryInfo.TestValidInsertQueryInfo&lt;/TestId&gt;&#xD;
+  &lt;/TestAncestor&gt;&#xD;
+&lt;/SessionState&gt;</s:String>
 	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=dbdeeceb_002D80b8_002D4b47_002D99d8_002D9f1f748bf662/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" IsActive="True" Name="TestValidSelectQueryInfo #2" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;&#xD;
   &lt;TestAncestor&gt;&#xD;
     &lt;TestId&gt;NUnit3x::2E3C7ED0-A529-4CA0-BC78-7B9F9DA2AFA1::.NETCoreApp,Version=v3.1::Tests.Parser.TestSelectQueryInfo.TestValidSelectQueryInfo&lt;/TestId&gt;&#xD;
+    &lt;TestId&gt;NUnit3x::2E3C7ED0-A529-4CA0-BC78-7B9F9DA2AFA1::.NETCoreApp,Version=v3.1::Tests.Parser.TestInsertQueryInfo.TestValidInsertQueryInfo&lt;/TestId&gt;&#xD;
   &lt;/TestAncestor&gt;&#xD;
 &lt;/SessionState&gt;</s:String>
 	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=eac9cc33_002D825f_002D4a7f_002Da822_002D38d5c3187b40/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" Name="TestValidSelectQueryInfo #3" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;&#xD;
