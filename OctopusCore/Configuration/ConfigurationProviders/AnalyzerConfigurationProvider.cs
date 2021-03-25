@@ -7,13 +7,29 @@ namespace OctopusCore.Configuration.ConfigurationProviders
     public class AnalyzerConfigurationProvider : IAnalyzerConfigurationProvider
     {
         private readonly Dictionary<string, Dictionary<string, List<string>>> _entityTypeToFieldNameToDatabaseKeys;
+        private readonly Dictionary<string, HashSet<string>> _entityTypeToComplexFields;
 
         public AnalyzerConfigurationProvider(Scheme scheme, DbConfigurations dbConfigurations)
         {
             Scheme = scheme;
             DbConfigurations = dbConfigurations;
             _entityTypeToFieldNameToDatabaseKeys = new Dictionary<string, Dictionary<string, List<string>>>();
+            _entityTypeToComplexFields = new Dictionary<string, HashSet<string>>();
             InitializeEntityTypeToFieldNameToDatabaseKeys();
+            InitializeEntityTypeToComplexFields();
+        }
+
+        private void InitializeEntityTypeToComplexFields()
+        {
+            foreach (var entity in Scheme.Entities)
+            {
+                foreach (var field in entity.Fields)
+                {
+                    if(field.Type)
+                }
+            }
+
+            Scheme.Entities
         }
 
         public Scheme Scheme { get; }
@@ -46,6 +62,11 @@ namespace OctopusCore.Configuration.ConfigurationProviders
                 throw new ArgumentException(
                     $"no db to handle this field: {nameof(entityType)}= {entityType}: {nameof(fieldName)} = {fieldName}");
             return databaseKeys.First();
+        }
+
+        public bool IsComplexField(string entityType, string fieldName)
+        {
+
         }
     }
 }

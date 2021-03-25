@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
 
 namespace OctopusCore.Configuration
 {
@@ -19,13 +21,18 @@ namespace OctopusCore.Configuration
     public class Field
     {
         public string Name { get; set; }
-        public string Type { get; set; }
-        public Connection ConnectedTo { get; set; }
-    }
 
-    public class Connection
-    {
+        [JsonConverter(typeof(StringEnumConverter))]
+        public DbFieldType Type { get; set; }
+
+        [JsonConverter(typeof(StringEnumConverter))]
+
+        public PrimitiveType PrimitiveType { get; set; }
+
+        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
         public string EntityName { get; set; }
-        public string FieldName { get; set; }
+
+        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+        public string ConnectedToField { get; set; }
     }
 }
