@@ -17,7 +17,7 @@ namespace Tests.Parser
         {
             _parser = new OctopusCore.Parser.Parser();
         }
-        public static IEnumerable<TestCaseData> TestValidSelectQueryInfoParameters
+        public static IEnumerable<TestCaseData> TestValidInsertQueryInfoParameters
         {
             get
             {
@@ -109,7 +109,7 @@ namespace Tests.Parser
                     });
             }
         }
-        [Test, TestCaseSource(nameof(TestValidSelectQueryInfoParameters))]
+        [Test, TestCaseSource(nameof(TestValidInsertQueryInfoParameters))]
         public void TestValidInsertQueryInfo(string query, InsertQueryInfo expectedInsertQueryInfo)
         {
             var actualQueryInfo = _parser.ParseQuery(query).Result;
