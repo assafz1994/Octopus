@@ -49,8 +49,7 @@ namespace OctopusCore.Analyzer
             foreach (var field in selectQueryInfo.Fields ?? Enumerable.Empty<string>())
                 workPlanBuilder.AddProjectionField(field);
 
-            var workPlan = workPlanBuilder.Build();
-            workPlan.SubQueryWorkPlans = subQueryWorkPlans;
+            var workPlan = workPlanBuilder.Build(subQueryWorkPlans);
             return workPlan;
         }
 
@@ -58,7 +57,7 @@ namespace OctopusCore.Analyzer
         {
             var parserEntities = insertQueryInfo.ParserEntities.Where(x => insertQueryInfo.EntityReps.Contains(x.EntityName)).ToList();
             var jobs = new List<Job>();
-            
+            var subQueryWorkPlans = new Dictionary<string, WorkPlan>();
             foreach (var parserEntity in parserEntities)
             {
                 var dbsToFields = _analyzerConfigurationProvider.GetDbsToFields(parserEntity.EntityType);
@@ -72,8 +71,7 @@ namespace OctopusCore.Analyzer
                     jobs.Add(insertQueryJob);
                 }
             }
-
-            return new WorkPlan(jobs);
+            return new WorkPlan(jobs, subQueryWorkPlans);
         }
     }
 }

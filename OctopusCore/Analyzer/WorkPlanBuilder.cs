@@ -44,7 +44,7 @@ namespace OctopusCore.Analyzer
             queryJobBuilder.AddWorkPlan(guid, workPlan);
         }
 
-        public WorkPlan Build()
+        public WorkPlan Build(Dictionary<string, WorkPlan> subQueryWorkPlans)
         {
             var jobs = new List<Job>(_databaseKeyToQueryJobBuilderMappings.Values.Select(builder => builder.Build()));
             if (jobs.Count > 1)
@@ -53,7 +53,7 @@ namespace OctopusCore.Analyzer
                 jobs.Add(unionQueryJob);
             }
 
-            return new WorkPlan(jobs);
+            return new WorkPlan(jobs, subQueryWorkPlans);
         }
 
         private SelectQueryJobBuilder GetOrCreateQueryJobBuilder(string fieldName)

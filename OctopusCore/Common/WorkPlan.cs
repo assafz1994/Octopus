@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections.Concurrent;
+using System.Collections.Generic;
 using OctopusCore.Analyzer.Jobs;
 
 namespace OctopusCore.Contract
@@ -8,9 +9,10 @@ namespace OctopusCore.Contract
         public IReadOnlyDictionary<string, WorkPlan> SubQueryWorkPlans { get; set; }
         public IReadOnlyCollection<Job> Jobs { get; }
 
-        public WorkPlan(IReadOnlyCollection<Job> jobs)
+        public WorkPlan(IReadOnlyCollection<Job> jobs, IReadOnlyDictionary<string, WorkPlan> subQueryWorkPlans)
         {
             Jobs = jobs;
+            SubQueryWorkPlans = subQueryWorkPlans;
         }
     }
 }

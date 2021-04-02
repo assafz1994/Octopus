@@ -69,8 +69,8 @@ namespace OctopusCore.DbHandlers
         {
             switch (argValue)
             {
-                case string _:
-                    return $"\"{argValue}\"";
+                case string s:
+                    return $"'{s.Trim('"')}'";
                 case int _:
                     return $"{argValue}";
                 case Guid _:
