@@ -83,20 +83,26 @@
                             "ConnectedTo": null
                         },
                         {
-                            "Name": "age",
-                            "Type": "int",
+                            "Name": "name",
+                            "Type": "string",
                             "ConnectedTo": null
                         },
                         {
-                            "Name": "name",
+                            "Name": "hobby",
                             "Type": "string",
+                            "ConnectedTo": null
+                        },
+                        {
+                            "Name": "age",
+                            "Type": "int",
                             "ConnectedTo": null
                         }
                     ],
                     "TablesByFields": [
                         [],
                         [ "id" ],
-                        [ "id", "age" ]
+                        [ "id", "age" ],
+                        [ "hobby"]
                     ]
                 }
             ]
