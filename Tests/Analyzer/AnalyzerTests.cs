@@ -84,8 +84,8 @@ namespace Tests
 
             Assert.AreEqual(1, actualWorkPlan.Jobs.Count);
             var job = actualWorkPlan.Jobs.Single();
-            Assert.IsInstanceOf<QueryJob>(job);
-            var queryJob = (QueryJob)job;
+            Assert.IsInstanceOf<SelectQueryJob>(job);
+            var queryJob = (SelectQueryJob)job;
             Assert.AreEqual(EntityName, queryJob.EntityType);
             Assert.That(queryJob.FieldsToSelect, Is.EquivalentTo(new[]
             {

@@ -7,13 +7,13 @@ using System.Linq;
 
 namespace OctopusCore.Analyzer.Jobs
 {
-    internal class QueryJob : Job
+    internal class SelectQueryJob : Job
     {
         private readonly IDbHandler _dbHandler;
 
         public Dictionary<string, WorkPlan> SubQueryWorkPlans { get; set; }
 
-        public QueryJob(IDbHandler dbHandler, IReadOnlyCollection<string> fieldsToSelect,
+        public SelectQueryJob(IDbHandler dbHandler, IReadOnlyCollection<string> fieldsToSelect,
             IReadOnlyCollection<Filter> filters, string entityType, Dictionary<string, WorkPlan> subQueryWorkPlans)
         {
             _dbHandler = dbHandler;

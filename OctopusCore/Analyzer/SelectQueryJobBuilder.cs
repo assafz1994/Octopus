@@ -38,9 +38,9 @@ namespace OctopusCore.Analyzer
             _subQueriesWorkPlans.Add(guid, workPlan);
         }
 
-        public QueryJob Build()
+        public SelectQueryJob Build()
         {
-            return new QueryJob(_dbHandler, _fieldsToSelect, _filters, _entityType, _subQueriesWorkPlans);
+            return new SelectQueryJob(_dbHandler, _fieldsToSelect, _filters, _entityType, _subQueriesWorkPlans);
         }
     }
 }
