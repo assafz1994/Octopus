@@ -42,9 +42,7 @@ namespace OctopusCore.Configuration.ConfigurationProviders
                 // InitializeEntityTypeToDatabaseToFields
                 if (_entityTypeToDatabaseToFields.ContainsKey(entity.Name) == false)
                     _entityTypeToDatabaseToFields.Add(entity.Name, new Dictionary<string, List<string>>());
-                var fields = entity.Fields.Select(x => x.Name).ToList();
-                fields.Add(StringConstants.Guid);
-                _entityTypeToDatabaseToFields[entity.Name][dbConfiguration.Id] = fields;
+                _entityTypeToDatabaseToFields[entity.Name][dbConfiguration.Id] = entity.Fields.Select(x => x.Name).ToList();
             }
         }
         

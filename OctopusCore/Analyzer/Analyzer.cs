@@ -63,15 +63,11 @@ namespace OctopusCore.Analyzer
             {
                 var dbsToFields = _analyzerConfigurationProvider.GetDbsToFields(parserEntity.EntityType);
                 var guid = Guid.NewGuid();
-                var insertGuid = !parserEntity.Fields.ContainsKey(StringConstants.Guid);
                 foreach (var dbToFields in dbsToFields)
                 {
                     var dbHandler = _dbHandlersResolver.ResolveDbHandler(dbToFields.Key);
                     var fields = parserEntity.Fields.Where(x => dbToFields.Value.Contains(x.Key)).ToList().ToDictionary(i => i.Key, i => i.Value);
-                    if (insertGuid)
-                    {
-                        fields[StringConstants.Guid] = guid;
-                    }
+                    fields[StringConstants.Guid] = guid;
                     var insertQueryJob = new InsertQueryJob(dbHandler, fields, parserEntity.EntityType, new Dictionary<string, WorkPlan>());
                     jobs.Add(insertQueryJob);
                 }

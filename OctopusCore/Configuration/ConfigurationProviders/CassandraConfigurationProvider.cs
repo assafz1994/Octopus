@@ -36,5 +36,16 @@ namespace OctopusCore.Configuration.ConfigurationProviders
                 ? $"SELECT {fields} FROM {entityType}_table_by_{string.Join("_", table)} {conditions}"
                 : $"SELECT {fields} FROM {entityType}_table {conditions} ALLOW FILTERING";
         }
+
+        public string TableToString(string entityType, List<string> table)
+        {
+            return table.Count == 0 ? $"{entityType}_table" : $"{entityType}_table_by_{string.Join("_", table)}";
+        }
+        public List<string> GetTableNames(string entityType)
+        {
+            var entity = Entities.First(x => x.Name == entityType);
+            var tables = entity.TablesByFields.Select(table => TableToString(entityType, table)).ToList();
+            return tables;
+        }
     }
 }

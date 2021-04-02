@@ -39,7 +39,45 @@ namespace OctopusCore.DbHandlers
             var cluster = Cluster.Builder()
                 .AddContactPoint(_configurationProvider.ConnectionString)
                 .Build();
+            var session = cluster.Connect(_configurationProvider.KeySpace);
+            var tables = _configurationProvider.GetTableNames(entityType);
+            var queries = AssembleInsertQueries(tables, fields);
+            foreach (var query in queries)
+            {
+                var rs = session.Execute(query);
+            }
             return Task.FromResult(new ExecutionResult(entityType, new Dictionary<string, EntityResult>()));
+        }
+
+        private List<string> AssembleInsertQueries(List<string> tables, IReadOnlyDictionary<string, dynamic> fields)
+        {
+            var queries = new List<string>();
+            var fieldsList = fields.ToList();
+            
+            foreach (var table in tables)
+            {
+                var query = $"INSERT INTO {table} " +
+                            $"({string.Join(",", fieldsList.Select(x => x.Key))}) " +
+                            $"values " +
+                            $"({string.Join(",", fieldsList.Select(x => ValueToString(x.Value)))});";
+                queries.Add(query);
+            }
+            return queries;
+        }
+
+        private string ValueToString(object argValue)
+        {
+            switch (argValue)
+            {
+                case string _:
+                    return $"\"{argValue}\"";
+                case int _:
+                    return $"{argValue}";
+                case Guid _:
+                    return $"{argValue}";
+                default:
+                    return null;
+            }
         }
 
         private string ConvertFiltersToWhereStatement(IReadOnlyCollection<Filter> filters)
