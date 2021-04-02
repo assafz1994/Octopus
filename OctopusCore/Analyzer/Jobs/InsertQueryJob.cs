@@ -12,10 +12,18 @@ namespace OctopusCore.Analyzer.Jobs
         private readonly IDbHandler _dbHandler;
         public Dictionary<string, WorkPlan> SubQueryWorkPlans { get; set; }
         public string EntityType;
-        public Dictionary<string, dynamic> Fields { get; set; }
+        public IReadOnlyDictionary<string, dynamic> Fields { get; set; }
         protected override Task<ExecutionResult> ExecuteInternalAsync()
         {
             throw new NotImplementedException();
+        }
+
+        public InsertQueryJob(IDbHandler dbHandler, IReadOnlyDictionary<string, dynamic> fields, string entityType, Dictionary<string, WorkPlan> subQueryWorkPlans)
+        {
+            _dbHandler = dbHandler;
+            Fields = fields;
+            EntityType = entityType;
+            SubQueryWorkPlans = subQueryWorkPlans;
         }
 
     }

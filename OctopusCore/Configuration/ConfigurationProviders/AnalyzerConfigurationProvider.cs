@@ -7,13 +7,26 @@ namespace OctopusCore.Configuration.ConfigurationProviders
     public class AnalyzerConfigurationProvider : IAnalyzerConfigurationProvider
     {
         private readonly Dictionary<string, Dictionary<string, List<string>>> _entityTypeToFieldNameToDatabaseKeys;
-
+        private readonly Dictionary<string, Dictionary<string, List<string>>> _entityTypeToDatabaseToFields;
         public AnalyzerConfigurationProvider(Scheme scheme, DbConfigurations dbConfigurations)
         {
             Scheme = scheme;
             DbConfigurations = dbConfigurations;
             _entityTypeToFieldNameToDatabaseKeys = new Dictionary<string, Dictionary<string, List<string>>>();
+            _entityTypeToDatabaseToFields = new Dictionary<string, Dictionary<string, List<string>>>();
             InitializeEntityTypeToFieldNameToDatabaseKeys();
+            InitializeEntityTypeToDatabaseToFields();
+        }
+
+        private void InitializeEntityTypeToDatabaseToFields()
+        {
+            foreach (var dbConfiguration in DbConfigurations.Configurations)
+            foreach (var entity in dbConfiguration.Entities)
+            {
+                if (_entityTypeToDatabaseToFields.ContainsKey(entity.Name) == false)
+                    _entityTypeToDatabaseToFields.Add(entity.Name, new Dictionary<string, List<string>>());
+                _entityTypeToDatabaseToFields[entity.Name][dbConfiguration.Id] = entity.Fields.Select(x => x.Name).ToList();
+            }
         }
 
         public Scheme Scheme { get; }
@@ -36,6 +49,12 @@ namespace OctopusCore.Configuration.ConfigurationProviders
                         fieldNameToDatabaseKey[field.Name].Add(dbConfiguration.Id);
                 }
             }
+        }
+        public Dictionary<string, List<string>> GetDbAndFields(string entityType)
+        {
+            if (_entityTypeToDatabaseToFields.TryGetValue(entityType, out var dbAndFieldsDictionary) == false)
+                throw new ArgumentException($"no db to handle this entity type:{entityType}");
+            return dbAndFieldsDictionary;
         }
 
         public string GetFieldDatabaseKey(string entityType, string fieldName)

@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
+using OctopusCore.Analyzer.Jobs;
 using OctopusCore.Configuration;
 using OctopusCore.Configuration.ConfigurationProviders;
 using OctopusCore.Contract;
@@ -21,8 +23,10 @@ namespace OctopusCore.Analyzer
 
         public WorkPlan AnalyzeQuery(QueryInfo queryInfo)
         {
-            if (!(queryInfo is SelectQueryInfo selectQueryInfo)) throw new Exception("Unsupported query type");
-
+            // if (!(queryInfo is SelectQueryInfo selectQueryInfo)) throw new Exception("Unsupported query type");
+            if (queryInfo is InsertQueryInfo insertQueryInfo) return AnalyzeInsertQuery(insertQueryInfo);
+            var selectQueryInfo = (SelectQueryInfo) queryInfo;
+            
             var workPlanBuilder = new WorkPlanBuilder(_dbHandlersResolver,_analyzerConfigurationProvider, selectQueryInfo.Entity);
 
             var subQueryWorkPlans = selectQueryInfo.SubQueries.ToDictionary(v => v.Key, v => AnalyzeQuery(v.Value));
@@ -41,6 +45,25 @@ namespace OctopusCore.Analyzer
             var workPlan = workPlanBuilder.Build();
             workPlan.SubQueryWorkPlans = subQueryWorkPlans;
             return workPlan;
+        }
+
+        private WorkPlan AnalyzeInsertQuery(InsertQueryInfo insertQueryInfo)
+        {
+            var parserEntities = insertQueryInfo.ParserEntities.Where(x => insertQueryInfo.EntityReps.Contains(x.EntityName)).ToList();
+            var jobs = new List<Job>();
+            foreach (var parserEntity in parserEntities)
+            {
+                var dbsDict = _analyzerConfigurationProvider.GetDbAndFields(parserEntity.EntityType);
+                foreach (var dbToFields in dbsDict)
+                {
+                    var dbHandler = _dbHandlersResolver.ResolveDbHandler(dbToFields.Key);
+                    var fields = parserEntity.Fields.Where(x => dbToFields.Value.Contains(x.Key)).ToList().ToDictionary(i => i.Key, i => i.Value);
+                    var insertQueryJob = new InsertQueryJob(dbHandler, fields, parserEntity.EntityType, new Dictionary<string, WorkPlan>());
+                    jobs.Add(insertQueryJob);
+                }
+            }
+
+            return new WorkPlan(jobs);
         }
     }
 }
