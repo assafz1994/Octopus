@@ -44,7 +44,7 @@ namespace OctopusCore.DbHandlers
             var queries = AssembleInsertQueries(tables, fields);
             foreach (var query in queries)
             {
-                var rs = session.Execute(query);
+                session.Execute(query);
             }
             return Task.FromResult(new ExecutionResult(entityType, new Dictionary<string, EntityResult>()));
         }
@@ -65,12 +65,12 @@ namespace OctopusCore.DbHandlers
             return queries;
         }
 
-        private string ValueToString(object argValue)
+        private static string ValueToString(object argValue)
         {
             switch (argValue)
             {
                 case string s:
-                    return $"'{s.Trim('"')}'";
+                    return GetExpression(s);
                 case int _:
                     return $"{argValue}";
                 case Guid _:

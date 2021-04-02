@@ -41,6 +41,7 @@ namespace OctopusCore.Configuration.ConfigurationProviders
         {
             return table.Count == 0 ? $"{entityType}_table" : $"{entityType}_table_by_{string.Join("_", table)}";
         }
+
         public List<string> GetTableNames(string entityType)
         {
             var entity = Entities.First(x => x.Name == entityType);
