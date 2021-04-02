@@ -15,31 +15,18 @@ namespace OctopusCore.Configuration.ConfigurationProviders
             DbConfigurations = dbConfigurations;
             _entityTypeToFieldNameToDatabaseKeys = new Dictionary<string, Dictionary<string, List<string>>>();
             _entityTypeToDatabaseToFields = new Dictionary<string, Dictionary<string, List<string>>>();
-            InitializeEntityTypeToFieldNameToDatabaseKeys();
-            InitializeEntityTypeToDatabaseToFields();
-        }
-
-        private void InitializeEntityTypeToDatabaseToFields()
-        {
-            foreach (var dbConfiguration in DbConfigurations.Configurations)
-            foreach (var entity in dbConfiguration.Entities)
-            {
-                if (_entityTypeToDatabaseToFields.ContainsKey(entity.Name) == false)
-                    _entityTypeToDatabaseToFields.Add(entity.Name, new Dictionary<string, List<string>>());
-                var fields = entity.Fields.Select(x => x.Name).ToList();
-                fields.Add(StringConstants.Guid);
-                _entityTypeToDatabaseToFields[entity.Name][dbConfiguration.Id] = fields;
-            }
+            InitializeDictionaries();
         }
 
         public Scheme Scheme { get; }
         public DbConfigurations DbConfigurations { get; }
 
-        private void InitializeEntityTypeToFieldNameToDatabaseKeys()
+        private void InitializeDictionaries()
         {
             foreach (var dbConfiguration in DbConfigurations.Configurations)
             foreach (var entity in dbConfiguration.Entities)
             {
+                // InitializeDictionaries
                 if (_entityTypeToFieldNameToDatabaseKeys.ContainsKey(entity.Name) == false)
                     _entityTypeToFieldNameToDatabaseKeys.Add(entity.Name, new Dictionary<string, List<string>>());
 
@@ -51,8 +38,16 @@ namespace OctopusCore.Configuration.ConfigurationProviders
                     else
                         fieldNameToDatabaseKey[field.Name].Add(dbConfiguration.Id);
                 }
+
+                // InitializeEntityTypeToDatabaseToFields
+                if (_entityTypeToDatabaseToFields.ContainsKey(entity.Name) == false)
+                    _entityTypeToDatabaseToFields.Add(entity.Name, new Dictionary<string, List<string>>());
+                var fields = entity.Fields.Select(x => x.Name).ToList();
+                fields.Add(StringConstants.Guid);
+                _entityTypeToDatabaseToFields[entity.Name][dbConfiguration.Id] = fields;
             }
         }
+        
         public Dictionary<string, List<string>> GetDbsToFields(string entityType)
         {
             if (_entityTypeToDatabaseToFields.TryGetValue(entityType, out var dbsToFieldsDictionary) == false)
