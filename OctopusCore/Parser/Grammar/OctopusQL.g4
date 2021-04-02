@@ -31,7 +31,7 @@ all                 : '*' ;
 /*
  * Lexer Rules
  */
-
+EQUALS              : '=' ;
 COMPARATOR          : ISEQUALS | GT | GTE | LT | LTE ; 
 SELECT              : 'select' | 'SELECT' | 'Select' ;
 FROM                : 'from' | 'FROM' | 'From' ;
@@ -45,7 +45,7 @@ ASSIGN              : EQUALS | ADD | REMOVE ;
 PIPELINE            : '|' ;
 COLON               : ':' ;
 ISEQUALS            : '==' ;
-EQUALS              : '=' ;
+
 GT                  : '>' ;
 GTE                 : '>=' ;
 LT                  : '<' ;
