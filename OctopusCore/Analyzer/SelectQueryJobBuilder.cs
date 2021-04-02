@@ -6,7 +6,7 @@ using OctopusCore.Parser;
 
 namespace OctopusCore.Analyzer
 {
-    internal class QueryJobBuilder
+    internal class SelectQueryJobBuilder
     {
         private readonly IDbHandler _dbHandler;
         private readonly List<string> _fieldsToSelect;
@@ -14,7 +14,7 @@ namespace OctopusCore.Analyzer
         private readonly string _entityType;
         private Dictionary<string, WorkPlan> _subQueriesWorkPlans;
 
-        public QueryJobBuilder(IDbHandler dbHandler, string entityType)
+        public SelectQueryJobBuilder(IDbHandler dbHandler, string entityType)
         {
             _dbHandler = dbHandler;
 
