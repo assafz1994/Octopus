@@ -28,7 +28,7 @@ namespace OctopusCore.DbHandlers
             // var table = _configurationProvider.GetTableName(entityType, filters);
             var conditions = ConvertFiltersToWhereStatement(filters);
             var session = cluster.Connect(_configurationProvider.KeySpace);
-            var query = _configurationProvider.AssembleQuery(entityType, fields, filters, conditions);
+            var query = _configurationProvider.AssembleSelectQuery(entityType, fields, filters, conditions);
             var rs = session.Execute(query);
             var result = ExecuteCommand(fieldsToSelect, rs);
             return Task.FromResult(new ExecutionResult(entityType, result));
@@ -36,7 +36,10 @@ namespace OctopusCore.DbHandlers
 
         public Task<ExecutionResult> ExecuteInsertQuery(string entityType, IReadOnlyDictionary<string, dynamic> fields)
         {
-            throw new NotImplementedException();
+            var cluster = Cluster.Builder()
+                .AddContactPoint(_configurationProvider.ConnectionString)
+                .Build();
+            return Task.FromResult(new ExecutionResult(entityType, new Dictionary<string, EntityResult>()));
         }
 
         private string ConvertFiltersToWhereStatement(IReadOnlyCollection<Filter> filters)

@@ -17,7 +17,7 @@ namespace OctopusCore.Configuration.ConfigurationProviders
             Entities = dbConfiguration.Entities;
         }
 
-        public string AssembleQuery(string entityType, string fields, IReadOnlyCollection<Filter> filters, string conditions)
+        public string AssembleSelectQuery(string entityType, string fields, IReadOnlyCollection<Filter> filters, string conditions)
         {
             var entity = Entities.First(x => x.Name == entityType);
             var filterNames = filters.Select(x => x.FieldNames[0]).ToList();
