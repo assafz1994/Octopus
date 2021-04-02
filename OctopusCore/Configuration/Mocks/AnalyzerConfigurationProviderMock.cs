@@ -12,7 +12,7 @@ namespace OctopusCore.Configuration.Mocks
             _entityTypeToFieldNameToDatabaseKeyMappings = entityTypeToFieldNameToDatabaseKeyMappings;
         }
 
-        public Dictionary<string, List<string>> GetDbAndFields(string entityType)
+        public Dictionary<string, List<string>> GetDbsToFields(string entityType)
         {
             throw new System.NotImplementedException();
         }

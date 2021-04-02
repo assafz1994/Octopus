@@ -50,11 +50,11 @@ namespace OctopusCore.Configuration.ConfigurationProviders
                 }
             }
         }
-        public Dictionary<string, List<string>> GetDbAndFields(string entityType)
+        public Dictionary<string, List<string>> GetDbsToFields(string entityType)
         {
-            if (_entityTypeToDatabaseToFields.TryGetValue(entityType, out var dbAndFieldsDictionary) == false)
+            if (_entityTypeToDatabaseToFields.TryGetValue(entityType, out var dbsToFieldsDictionary) == false)
                 throw new ArgumentException($"no db to handle this entity type:{entityType}");
-            return dbAndFieldsDictionary;
+            return dbsToFieldsDictionary;
         }
 
         public string GetFieldDatabaseKey(string entityType, string fieldName)

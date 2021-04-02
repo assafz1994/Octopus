@@ -4,7 +4,7 @@ namespace OctopusCore.Configuration.ConfigurationProviders
 {
     public interface IAnalyzerConfigurationProvider
     {
-        public Dictionary<string, List<string>> GetDbAndFields(string entityType);
+        public Dictionary<string, List<string>> GetDbsToFields(string entityType);
         string GetFieldDatabaseKey(string entityType, string fieldName);
     }
 }

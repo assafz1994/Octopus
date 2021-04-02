@@ -59,8 +59,8 @@ namespace OctopusCore.Analyzer
             var jobs = new List<Job>();
             foreach (var parserEntity in parserEntities)
             {
-                var dbsDict = _analyzerConfigurationProvider.GetDbAndFields(parserEntity.EntityType);
-                foreach (var dbToFields in dbsDict)
+                var dbsToFields = _analyzerConfigurationProvider.GetDbsToFields(parserEntity.EntityType);
+                foreach (var dbToFields in dbsToFields)
                 {
                     var dbHandler = _dbHandlersResolver.ResolveDbHandler(dbToFields.Key);
                     var fields = parserEntity.Fields.Where(x => dbToFields.Value.Contains(x.Key)).ToList().ToDictionary(i => i.Key, i => i.Value);
