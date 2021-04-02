@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using OctopusCore.Common;
 
 namespace OctopusCore.Configuration.ConfigurationProviders
 {
@@ -25,7 +26,9 @@ namespace OctopusCore.Configuration.ConfigurationProviders
             {
                 if (_entityTypeToDatabaseToFields.ContainsKey(entity.Name) == false)
                     _entityTypeToDatabaseToFields.Add(entity.Name, new Dictionary<string, List<string>>());
-                _entityTypeToDatabaseToFields[entity.Name][dbConfiguration.Id] = entity.Fields.Select(x => x.Name).ToList();
+                var fields = entity.Fields.Select(x => x.Name).ToList();
+                fields.Add(StringConstants.Guid);
+                _entityTypeToDatabaseToFields[entity.Name][dbConfiguration.Id] = fields;
             }
         }
 
