@@ -11,7 +11,7 @@ namespace OctopusCore.Analyzer
 {
     internal class WorkPlanBuilder
     {
-        private readonly Dictionary<string, QueryJobBuilder> _databaseKeyToQueryJobBuilderMappings;
+        private readonly Dictionary<string, SelectQueryJobBuilder> _databaseKeyToQueryJobBuilderMappings;
         private readonly string _entityType;
         private readonly IAnalyzerConfigurationProvider _analyzerConfigurationProvider;
         private readonly IDbHandlersResolver _dbHandlersResolver;
@@ -23,7 +23,7 @@ namespace OctopusCore.Analyzer
             _dbHandlersResolver = dbHandlersResolver;
             _analyzerConfigurationProvider = analyzerConfigurationProvider;
 
-            _databaseKeyToQueryJobBuilderMappings = new Dictionary<string, QueryJobBuilder>();
+            _databaseKeyToQueryJobBuilderMappings = new Dictionary<string, SelectQueryJobBuilder>();
         }
 
         public void AddFilter(Filter filter)
@@ -56,14 +56,14 @@ namespace OctopusCore.Analyzer
             return new WorkPlan(jobs);
         }
 
-        private QueryJobBuilder GetOrCreateQueryJobBuilder(string fieldName)
+        private SelectQueryJobBuilder GetOrCreateQueryJobBuilder(string fieldName)
         {
             var fieldDatabaseKey = _analyzerConfigurationProvider.GetFieldDatabaseKey(_entityType, fieldName);
             if (_databaseKeyToQueryJobBuilderMappings.ContainsKey(fieldDatabaseKey) == false)
             {
                 var dbHandler = _dbHandlersResolver.ResolveDbHandler(fieldDatabaseKey);
                 _databaseKeyToQueryJobBuilderMappings.Add(fieldDatabaseKey,
-                    new QueryJobBuilder(dbHandler, _entityType));
+                    new SelectQueryJobBuilder(dbHandler, _entityType));
             }
 
             return _databaseKeyToQueryJobBuilderMappings[fieldDatabaseKey];

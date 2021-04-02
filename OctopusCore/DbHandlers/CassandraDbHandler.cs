@@ -34,6 +34,11 @@ namespace OctopusCore.DbHandlers
             return Task.FromResult(new ExecutionResult(entityType, result));
         }
 
+        public Task<ExecutionResult> ExecuteInsertQuery(string entityType, IReadOnlyDictionary<string, dynamic> fields)
+        {
+            throw new NotImplementedException();
+        }
+
         private string ConvertFiltersToWhereStatement(IReadOnlyCollection<Filter> filters)
         {
             if (filters.Count == 0) return "";

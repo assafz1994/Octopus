@@ -1,5 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
+using OctopusCore.Analyzer.Jobs;
+using OctopusCore.Common;
 using OctopusCore.Configuration;
 using OctopusCore.Configuration.ConfigurationProviders;
 using OctopusCore.Contract;
@@ -21,9 +24,17 @@ namespace OctopusCore.Analyzer
 
         public WorkPlan AnalyzeQuery(QueryInfo queryInfo)
         {
-            if (!(queryInfo is SelectQueryInfo selectQueryInfo)) throw new Exception("Unsupported query type");
+            return queryInfo switch
+            {
+                SelectQueryInfo selectQueryInfo => AnalyzeSelectQuery(selectQueryInfo),
+                InsertQueryInfo insertQueryInfo => AnalyzeInsertQuery(insertQueryInfo),
+                _ => throw new Exception("Unsupported query type")
+            };
+        }
 
-            var workPlanBuilder = new WorkPlanBuilder(_dbHandlersResolver,_analyzerConfigurationProvider, selectQueryInfo.Entity);
+        private WorkPlan AnalyzeSelectQuery(SelectQueryInfo selectQueryInfo)
+        {
+            var workPlanBuilder = new WorkPlanBuilder(_dbHandlersResolver, _analyzerConfigurationProvider, selectQueryInfo.Entity);
 
             var subQueryWorkPlans = selectQueryInfo.SubQueries.ToDictionary(v => v.Key, v => AnalyzeQuery(v.Value));
             foreach (var queryFilter in selectQueryInfo.Filters ?? Enumerable.Empty<Filter>())
@@ -34,13 +45,39 @@ namespace OctopusCore.Analyzer
                     workPlanBuilder.AddSubQueriedWorkPlan(queryFilter, queryFilter.Expression, subQueryWorkPlans[queryFilter.Expression]);
                 }
             }
-            
+
             foreach (var field in selectQueryInfo.Fields ?? Enumerable.Empty<string>())
                 workPlanBuilder.AddProjectionField(field);
 
             var workPlan = workPlanBuilder.Build();
             workPlan.SubQueryWorkPlans = subQueryWorkPlans;
             return workPlan;
+        }
+
+        private WorkPlan AnalyzeInsertQuery(InsertQueryInfo insertQueryInfo)
+        {
+            var parserEntities = insertQueryInfo.ParserEntities.Where(x => insertQueryInfo.EntityReps.Contains(x.EntityName)).ToList();
+            var jobs = new List<Job>();
+            
+            foreach (var parserEntity in parserEntities)
+            {
+                var dbsToFields = _analyzerConfigurationProvider.GetDbsToFields(parserEntity.EntityType);
+                var guid = Guid.NewGuid();
+                var insertGuid = !parserEntity.Fields.ContainsKey(StringConstants.Guid);
+                foreach (var dbToFields in dbsToFields)
+                {
+                    var dbHandler = _dbHandlersResolver.ResolveDbHandler(dbToFields.Key);
+                    var fields = parserEntity.Fields.Where(x => dbToFields.Value.Contains(x.Key)).ToList().ToDictionary(i => i.Key, i => i.Value);
+                    if (insertGuid)
+                    {
+                        fields[StringConstants.Guid] = guid;
+                    }
+                    var insertQueryJob = new InsertQueryJob(dbHandler, fields, parserEntity.EntityType, new Dictionary<string, WorkPlan>());
+                    jobs.Add(insertQueryJob);
+                }
+            }
+
+            return new WorkPlan(jobs);
         }
     }
 }
