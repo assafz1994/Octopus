@@ -44,29 +44,95 @@
           }
         ]
       },
-      {
-        "Id": "neo4j",
-        "DbType": "Neo4j",
-        "ConnectionString": "http://localhost:7474/",
-        "Username": "neo4j",
-        "Password": "1234",
-        "Entities": [
-          {
-            "Name": "person",
-            "Fields": [
-              {
-                "Name": "email",
-                "Type": "string",
-                "ConnectedTo": null
-              },
-              {
-                "Name": "hobby",
-                "Type": "string",
-                "ConnectedTo": null
-              }
+        {
+            "Id": "neo4j",
+            "DbType": "Neo4j",
+            "ConnectionString": "http://localhost:7474/",
+            "Username": "neo4j",
+            "Password": "1234",
+            "Entities": [
+                {
+                    "Name": "person",
+                    "Fields": [
+                        {
+                            "Name": "email",
+                            "Type": "string",
+                            "ConnectedTo": null
+                        },
+                        {
+                            "Name": "hobby",
+                            "Type": "string",
+                            "ConnectedTo": null
+                        }
+                    ]
+                }
             ]
-          }
-        ]
-      }
+        },
+        {
+            "Id": "c1",
+            "DbType": "Cassandra",
+            "ConnectionString": "127.0.0.1",
+            "KeySpace": "c1",
+            "Entities": [
+                {
+                    "Name": "person",
+                    "Fields": [
+                        {
+                            "Name": "id",
+                            "Type": "string",
+                            "ConnectedTo": null
+                        },
+                        {
+                            "Name": "name",
+                            "Type": "string",
+                            "ConnectedTo": null
+                        },
+                        {
+                            "Name": "hobby",
+                            "Type": "string",
+                            "ConnectedTo": null
+                        },
+                        {
+                            "Name": "age",
+                            "Type": "int",
+                            "ConnectedTo": null
+                        }
+                    ],
+                    "TablesByFields": [
+                        [],
+                        [ "id" ],
+                        [ "id", "age" ],
+                        [ "hobby"]
+                    ]
+                }
+            ]
+        },
+        {
+            "Id": "mongo1",
+            "DbType": "MongoDB",
+            "ConnectionString": "mongodb://localhost:27017/mongodb_1",
+            "Entities": [
+                {
+                    "Name": "person",
+                    "Fields": [
+                        {
+                            "Name": "id",
+                            "Type": "string",
+                            "ConnectedTo": null
+                        },
+                        {
+                            "Name": "age",
+                            "Type": "int",
+                            "ConnectedTo": null
+                        },
+                        {
+                            "Name": "name",
+                            "Type": "string",
+                            "ConnectedTo": null
+                        }
+                    ]
+                }
+            ]
+        }
     ]
 }

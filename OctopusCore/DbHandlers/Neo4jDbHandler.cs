@@ -45,6 +45,11 @@ namespace OctopusCore.DbHandlers
             return new ExecutionResult(entityType, entityResults);
         }
 
+        public Task<ExecutionResult> ExecuteInsertQuery(string entityType, IReadOnlyDictionary<string, dynamic> fields)
+        {
+            throw new NotImplementedException();
+        }
+
         private string GetFilterOperator(Filter filter)
         {
             return _filterTypeToOperatorRepresentation[filter.Type];

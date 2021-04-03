@@ -9,5 +9,6 @@ namespace OctopusCore.DbHandlers
     {
         Task<ExecutionResult> ExecuteQueryWithFiltersAsync(IReadOnlyCollection<string> fieldsToSelect,
             IReadOnlyCollection<Filter> filters, string entityType);
+        Task<ExecutionResult> ExecuteInsertQuery(string entityType, IReadOnlyDictionary<string, dynamic> fields);
     }
 }
