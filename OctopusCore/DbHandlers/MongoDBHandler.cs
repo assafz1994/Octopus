@@ -40,9 +40,24 @@ namespace OctopusCore.DbHandlers
             return Task.FromResult(new ExecutionResult(entityType, result));
         }
 
+
         public Task<ExecutionResult> ExecuteInsertQuery(string entityType, IReadOnlyDictionary<string, dynamic> fields)
         {
-            throw new NotImplementedException();
+            MongoClient dbClient = new MongoClient(); // no need to insert connection string -> local db is the default
+            var databaseName = MongoUrl.Create(_configurationProvider.ConnectionString).DatabaseName;
+            var db = dbClient.GetDatabase(databaseName);
+            string collectionName = _configurationProvider.GetTableName(entityType);
+            var collection = db.GetCollection<BsonDocument>(collectionName);
+
+            BsonDocument entityToInsert = new BsonDocument();
+            foreach (var key in fields.Keys)
+            {
+                entityToInsert.Add(key, fields[key]);
+            }
+            
+            collection.InsertOne(entityToInsert);
+        
+            return Task.FromResult(new ExecutionResult(entityType, new Dictionary<string, EntityResult>()));
         }
 
         private Dictionary<string, EntityResult> ExecuteCommand(IMongoCollection<BsonDocument> collection, ProjectionDefinition<BsonDocument> project, FilterDefinition<BsonDocument> conditions)
