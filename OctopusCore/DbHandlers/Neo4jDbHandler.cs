@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 using Neo4jClient;
 using OctopusCore.Common;
@@ -45,9 +46,27 @@ namespace OctopusCore.DbHandlers
             return new ExecutionResult(entityType, entityResults);
         }
 
-        public Task<ExecutionResult> ExecuteInsertQuery(string entityType, IReadOnlyDictionary<string, dynamic> fields)
+        public async Task<ExecutionResult> ExecuteInsertQuery(string entityType, IReadOnlyDictionary<string, dynamic> fields)
         {
-            throw new NotImplementedException();
+            var client = new GraphClient(new Uri(_configurationProvider.ConnectionString),
+                _configurationProvider.Username, _configurationProvider.Password);
+
+            await client.ConnectAsync();
+            //todo check if indeed necessary to surround fields with ''. (probably not, it should return from the parser as string)
+            //todo check what type should be guid(String?)
+            var query = BuildInsertQuery(entityType, fields);
+            //"(n:neoperson {email: 'ba@mail', hobby: 'mba'})"
+            await client.Cypher.Create(query).ExecuteWithoutResultsAsync();
+            return new ExecutionResult(entityType, new Dictionary<string, EntityResult>());
+        }
+
+        private string BuildInsertQuery(string entityType, IReadOnlyDictionary<string, dynamic> fields)
+        {
+            var query = new StringBuilder($"(e:{entityType} ").Append("{");
+            var keyValueFormatted = fields.Select(field => string.Format("{0}: {1}", field.Key, field.Value));
+            query.Append(string.Join(",", keyValueFormatted));
+            query.Append("})");
+            return query.ToString();
         }
 
         private string GetFilterOperator(Filter filter)
