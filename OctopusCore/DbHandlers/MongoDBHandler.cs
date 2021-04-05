@@ -12,29 +12,32 @@ namespace OctopusCore.DbHandlers
 {
     class MongoDBHandler : IDbHandler
     {
-        private readonly MongoDBConfigurationProvider  _configurationProvider;
+        private readonly MongoDBConfigurationProvider _configurationProvider;
 
         public MongoDBHandler(MongoDBConfigurationProvider configurationProvider)
         {
             _configurationProvider = configurationProvider;
         }
 
-        public Task<ExecutionResult> ExecuteQueryWithFiltersAsync(IReadOnlyCollection<string> fieldsToSelect, IReadOnlyCollection<Filter> filters, string entityType)
+        public Task<ExecutionResult> ExecuteQueryWithFiltersAsync(IReadOnlyCollection<string> fieldsToSelect,
+            IReadOnlyCollection<Filter> filters, string entityType,
+            List<(string entityType, string fieldEntityType, string fieldName, List<string> fieldsToSelect)>
+                joinsTuples)
         {
             MongoClient dbClient = new MongoClient(); // no need to insert connection string -> local db is the default
             var databaseName = MongoUrl.Create(_configurationProvider.ConnectionString).DatabaseName;
 
-            var db = dbClient.GetDatabase(databaseName); 
+            var db = dbClient.GetDatabase(databaseName);
             string collectionName = _configurationProvider.GetTableName(entityType);
             var collection = db.GetCollection<BsonDocument>(collectionName);
-            
+
             var fieldsToSelectWithGuid = new List<string>(fieldsToSelect);
             fieldsToSelectWithGuid.Add("guid");
 
             ProjectionDefinition<BsonDocument> project = BuildProjection(fieldsToSelectWithGuid);
 
             FilterDefinition<BsonDocument> conditions = BuildFilters(filters);
-           
+
             var result = ExecuteCommand(collection, project, conditions);
 
             return Task.FromResult(new ExecutionResult(entityType, result));
@@ -45,9 +48,12 @@ namespace OctopusCore.DbHandlers
             throw new NotImplementedException();
         }
 
-        private Dictionary<string, EntityResult> ExecuteCommand(IMongoCollection<BsonDocument> collection, ProjectionDefinition<BsonDocument> project, FilterDefinition<BsonDocument> conditions)
+        private Dictionary<string, EntityResult> ExecuteCommand(IMongoCollection<BsonDocument> collection,
+            ProjectionDefinition<BsonDocument> project, FilterDefinition<BsonDocument> conditions)
         {
-            List<BsonDocument> result = (conditions == null) ? collection.Find(_ => true).Project(project).ToList() :  collection.Find(conditions).Project(project).ToList();
+            List<BsonDocument> result = (conditions == null)
+                ? collection.Find(_ => true).Project(project).ToList()
+                : collection.Find(conditions).Project(project).ToList();
             Dictionary<string, EntityResult> entityResults = new Dictionary<string, EntityResult>();
             foreach (var entity in result)
             {
@@ -97,31 +103,32 @@ namespace OctopusCore.DbHandlers
             {
                 if (filter.FieldNames.Count > 1)
                     throw new ArgumentException("Fields with Include are not supported");
-                
+
                 FilterDefinition<BsonDocument> filterOp;
                 switch (GetFilterOperator(filter))
                 {
                     case "=":
-                        {
-                            filterOp = builder.Eq(filter.FieldNames[0], filter.Expression);
-                            break;
-                        }
+                    {
+                        filterOp = builder.Eq(filter.FieldNames[0], filter.Expression);
+                        break;
+                    }
                     case ">":
-                        {
-                            filterOp = builder.Gt(filter.FieldNames[0], filter.Expression);
-                            break;
-                        }
+                    {
+                        filterOp = builder.Gt(filter.FieldNames[0], filter.Expression);
+                        break;
+                    }
                     case "<":
-                        {
-                            filterOp = builder.Lt(filter.FieldNames[0], filter.Expression);
-                            break;
-                        }
+                    {
+                        filterOp = builder.Lt(filter.FieldNames[0], filter.Expression);
+                        break;
+                    }
 
                     default:
-                        {
-                            throw new ArgumentException("This type of field is not supported");
-                        }
+                    {
+                        throw new ArgumentException("This type of field is not supported");
+                    }
                 }
+
                 filterOutput = (filterOutput == null) ? filterOp : filterOutput & filterOp;
             }
 

@@ -24,7 +24,9 @@ namespace OctopusCore.DbHandlers
         }
 
         public async Task<ExecutionResult> ExecuteQueryWithFiltersAsync(IReadOnlyCollection<string> fieldsToSelect,
-            IReadOnlyCollection<Filter> filters, string entityType)
+            IReadOnlyCollection<Filter> filters, string entityType,
+            List<(string entityType, string fieldEntityType, string fieldName, List<string> fieldsToSelect)>
+                joinsTuples)
         {
             using var connection = new SqliteConnection(_configurationProvider.ConnectionString);
             connection.Open();
@@ -56,7 +58,8 @@ namespace OctopusCore.DbHandlers
         }
 
 
-        private static async Task<Dictionary<string, EntityResult>> ExecuteCommand(IReadOnlyCollection<string> fieldsToSelect,
+        private static async Task<Dictionary<string, EntityResult>> ExecuteCommand(
+            IReadOnlyCollection<string> fieldsToSelect,
             SqliteCommand command)
         {
             using var reader = await command.ExecuteReaderAsync();

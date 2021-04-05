@@ -18,7 +18,8 @@ namespace OctopusCore.DbHandlers
         {
             _configurationProvider = configurationProvider;
         }
-        public Task<ExecutionResult> ExecuteQueryWithFiltersAsync(IReadOnlyCollection<string> fieldsToSelect, IReadOnlyCollection<Filter> filters, string entityType)
+        public Task<ExecutionResult> ExecuteQueryWithFiltersAsync(IReadOnlyCollection<string> fieldsToSelect, IReadOnlyCollection<Filter> filters, string entityType,
+            List<(string entityType, string fieldEntityType, string fieldName, List<string> fieldsToSelect)> joinsTuples)
         {
             var cluster = Cluster.Builder()
                 .AddContactPoint(_configurationProvider.ConnectionString)

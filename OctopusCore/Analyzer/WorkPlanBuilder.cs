@@ -12,39 +12,33 @@ namespace OctopusCore.Analyzer
     internal class WorkPlanBuilder
     {
         private readonly Dictionary<string, SelectQueryJobBuilder> _databaseKeyToQueryJobBuilderMappings;
-        private readonly string _entityType;
         private readonly IAnalyzerConfigurationProvider _analyzerConfigurationProvider;
         private readonly IDbHandlersResolver _dbHandlersResolver;
 
         public WorkPlanBuilder(IDbHandlersResolver dbHandlersResolver,
-            IAnalyzerConfigurationProvider analyzerConfigurationProvider, string entityType)
+            IAnalyzerConfigurationProvider analyzerConfigurationProvider)
         {
-            _entityType = entityType;
             _dbHandlersResolver = dbHandlersResolver;
             _analyzerConfigurationProvider = analyzerConfigurationProvider;
-
             _databaseKeyToQueryJobBuilderMappings = new Dictionary<string, SelectQueryJobBuilder>();
         }
 
-        public void AddFilter(Filter filter)
+        public void AddFilter(string entityType, Filter filter)
         {
-            var queryJobBuilder = GetOrCreateQueryJobBuilder(filter.FieldNames.Single());
+            var queryJobBuilder = GetOrCreateQueryJobBuilder(entityType, filter.FieldNames.Single());
             queryJobBuilder.AddFilter(filter);
         }
 
-        public void AddProjectionField(string fieldName)
+        public void AddSimpleProjectionField(string entityType, string fieldName)
         {
-           if( _analyzerConfigurationProvider.IsComplexField(_entityType,fieldName))
-           {
-
-           }
-           var queryJobBuilder = GetOrCreateQueryJobBuilder(fieldName);
-           queryJobBuilder.AddProjectionField(fieldName); 
+            var queryJobBuilder = GetOrCreateQueryJobBuilder(entityType, fieldName);
+            queryJobBuilder.AddProjectionSimpleField(entityType, fieldName);
         }
 
-        public void AddSubQueriedWorkPlan(Filter filter, string guid, WorkPlan workPlan)
+        public void AddSubQueriedWorkPlan(Filter filter, string guid, WorkPlan workPlan, string entityType)
         {
-            var queryJobBuilder = GetOrCreateQueryJobBuilder(filter.FieldNames.Single());
+            var queryJobBuilder = GetOrCreateQueryJobBuilder(entityType, filter.FieldNames.Single());
+
             queryJobBuilder.AddWorkPlan(guid, workPlan);
         }
 
@@ -60,17 +54,26 @@ namespace OctopusCore.Analyzer
             return new WorkPlan(jobs, subQueryWorkPlans);
         }
 
-        private SelectQueryJobBuilder GetOrCreateQueryJobBuilder(string fieldName)
+        private SelectQueryJobBuilder GetOrCreateQueryJobBuilder(string entityType, string fieldName)
         {
-            var fieldDatabaseKey = _analyzerConfigurationProvider.GetFieldDatabaseKey(_entityType, fieldName);
+            var fieldDatabaseKey = _analyzerConfigurationProvider.GetFieldDatabaseKey(entityType, fieldName);
             if (_databaseKeyToQueryJobBuilderMappings.ContainsKey(fieldDatabaseKey) == false)
             {
                 var dbHandler = _dbHandlersResolver.ResolveDbHandler(fieldDatabaseKey);
                 _databaseKeyToQueryJobBuilderMappings.Add(fieldDatabaseKey,
-                    new SelectQueryJobBuilder(dbHandler, _entityType));
+                    new SelectQueryJobBuilder(entityType, dbHandler));
             }
 
             return _databaseKeyToQueryJobBuilderMappings[fieldDatabaseKey];
+        }
+
+        public void AddProjectionComplexField(string entityType, string field, string fieldEntityType,
+            List<string> includedFields)
+        {
+            var queryJobBuilder = GetOrCreateQueryJobBuilder(entityType, field);
+            queryJobBuilder.AddProjectionComplexField(entityType, fieldEntityType, field,
+                includedFields); //todo assaf will make sure included fields are exists and simple
+            //todo assaf will make sure entities are in the same db
         }
     }
 }

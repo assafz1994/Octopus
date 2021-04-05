@@ -23,7 +23,9 @@ namespace OctopusCore.DbHandlers
         }
 
         public async Task<ExecutionResult> ExecuteQueryWithFiltersAsync(IReadOnlyCollection<string> fieldsToSelect,
-            IReadOnlyCollection<Filter> filters, string entityType)
+            IReadOnlyCollection<Filter> filters, string entityType,
+            List<(string entityType, string fieldEntityType, string fieldName, List<string> fieldsToSelect)>
+                joinsTuples)
         {
             var client = new GraphClient(new Uri(_configurationProvider.ConnectionString),
                 _configurationProvider.Username, _configurationProvider.Password);

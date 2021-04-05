@@ -8,7 +8,7 @@ namespace OctopusCore.DbHandlers
     public interface IDbHandler
     {
         Task<ExecutionResult> ExecuteQueryWithFiltersAsync(IReadOnlyCollection<string> fieldsToSelect,
-            IReadOnlyCollection<Filter> filters, string entityType);
+            IReadOnlyCollection<Filter> filters, string entityType, List<(string entityType, string fieldEntityType, string fieldName, List<string> fieldsToSelect)> joinsTuples);
         Task<ExecutionResult> ExecuteInsertQuery(string entityType, IReadOnlyDictionary<string, dynamic> fields);
     }
 }

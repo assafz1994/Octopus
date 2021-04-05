@@ -6,8 +6,9 @@ namespace OctopusCore.Configuration.ConfigurationProviders
 {
     public class AnalyzerConfigurationProvider : IAnalyzerConfigurationProvider
     {
+        //todo refactor dictionaries. create object for fields and database keys(entity -> fieldName -> object)
         private readonly Dictionary<string, Dictionary<string, List<string>>> _entityTypeToFieldNameToDatabaseKeys;
-        private readonly Dictionary<string, HashSet<string>> _entityTypeToComplexFields;
+        private readonly Dictionary<string, Dictionary<string,Field>> _entityTypeToFieldNameToField;
 
         private readonly Dictionary<string, Dictionary<string, List<string>>> _entityTypeToDatabaseToFields;
         public AnalyzerConfigurationProvider(Scheme scheme, DbConfigurations dbConfigurations)
@@ -16,43 +17,34 @@ namespace OctopusCore.Configuration.ConfigurationProviders
             DbConfigurations = dbConfigurations;
             _entityTypeToFieldNameToDatabaseKeys = new Dictionary<string, Dictionary<string, List<string>>>(StringComparer.OrdinalIgnoreCase);
             _entityTypeToDatabaseToFields = new Dictionary<string, Dictionary<string, List<string>>>(StringComparer.OrdinalIgnoreCase);
-            _entityTypeToComplexFields = new Dictionary<string, HashSet<string>>(StringComparer.OrdinalIgnoreCase);
+            _entityTypeToFieldNameToField = new Dictionary<string, Dictionary<string, Field>>();
             InitializeDictionaries();
         }
 
-        private void InitializeEntityTypeToComplexFields()
-        {
-            foreach (var entity in Scheme.Entities)
-            {
-                foreach (var field in entity.Fields)
-                {
-                    if (field.Type != DbFieldType.Primitive)
-                    {
-                        if (!_entityTypeToComplexFields.ContainsKey(entity.Name))
-                        {
-                            _entityTypeToComplexFields.Add(entity.Name,new HashSet<string>());
-                        }
-                        _entityTypeToComplexFields[entity.Name].Add(field.Name);
-                    }
-                }
-            }
-        }
 
         public Scheme Scheme { get; }
         public DbConfigurations DbConfigurations { get; }
 
         private void InitializeDictionaries()
         {
-            InitializeEntityTypeToComplexFields();
             foreach (var dbConfiguration in DbConfigurations.Configurations)
             foreach (var entity in dbConfiguration.Entities)
             {
                 // InitializeDictionaries
+                if (_entityTypeToFieldNameToField.ContainsKey(entity.Name) == false)
+                {
+                    _entityTypeToFieldNameToField.Add(entity.Name,new Dictionary<string, Field>());
+                }
                 if (_entityTypeToFieldNameToDatabaseKeys.ContainsKey(entity.Name) == false)
                     _entityTypeToFieldNameToDatabaseKeys.Add(entity.Name, new Dictionary<string, List<string>>());
 
                 foreach (var field in entity.Fields)
                 {
+
+                    if (_entityTypeToFieldNameToField[entity.Name].ContainsKey(field.Name) == false)
+                    {
+                        _entityTypeToFieldNameToField[entity.Name][field.Name] = field;
+                    }
                     var fieldNameToDatabaseKey = _entityTypeToFieldNameToDatabaseKeys[entity.Name];
                     if (fieldNameToDatabaseKey.ContainsKey(field.Name) == false)
                         fieldNameToDatabaseKey.Add(field.Name, new List<string> {dbConfiguration.Id});
@@ -86,12 +78,30 @@ namespace OctopusCore.Configuration.ConfigurationProviders
 
         public bool IsComplexField(string entityType, string fieldName)
         {
-            if (_entityTypeToComplexFields.TryGetValue(entityType, out var complexFields))
+            var field = GetField(entityType, fieldName);
+
+            return field.Type != DbFieldType.Primitive;
+        }
+
+        private Field GetField(string entityType, string fieldName)
+        {
+            if (_entityTypeToFieldNameToField.TryGetValue(entityType, out var fieldNameToField) == false)
             {
-                return complexFields.Contains(fieldName);
+                throw new ArgumentException($"entity not exist. entity type = {entityType}");
             }
 
-            return false;
+            if (fieldNameToField.TryGetValue(fieldName, out var field) == false)
+            {
+                throw new ArgumentException($"field not exist. field = {fieldName}");
+            }
+
+            return field;
+        }
+
+        public string GetFieldEntityType(string entityType, string fieldName)
+        {
+            var field = GetField(entityType, fieldName);
+            return field.EntityName;
         }
     }
 }
