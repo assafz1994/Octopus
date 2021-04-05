@@ -6,5 +6,6 @@ namespace OctopusCore.Configuration.ConfigurationProviders
     {
         public Dictionary<string, List<string>> GetDbsToFields(string entityType);
         string GetFieldDatabaseKey(string entityType, string fieldName);
+        bool IsComplexField(string entityType, string fieldName);
     }
 }

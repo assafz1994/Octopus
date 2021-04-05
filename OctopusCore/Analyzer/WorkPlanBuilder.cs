@@ -34,8 +34,12 @@ namespace OctopusCore.Analyzer
 
         public void AddProjectionField(string fieldName)
         {
-            var queryJobBuilder = GetOrCreateQueryJobBuilder(fieldName);
-            queryJobBuilder.AddProjectionField(fieldName);
+           if( _analyzerConfigurationProvider.IsComplexField(_entityType,fieldName))
+           {
+
+           }
+           var queryJobBuilder = GetOrCreateQueryJobBuilder(fieldName);
+           queryJobBuilder.AddProjectionField(fieldName); 
         }
 
         public void AddSubQueriedWorkPlan(Filter filter, string guid, WorkPlan workPlan)

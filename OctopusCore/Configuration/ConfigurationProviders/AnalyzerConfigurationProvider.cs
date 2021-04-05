@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using OctopusCore.Common;
 
 namespace OctopusCore.Configuration.ConfigurationProviders
 {
@@ -15,11 +14,10 @@ namespace OctopusCore.Configuration.ConfigurationProviders
         {
             Scheme = scheme;
             DbConfigurations = dbConfigurations;
-            _entityTypeToFieldNameToDatabaseKeys = new Dictionary<string, Dictionary<string, List<string>>>();
-            _entityTypeToDatabaseToFields = new Dictionary<string, Dictionary<string, List<string>>>();
-            _entityTypeToComplexFields = new Dictionary<string, HashSet<string>>();
+            _entityTypeToFieldNameToDatabaseKeys = new Dictionary<string, Dictionary<string, List<string>>>(StringComparer.OrdinalIgnoreCase);
+            _entityTypeToDatabaseToFields = new Dictionary<string, Dictionary<string, List<string>>>(StringComparer.OrdinalIgnoreCase);
+            _entityTypeToComplexFields = new Dictionary<string, HashSet<string>>(StringComparer.OrdinalIgnoreCase);
             InitializeDictionaries();
-            InitializeEntityTypeToComplexFields();
         }
 
         private void InitializeEntityTypeToComplexFields()
@@ -28,11 +26,16 @@ namespace OctopusCore.Configuration.ConfigurationProviders
             {
                 foreach (var field in entity.Fields)
                 {
-                    if(field.Type)
+                    if (field.Type != DbFieldType.Primitive)
+                    {
+                        if (!_entityTypeToComplexFields.ContainsKey(entity.Name))
+                        {
+                            _entityTypeToComplexFields.Add(entity.Name,new HashSet<string>());
+                        }
+                        _entityTypeToComplexFields[entity.Name].Add(field.Name);
+                    }
                 }
             }
-
-            Scheme.Entities
         }
 
         public Scheme Scheme { get; }
@@ -40,6 +43,7 @@ namespace OctopusCore.Configuration.ConfigurationProviders
 
         private void InitializeDictionaries()
         {
+            InitializeEntityTypeToComplexFields();
             foreach (var dbConfiguration in DbConfigurations.Configurations)
             foreach (var entity in dbConfiguration.Entities)
             {
@@ -82,7 +86,12 @@ namespace OctopusCore.Configuration.ConfigurationProviders
 
         public bool IsComplexField(string entityType, string fieldName)
         {
+            if (_entityTypeToComplexFields.TryGetValue(entityType, out var complexFields))
+            {
+                return complexFields.Contains(fieldName);
+            }
 
+            return false;
         }
     }
 }

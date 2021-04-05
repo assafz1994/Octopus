@@ -13,8 +13,8 @@ namespace OctopusCore.Analyzer
     public class Analyzer : IAnalyzer
     {
 
-        private IDbHandlersResolver _dbHandlersResolver;
-        private IAnalyzerConfigurationProvider _analyzerConfigurationProvider;
+        private readonly IDbHandlersResolver _dbHandlersResolver;
+        private readonly IAnalyzerConfigurationProvider _analyzerConfigurationProvider;
 
         public Analyzer(IDbHandlersResolver dbHandlersResolver ,IAnalyzerConfigurationProvider analyzerConfigurationProvider)
         {

@@ -43,11 +43,6 @@ namespace OctopusCore.DbHandlers
             return new ExecutionResult(entityType, result);
         }
 
-        public Task<ExecutionResult> ExecuteInsertQuery(string entityType, IReadOnlyDictionary<string, dynamic> fields)
-        {
-            throw new NotImplementedException();
-        }
-
         private static string SetCommandText(string fields, string table, string conditions)
         {
             return conditions == null
