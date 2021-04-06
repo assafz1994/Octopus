@@ -63,7 +63,8 @@ namespace OctopusCore.DbHandlers
         private string BuildInsertQuery(string entityType, IReadOnlyDictionary<string, dynamic> fields)
         {
             var query = new StringBuilder($"(e:{entityType} ").Append("{");
-            var keyValueFormatted = fields.Select(field => string.Format("{0}: {1}", field.Key, field.Value));
+            //in case the key is Guid, need to wrap it with '', so it will be stored in db as string
+            var keyValueFormatted = fields.Select(field => string.Format(field.Key.Equals(StringConstants.Guid) ? "{0}: '{1}'" : "{0}: {1}", field.Key, field.Value));
             query.Append(string.Join(",", keyValueFormatted));
             query.Append("})");
             return query.ToString();

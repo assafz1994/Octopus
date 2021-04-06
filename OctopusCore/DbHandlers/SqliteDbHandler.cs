@@ -45,7 +45,8 @@ namespace OctopusCore.DbHandlers
 
         public Task<ExecutionResult> ExecuteInsertQuery(string entityType, IReadOnlyDictionary<string, dynamic> fields)
         {
-            throw new NotImplementedException();
+            return Task.FromResult(new ExecutionResult(entityType, new Dictionary<string, EntityResult>()));
+            // throw new NotImplementedException();
         }
 
         private static string SetCommandText(string fields, string table, string conditions)
