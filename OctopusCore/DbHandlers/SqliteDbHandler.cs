@@ -20,7 +20,7 @@ namespace OctopusCore.DbHandlers
         public SqliteDbHandler(SqliteConfigurationProvider configurationProvider)
         {
             _configurationProvider = configurationProvider;
-            _filterTypeToOperatorRepresentation = new Dictionary<FilterType, string> {{FilterType.Eq, "="}};
+            _filterTypeToOperatorRepresentation = new Dictionary<FilterType, string> { { FilterType.Eq, "=" } };
         }
 
         public async Task<ExecutionResult> ExecuteQueryWithFiltersAsync(IReadOnlyCollection<string> fieldsToSelect,
@@ -28,7 +28,7 @@ namespace OctopusCore.DbHandlers
         {
             using var connection = new SqliteConnection(_configurationProvider.ConnectionString);
             connection.Open();
-            var fieldsToSelectWithGuid = new List<string>(fieldsToSelect) {StringConstants.Guid};
+            var fieldsToSelectWithGuid = new List<string>(fieldsToSelect) { StringConstants.Guid };
             var fields = string.Join(",", fieldsToSelectWithGuid);
             var table = _configurationProvider.GetTableName(entityType);
             var conditions = ConvertFiltersToWhereStatement(filters);
@@ -43,9 +43,40 @@ namespace OctopusCore.DbHandlers
             return new ExecutionResult(entityType, result);
         }
 
-        public Task<ExecutionResult> ExecuteInsertQuery(string entityType, IReadOnlyDictionary<string, dynamic> fields)
+        public async Task<ExecutionResult> ExecuteInsertQuery(string entityType, IReadOnlyDictionary<string, dynamic> fields)
         {
-            throw new NotImplementedException();
+            using var connection = new SqliteConnection(_configurationProvider.ConnectionString);
+            connection.Open();
+            var table = _configurationProvider.GetTableName(entityType);
+
+            var fieldsNames = fields.Keys.ToList();
+            var fieldsValues = fieldsNames.Select(fieldName => ValueToString(fields[fieldName]));
+            var query = $"INSERT INTO {table} ({string.Join(",", fields.Keys)}) Values ({string.Join(",", fieldsValues)})";
+
+            var command = connection.CreateCommand();
+            command.CommandText = query;
+
+            var row = await command.ExecuteNonQueryAsync();
+            
+            return new ExecutionResult(entityType, new Dictionary<string, EntityResult>());
+        }
+
+        //todo reuse this logic for all handlers
+        private static string ValueToString(object argValue)
+        {
+            return argValue switch
+            {
+                string s => GetExpression(s),
+                int _ => $"{argValue}",
+                Guid _ => $"'{argValue}'",
+                _ => null
+            };
+        }
+        private static string GetExpression(string expression)
+        {
+            if (!expression.StartsWith("\"") || !expression.EndsWith("\"")) return expression;
+            var res = expression.Trim('"');
+            return $"'{res}'";
         }
 
         private static string SetCommandText(string fields, string table, string conditions)
