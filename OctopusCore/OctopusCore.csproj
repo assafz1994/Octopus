@@ -59,4 +59,11 @@
     <ProjectReference Include="..\Octopus.Common\Octopus.Common.csproj" />
   </ItemGroup>
 
+
+  <ItemGroup>
+    <None Update="DataBases\Relations.db">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
 </Project>

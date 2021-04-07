@@ -45,17 +45,17 @@ namespace OctopusCore.Analyzer
                 }
             }
 
-            foreach (var field in selectQueryInfo.Fields ?? Enumerable.Empty<string>())
+            foreach (var fieldName in selectQueryInfo.Fields ?? Enumerable.Empty<string>())
             {
-                if (_analyzerConfigurationProvider.IsComplexField(selectQueryInfo.Entity, field))
+                if (_analyzerConfigurationProvider.IsComplexField(selectQueryInfo.Entity, fieldName))
                 {
                     //todo assaf will validate that query includes fields!
-                    var fieldEntityType =_analyzerConfigurationProvider.GetFieldEntityType(selectQueryInfo.Entity, field);
-                    workPlanBuilder.AddProjectionComplexField(selectQueryInfo.Entity,field,fieldEntityType,selectQueryInfo.Includes.Single(x=> x.Name.Equals(field)).Fields);
+                    var field =_analyzerConfigurationProvider.GetField(selectQueryInfo.Entity, fieldName);
+                    workPlanBuilder.AddProjectionComplexField(selectQueryInfo.Entity,field,selectQueryInfo.Includes.Single(x=> x.Name.Equals(fieldName,StringComparison.OrdinalIgnoreCase)).Fields);
                 }
                 else
                 {
-                    workPlanBuilder.AddSimpleProjectionField(selectQueryInfo.Entity, field);
+                    workPlanBuilder.AddSimpleProjectionField(selectQueryInfo.Entity, fieldName);
                 }
             }
 

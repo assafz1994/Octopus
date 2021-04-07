@@ -32,7 +32,7 @@ namespace OctopusCore.Analyzer
         public void AddSimpleProjectionField(string entityType, string fieldName)
         {
             var queryJobBuilder = GetOrCreateQueryJobBuilder(entityType, fieldName);
-            queryJobBuilder.AddProjectionSimpleField(entityType, fieldName);
+            queryJobBuilder.AddProjectionSimpleField(fieldName);
         }
 
         public void AddSubQueriedWorkPlan(Filter filter, string guid, WorkPlan workPlan, string entityType)
@@ -67,11 +67,11 @@ namespace OctopusCore.Analyzer
             return _databaseKeyToQueryJobBuilderMappings[fieldDatabaseKey];
         }
 
-        public void AddProjectionComplexField(string entityType, string field, string fieldEntityType,
+        public void AddProjectionComplexField(string entityType, Field field, 
             List<string> includedFields)
         {
-            var queryJobBuilder = GetOrCreateQueryJobBuilder(entityType, field);
-            queryJobBuilder.AddProjectionComplexField(entityType, fieldEntityType, field,
+            var queryJobBuilder = GetOrCreateQueryJobBuilder(entityType, field.Name);
+            queryJobBuilder.AddProjectionComplexField(entityType, field,
                 includedFields); //todo assaf will make sure included fields are exists and simple
             //todo assaf will make sure entities are in the same db
         }

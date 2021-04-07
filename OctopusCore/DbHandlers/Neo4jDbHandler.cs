@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Neo4jClient;
 using OctopusCore.Common;
+using OctopusCore.Configuration;
 using OctopusCore.Configuration.ConfigurationProviders;
 using OctopusCore.Contract;
 using OctopusCore.Parser;
@@ -24,7 +25,7 @@ namespace OctopusCore.DbHandlers
 
         public async Task<ExecutionResult> ExecuteQueryWithFiltersAsync(IReadOnlyCollection<string> fieldsToSelect,
             IReadOnlyCollection<Filter> filters, string entityType,
-            List<(string entityType, string fieldEntityType, string fieldName, List<string> fieldsToSelect)>
+            List<(string entityType, Field field, List<string> fieldsToSelect)>
                 joinsTuples)
         {
             var client = new GraphClient(new Uri(_configurationProvider.ConnectionString),

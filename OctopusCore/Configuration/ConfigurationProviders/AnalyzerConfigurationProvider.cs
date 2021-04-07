@@ -17,7 +17,7 @@ namespace OctopusCore.Configuration.ConfigurationProviders
             DbConfigurations = dbConfigurations;
             _entityTypeToFieldNameToDatabaseKeys = new Dictionary<string, Dictionary<string, List<string>>>(StringComparer.OrdinalIgnoreCase);
             _entityTypeToDatabaseToFields = new Dictionary<string, Dictionary<string, List<string>>>(StringComparer.OrdinalIgnoreCase);
-            _entityTypeToFieldNameToField = new Dictionary<string, Dictionary<string, Field>>();
+            _entityTypeToFieldNameToField = new Dictionary<string, Dictionary<string, Field>>(StringComparer.OrdinalIgnoreCase);
             InitializeDictionaries();
         }
 
@@ -33,7 +33,7 @@ namespace OctopusCore.Configuration.ConfigurationProviders
                 // InitializeDictionaries
                 if (_entityTypeToFieldNameToField.ContainsKey(entity.Name) == false)
                 {
-                    _entityTypeToFieldNameToField.Add(entity.Name,new Dictionary<string, Field>());
+                    _entityTypeToFieldNameToField.Add(entity.Name,new Dictionary<string, Field>(StringComparer.OrdinalIgnoreCase));
                 }
                 if (_entityTypeToFieldNameToDatabaseKeys.ContainsKey(entity.Name) == false)
                     _entityTypeToFieldNameToDatabaseKeys.Add(entity.Name, new Dictionary<string, List<string>>());
@@ -83,7 +83,7 @@ namespace OctopusCore.Configuration.ConfigurationProviders
             return field.Type != DbFieldType.Primitive;
         }
 
-        private Field GetField(string entityType, string fieldName)
+        public Field GetField(string entityType, string fieldName)
         {
             if (_entityTypeToFieldNameToField.TryGetValue(entityType, out var fieldNameToField) == false)
             {
@@ -98,10 +98,5 @@ namespace OctopusCore.Configuration.ConfigurationProviders
             return field;
         }
 
-        public string GetFieldEntityType(string entityType, string fieldName)
-        {
-            var field = GetField(entityType, fieldName);
-            return field.EntityName;
-        }
     }
 }

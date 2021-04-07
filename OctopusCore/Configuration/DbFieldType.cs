@@ -7,6 +7,6 @@
 
     public enum PrimitiveType
     {
-        String,Int,None
+        String,Int
     }
 }

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using OctopusCore.Analyzer.Jobs;
+using OctopusCore.Configuration;
 using OctopusCore.Contract;
 using OctopusCore.DbHandlers;
 using OctopusCore.Parser;
@@ -14,7 +15,7 @@ namespace OctopusCore.Analyzer
         private readonly List<Filter> _filters;
         private readonly string _entityType;
         private Dictionary<string, WorkPlan> _subQueriesWorkPlans;
-        private List<(string entityType, string fieldEntityType, string fieldName, List<string> fieldsToSelect)> _joinsTuples;//todo assaf will rename it
+        private List<(string entityType, Field field, List<string> fieldsToSelect)> _joinsTuples;//todo assaf will rename it
 
         public SelectQueryJobBuilder(string entityType,IDbHandler dbHandler)
         {
@@ -24,16 +25,16 @@ namespace OctopusCore.Analyzer
             _fieldsToSelect = new List<string>();
             _filters = new List<Filter>();
             _subQueriesWorkPlans = new Dictionary<string, WorkPlan>();
-            _joinsTuples = new List<(string entityType, string fieldEntityType, string fieldName, List<string> fieldsToSelect)>();
+            _joinsTuples = new List<(string entityType, Field field, List<string> fieldsToSelect)>();
         }
 
         public void AddProjectionSimpleField(string fieldName)
         {
             _fieldsToSelect.Add(fieldName);
         }
-        public void AddProjectionComplexField(string entityType, string fieldEntityType, string fieldName,List<string> fieldsToSelect)
+        public void AddProjectionComplexField(string entityType, Field field,List<string> fieldsToSelect)
         {
-            _joinsTuples.Add((entityType,fieldEntityType,fieldName,fieldsToSelect));
+            _joinsTuples.Add((entityType,field,fieldsToSelect));
         }
 
         public void AddFilter(Filter filter)
@@ -47,7 +48,7 @@ namespace OctopusCore.Analyzer
 
         public SelectQueryJob Build()
         {
-            return new SelectQueryJob(_dbHandler,_entityType, _fieldsToSelect,_joinsTuples _filters, _subQueriesWorkPlans);
+            return new SelectQueryJob(_dbHandler,_entityType, _fieldsToSelect,_joinsTuples ,_filters, _subQueriesWorkPlans);
         }
     }
 }

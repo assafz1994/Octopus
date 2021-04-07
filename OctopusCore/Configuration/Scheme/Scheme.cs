@@ -27,7 +27,8 @@ namespace OctopusCore.Configuration
 
         [JsonConverter(typeof(StringEnumConverter))]
 
-        public PrimitiveType PrimitiveType { get; set; }
+        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+        public PrimitiveType? PrimitiveType { get; set; }
 
         [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
         public string EntityName { get; set; }

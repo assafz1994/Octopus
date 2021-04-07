@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Cassandra;
+using OctopusCore.Configuration;
 using OctopusCore.Configuration.ConfigurationProviders;
 using OctopusCore.Contract;
 using OctopusCore.Parser;
@@ -19,7 +20,7 @@ namespace OctopusCore.DbHandlers
             _configurationProvider = configurationProvider;
         }
         public Task<ExecutionResult> ExecuteQueryWithFiltersAsync(IReadOnlyCollection<string> fieldsToSelect, IReadOnlyCollection<Filter> filters, string entityType,
-            List<(string entityType, string fieldEntityType, string fieldName, List<string> fieldsToSelect)> joinsTuples)
+            List<(string entityType, Field field, List<string> fieldsToSelect)> joinsTuples)
         {
             var cluster = Cluster.Builder()
                 .AddContactPoint(_configurationProvider.ConnectionString)

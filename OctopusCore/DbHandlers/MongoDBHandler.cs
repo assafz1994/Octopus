@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using OctopusCore.Configuration.ConfigurationProviders;
 using MongoDB.Driver;
 using MongoDB.Bson;
+using OctopusCore.Configuration;
 using OctopusCore.Parser.Filters;
 
 namespace OctopusCore.DbHandlers
@@ -21,7 +22,7 @@ namespace OctopusCore.DbHandlers
 
         public Task<ExecutionResult> ExecuteQueryWithFiltersAsync(IReadOnlyCollection<string> fieldsToSelect,
             IReadOnlyCollection<Filter> filters, string entityType,
-            List<(string entityType, string fieldEntityType, string fieldName, List<string> fieldsToSelect)>
+            List<(string entityType, Field field, List<string> fieldsToSelect)>
                 joinsTuples)
         {
             MongoClient dbClient = new MongoClient(); // no need to insert connection string -> local db is the default

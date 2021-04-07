@@ -4,6 +4,7 @@ using OctopusCore.Contract;
 using OctopusCore.DbHandlers;
 using OctopusCore.Parser;
 using System.Linq;
+using OctopusCore.Configuration;
 
 namespace OctopusCore.Analyzer.Jobs
 {
@@ -14,7 +15,7 @@ namespace OctopusCore.Analyzer.Jobs
         public Dictionary<string, WorkPlan> SubQueryWorkPlans { get; set; }
 
         public SelectQueryJob(IDbHandler dbHandler, string entityType, IReadOnlyCollection<string> fieldsToSelect,
-            List<(string entityType, string fieldEntityType, string fieldName, List<string> fieldsToSelect)> joinsTuples,
+            List<(string entityType, Field field, List<string> fieldsToSelect)> joinsTuples,
             IReadOnlyCollection<Filter> filters, Dictionary<string, WorkPlan> subQueryWorkPlans)
         {
             _dbHandler = dbHandler;
@@ -26,7 +27,7 @@ namespace OctopusCore.Analyzer.Jobs
         }
 
         public IReadOnlyCollection<string> FieldsToSelect { get; }
-        public List<(string entityType, string fieldEntityType, string fieldName, List<string> fieldsToSelect)> JoinsTuples { get; }
+        public List<(string entityType, Field field, List<string> fieldsToSelect)> JoinsTuples { get; }
         public IReadOnlyCollection<Filter> Filters { get; }
         public string EntityType { get; }
 

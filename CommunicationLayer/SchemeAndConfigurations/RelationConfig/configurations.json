@@ -10,16 +10,14 @@
           "Fields": [
             {
               "Name": "name",
-              "Type": "string",
-              "ConnectedTo": null
+              "Type": "Primitive",
+              "PrimitiveType": "String"
             },
             {
-              "Name": "teacher",
-              "Type": "teacher",
-              "ConnectedTo": {
-                "EntityName": "teacher",
-                "FieldName": "student"
-              }
+              "Name": "taughtBy",
+              "Type": "Object",
+              "EntityName": "teacher",
+              "ConnectedToField": "teach"
             }
           ]
         },
@@ -28,16 +26,14 @@
           "Fields": [
             {
               "Name": "name",
-              "Type": "string",
-              "ConnectedTo": null
+              "Type": "Primitive",
+              "PrimitiveType": "String"
             },
             {
-              "Name": "student",
-              "Type": "student",
-              "ConnectedTo": {
-                "EntityName": "student",
-                "FieldName": "teacher"
-              }
+              "Name": "teach",
+              "Type": "Object",
+              "EntityName": "student",
+              "ConnectedToField": "taughtBy"
             }
           ]
         }
