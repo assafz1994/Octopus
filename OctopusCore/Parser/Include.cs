@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Security.Cryptography.X509Certificates;
+using OctopusCore.Common;
 
 namespace OctopusCore.Parser
 {
@@ -22,7 +23,7 @@ namespace OctopusCore.Parser
             Includes = new List<Include>();
             if (includeContext.all() != null)
             {
-                Fields.Add(QueryExtractor.All);
+                Fields.Add(StringConstants.All);
             }
             else if (includeContext.fields() != null)
             {

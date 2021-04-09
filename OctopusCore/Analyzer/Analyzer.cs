@@ -72,6 +72,12 @@ namespace OctopusCore.Analyzer
                 }
             }
 
+            // For now this will get all fields, primitives and complex
+            if (selectQueryInfo.Fields.Count == 1 && selectQueryInfo.Fields.First().Equals(StringConstants.Guid))
+            {
+                selectQueryInfo.Fields = _analyzerConfigurationProvider.GetEntityFields(selectQueryInfo.Entity);
+            }
+
             foreach (var field in selectQueryInfo.Fields ?? Enumerable.Empty<string>())
                 workPlanBuilder.AddProjectionField(field);
 

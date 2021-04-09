@@ -11,7 +11,6 @@ namespace OctopusCore.Parser
 {
     internal class QueryExtractor : OctopusQLBaseVisitor<QueryInfo>
     {
-        public const string All = "$ALL$";
         public static Dictionary<string, Func<List<string>, string, bool, Filter>> ComparatorToFilter =
             new Dictionary<string, Func<List<string>, string, bool, Filter>>()
         {
@@ -147,7 +146,7 @@ namespace OctopusCore.Parser
             var nestedProperty = new ArrayList<string>();
             if (selectContext.selectClause().all() != null)
             {
-                fields.Add(All);
+                fields.Add(StringConstants.All);
             }
             else if (selectContext.selectClause().fields() != null)
             {

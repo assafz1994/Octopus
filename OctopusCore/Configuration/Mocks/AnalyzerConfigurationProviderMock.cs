@@ -26,5 +26,10 @@ namespace OctopusCore.Configuration.Mocks
         {
             throw new System.NotImplementedException();
         }
+
+        public List<string> GetEntityFields(string entityType)
+        {
+            throw new System.NotImplementedException();
+        }
     }
 }

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Cassandra;
+using OctopusCore.Common;
 using OctopusCore.Configuration.ConfigurationProviders;
 using OctopusCore.Contract;
 using OctopusCore.Parser;
@@ -23,7 +24,7 @@ namespace OctopusCore.DbHandlers
             var cluster = Cluster.Builder()
                 .AddContactPoint(_configurationProvider.ConnectionString)
                 .Build();
-            var fieldsToSelectWithGuid = fieldsToSelect.ToList().Append("guid").ToList();
+            var fieldsToSelectWithGuid = fieldsToSelect.ToList().Append(StringConstants.Guid).ToList();
             var fields = string.Join(",", fieldsToSelectWithGuid);
             // var table = _configurationProvider.GetTableName(entityType, filters);
             var conditions = ConvertFiltersToWhereStatement(filters);
@@ -124,7 +125,7 @@ namespace OctopusCore.DbHandlers
             foreach (var row in rs)
             {
                 var fieldToValueMap = new EntityResult(fieldsToSelect.ToDictionary(field => field, field => row.GetValue(typeof(object), field)));
-                output.Add(row.GetValue(typeof(object), "guid").ToString(), fieldToValueMap);
+                output.Add(row.GetValue(typeof(object), StringConstants.Guid).ToString(), fieldToValueMap);
             }
             return output;
         }

@@ -9,14 +9,14 @@ namespace OctopusCore.Configuration.ConfigurationProviders
     {
         private readonly Dictionary<string, Dictionary<string, List<string>>> _entityTypeToFieldNameToDatabaseKeys;
         private readonly Dictionary<string, Dictionary<string, List<string>>> _entityTypeToDatabaseToFields;
-        private readonly Dictionary<string, string> _entityTypeToPrimaryKey;
+        private readonly Dictionary<string, List<string>> _entityTypeToFields;
         public AnalyzerConfigurationProvider(Scheme scheme, DbConfigurations dbConfigurations)
         {
             Scheme = scheme;
             DbConfigurations = dbConfigurations;
             _entityTypeToFieldNameToDatabaseKeys = new Dictionary<string, Dictionary<string, List<string>>>();
             _entityTypeToDatabaseToFields = new Dictionary<string, Dictionary<string, List<string>>>();
-            _entityTypeToPrimaryKey = new Dictionary<string, string>();
+            _entityTypeToFields = new Dictionary<string, List<string>>();
             InitializeDictionaries();
         }
 
@@ -49,7 +49,7 @@ namespace OctopusCore.Configuration.ConfigurationProviders
 
             foreach (var entity in Scheme.Entities)
             {
-                _entityTypeToPrimaryKey.Add(entity.Name, entity.Fields.First().Name);
+                _entityTypeToFields.Add(entity.Name, entity.Fields.Select(x => x.Name).ToList());
             }
         }
         
@@ -77,7 +77,12 @@ namespace OctopusCore.Configuration.ConfigurationProviders
 
         public string GetEntityPrimaryKey(string entityType)
         {
-            return _entityTypeToPrimaryKey[entityType];
+            return _entityTypeToFields[entityType].First();
+        }
+
+        public List<string> GetEntityFields(string entityType)
+        {
+            return _entityTypeToFields[entityType];
         }
     }
 }
