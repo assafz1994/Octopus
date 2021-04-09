@@ -5,9 +5,9 @@ grammar OctopusQL;
  */
 
 r                   : select | insert | delete | update;
-select              : FROM entity entityRep (whereClause)* (selectClause | aggregateClause) ;
+select              : FROM entity entityRep (whereClause)* (selectClause | aggregateClause)* ;
 insert              : (insertClause)+ INSERT entityReps ;
-delete              : (getClause)+ DELETE entityReps ;
+delete              : DELETE select ;
 update              : (getClause)+ UPDATE entityRep (fieldsWithDot)? ASSIGN value ;
 insertClause        : ENTITY entity COLON entityRep '(' (assignments | select) ')' ;
 getClause           : ENTITY entity COLON entityRep '(' select ')' ;

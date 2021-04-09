@@ -27,6 +27,16 @@ public interface OctopusQLListener extends ParseTreeListener {
 	 */
 	void exitSelect(OctopusQLParser.SelectContext ctx);
 	/**
+	 * Enter a parse tree produced by {@link OctopusQLParser#deleteSelect}.
+	 * @param ctx the parse tree
+	 */
+	void enterDeleteSelect(OctopusQLParser.DeleteSelectContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link OctopusQLParser#deleteSelect}.
+	 * @param ctx the parse tree
+	 */
+	void exitDeleteSelect(OctopusQLParser.DeleteSelectContext ctx);
+	/**
 	 * Enter a parse tree produced by {@link OctopusQLParser#insert}.
 	 * @param ctx the parse tree
 	 */

@@ -39,6 +39,18 @@ public class OctopusQLBaseListener implements OctopusQLListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
+	@Override public void enterDeleteSelect(OctopusQLParser.DeleteSelectContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitDeleteSelect(OctopusQLParser.DeleteSelectContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
 	@Override public void enterInsert(OctopusQLParser.InsertContext ctx) { }
 	/**
 	 * {@inheritDoc}
