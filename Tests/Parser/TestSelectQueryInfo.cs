@@ -2,6 +2,7 @@
 using System.Diagnostics;
 using System.Runtime.InteropServices.ComTypes;
 using NUnit.Framework;
+using OctopusCore.Common;
 using OctopusCore.Parser;
 using OctopusCore.Parser.Filters;
 
@@ -11,7 +12,6 @@ namespace Tests.Parser
     public class TestSelectQueryInfo
     {
         private IParser _parser;
-        private const string All = "$ALL$";
         [OneTimeSetUp]
         public void SetUp()
         {
@@ -48,7 +48,7 @@ namespace Tests.Parser
                         },
                         Fields = new List<string>()
                         {
-                            All
+                            StringConstants.All
                         },
                         Includes = new List<Include>(),
                         NestedProperty = new List<string>()
