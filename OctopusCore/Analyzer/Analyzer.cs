@@ -73,7 +73,7 @@ namespace OctopusCore.Analyzer
             }
 
             // For now this will get all fields, primitives and complex
-            if (selectQueryInfo.Fields.Count == 1 && selectQueryInfo.Fields.First().Equals(StringConstants.Guid))
+            if (selectQueryInfo.Fields.Count == 1 && selectQueryInfo.Fields.First().Equals(StringConstants.All))
             {
                 selectQueryInfo.Fields = _analyzerConfigurationProvider.GetEntityFields(selectQueryInfo.Entity);
             }
