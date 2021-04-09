@@ -44,6 +44,12 @@ public interface IOctopusQLVisitor<Result> : IParseTreeVisitor<Result> {
 	/// <return>The visitor result.</return>
 	Result VisitSelect([NotNull] OctopusQLParser.SelectContext context);
 	/// <summary>
+	/// Visit a parse tree produced by <see cref="OctopusQLParser.deleteSelect"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitDeleteSelect([NotNull] OctopusQLParser.DeleteSelectContext context);
+	/// <summary>
 	/// Visit a parse tree produced by <see cref="OctopusQLParser.insert"/>.
 	/// </summary>
 	/// <param name="context">The parse tree.</param>
