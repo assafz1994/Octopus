@@ -60,6 +60,11 @@ namespace OctopusCore.DbHandlers
             return new ExecutionResult(entityType, new Dictionary<string, EntityResult>());
         }
 
+        public Task<ExecutionResult> ExecuteDeleteQuery(string entityType, IReadOnlyCollection<string> guidCollection)
+        {
+            throw new NotImplementedException();
+        }
+
         private string BuildInsertQuery(string entityType, IReadOnlyDictionary<string, dynamic> fields)
         {
             var query = new StringBuilder($"(e:{entityType} ").Append("{");

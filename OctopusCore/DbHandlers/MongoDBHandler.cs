@@ -60,6 +60,11 @@ namespace OctopusCore.DbHandlers
             return Task.FromResult(new ExecutionResult(entityType, new Dictionary<string, EntityResult>()));
         }
 
+        public Task<ExecutionResult> ExecuteDeleteQuery(string entityType, IReadOnlyCollection<string> guidCollection)
+        {
+            throw new NotImplementedException();
+        }
+
         private Dictionary<string, EntityResult> ExecuteCommand(IMongoCollection<BsonDocument> collection, ProjectionDefinition<BsonDocument> project, FilterDefinition<BsonDocument> conditions)
         {
             List<BsonDocument> result = (conditions == null) ? collection.Find(_ => true).Project(project).ToList() :  collection.Find(conditions).Project(project).ToList();
