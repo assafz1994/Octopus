@@ -51,6 +51,16 @@ public interface IOctopusQLListener : IParseTreeListener {
 	/// <param name="context">The parse tree.</param>
 	void ExitSelect([NotNull] OctopusQLParser.SelectContext context);
 	/// <summary>
+	/// Enter a parse tree produced by <see cref="OctopusQLParser.deleteSelect"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	void EnterDeleteSelect([NotNull] OctopusQLParser.DeleteSelectContext context);
+	/// <summary>
+	/// Exit a parse tree produced by <see cref="OctopusQLParser.deleteSelect"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	void ExitDeleteSelect([NotNull] OctopusQLParser.DeleteSelectContext context);
+	/// <summary>
 	/// Enter a parse tree produced by <see cref="OctopusQLParser.insert"/>.
 	/// </summary>
 	/// <param name="context">The parse tree.</param>

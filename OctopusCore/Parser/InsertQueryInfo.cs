@@ -29,7 +29,7 @@ namespace OctopusCore.Parser
             return
                 ParserEntities.SequenceEqual(insertQueryInfo.ParserEntities)
                 && EntityReps.SequenceEqual(insertQueryInfo.EntityReps)
-                && SubQueries.SequenceEqual(insertQueryInfo.SubQueries);
+                && SubQueries.Values.SequenceEqual(insertQueryInfo.SubQueries.Values);
 
         }
     }

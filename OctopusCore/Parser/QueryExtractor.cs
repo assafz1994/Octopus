@@ -11,6 +11,11 @@ namespace OctopusCore.Parser
     internal class QueryExtractor : OctopusQLBaseVisitor<QueryInfo>
     {
         public const string All = "$ALL$";
+        public static Dictionary<string, Func<List<string>, string, bool, Filter>> ComparatorToFilter =
+            new Dictionary<string, Func<List<string>, string, bool, Filter>>()
+        {
+            {"==", (list, s, b) => new EqFilter(list, s, b)},
+        };
         public override QueryInfo VisitR([NotNull] OctopusQLParser.RContext context)
         {
             if (context.@select() != null)
@@ -34,15 +39,54 @@ namespace OctopusCore.Parser
         private DeleteQueryInfo HandleDelete(OctopusQLParser.DeleteContext delete)
         {
             var deleteQueryInfo = new DeleteQueryInfo();
-            var select = delete.@select();
-            if (select == null)
+            var deleteSelect = delete.@deleteSelect();
+            
+            if (deleteSelect == null)
             {
                 throw new Exception("select can't be null");
             }
-            var selectQueryInfo = HandleSelect(select, false);
+
+            var selectQueryInfo = HandleDeleteSelect(deleteSelect);
             selectQueryInfo.Fields.Add(StringConstants.Guid);
             deleteQueryInfo.SubQueries.Add(System.Guid.NewGuid().ToString(), selectQueryInfo);
             return deleteQueryInfo;
+        }
+
+        private SelectQueryInfo HandleDeleteSelect(OctopusQLParser.DeleteSelectContext deleteSelect)
+        {
+            var selectQueryInfo = new SelectQueryInfo();
+            UpdateSelectQueryInfo(selectQueryInfo, deleteSelect.entity(), deleteSelect.whereClause());
+            return selectQueryInfo;
+        }
+
+        private void UpdateSelectQueryInfo(SelectQueryInfo selectQueryInfo,
+            OctopusQLParser.EntityContext entityContext, OctopusQLParser.WhereClauseContext[] whereClauseContexts)
+        {
+            selectQueryInfo.Entity = entityContext.GetText().ToLower();
+            var filters = new List<Filter>();
+            foreach (var whereClause in whereClauseContexts)
+            {
+                var fieldNames = new List<string>();
+                fieldNames.AddRange(whereClause.fieldsWithDot()._el.Select(field => field.GetText().ToLower()));
+                string value;
+                var isQueried = false;
+                if (whereClause.value().select() != null)
+                {
+                    var guid = System.Guid.NewGuid().ToString();
+                    selectQueryInfo.SubQueries.Add(guid, HandleSelect(whereClause.value().select()));
+                    value = guid;
+                    isQueried = true;
+                }
+                else
+                {
+                    value = whereClause.value().GetText();
+                }
+                var comparator = whereClause.COMPARATOR().GetText();
+                var filter = ComparatorToFilter[comparator](fieldNames, value, isQueried);
+                filters.Add(filter);
+            }
+
+            selectQueryInfo.Filters = filters;
         }
 
         private InsertQueryInfo HandleInsert(OctopusQLParser.InsertContext insert)
@@ -87,50 +131,16 @@ namespace OctopusCore.Parser
             return new InsertQueryInfo(parserEntities, entityReps);
         }
 
-        private SelectQueryInfo HandleSelect([NotNull] OctopusQLParser.SelectContext selectContext, bool needsSelectClause=true)
+        private SelectQueryInfo HandleSelect([NotNull] OctopusQLParser.SelectContext selectContext)
         {
             var selectQueryInfo = new SelectQueryInfo();
-            var comparatorToFilter = new Dictionary<string, Func<List<string>, string, bool, Filter>>()
-            {
-                {"==", (list, s, b) => new EqFilter(list, s, b)},
-            };
-            selectQueryInfo.Entity = selectContext.entity().GetText().ToLower();
-            var filters = new List<Filter>();
-            foreach (var whereClause in selectContext.whereClause())
-            {
-                var fieldNames = new List<string>();
-                fieldNames.AddRange(whereClause.fieldsWithDot()._el.Select(field => field.GetText().ToLower()));
-                string value;
-                var isQueried = false;
-                if (whereClause.value().select() != null)
-                {
-                    var guid = System.Guid.NewGuid().ToString();
-                    selectQueryInfo.SubQueries.Add(guid, HandleSelect(whereClause.value().select()));
-                    value = guid;
-                    isQueried = true;
-                }
-                else
-                {
-                    value = whereClause.value().GetText();
-                }
-                var comparator = whereClause.COMPARATOR().GetText(); 
-                var filter = comparatorToFilter[comparator](fieldNames, value, isQueried);
-                filters.Add(filter);
-            }
-
-            selectQueryInfo.Filters = filters;
-            var noSelectClause = selectContext.selectClause() == null;
+            UpdateSelectQueryInfo(selectQueryInfo, selectContext.entity(), selectContext.whereClause());
             
-            if (needsSelectClause && noSelectClause)
+            if (selectContext.selectClause() == null)
             {
                 throw new Exception("no select at the end of query");
             }
 
-            if (noSelectClause)
-            {
-                return selectQueryInfo;
-            }
-            
             var fields = new List<string>();
             var nestedProperty = new ArrayList<string>();
             if (selectContext.selectClause().all() != null)

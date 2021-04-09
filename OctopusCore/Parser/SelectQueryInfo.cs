@@ -16,6 +16,10 @@ namespace OctopusCore.Parser
         public SelectQueryInfo()
         {
             SubQueries = new Dictionary<string, QueryInfo>();
+            Filters = new List<Filter>();
+            NestedProperty = new List<string>();
+            Fields = new List<string>();
+            Includes = new List<Include>();
         }
         
         public override bool Equals(object obj)
@@ -29,7 +33,7 @@ namespace OctopusCore.Parser
                    && Includes.SequenceEqual(selectQueryInfo.Includes)
                    && Filters.SequenceEqual(selectQueryInfo.Filters)
                    && NestedProperty.SequenceEqual(selectQueryInfo.NestedProperty) 
-                   && SubQueries.SequenceEqual(selectQueryInfo.SubQueries);
+                   && SubQueries.Values.SequenceEqual(selectQueryInfo.SubQueries.Values);
 
         }
     }
