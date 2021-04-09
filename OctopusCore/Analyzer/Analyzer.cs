@@ -37,7 +37,16 @@ namespace OctopusCore.Analyzer
         private WorkPlan AnalyzeDeleteQuery(DeleteQueryInfo deleteQueryInfo)
         {
             var jobs = new List<Job>();
-            var subQueryWorkPlan = AnalyzeQuery(deleteQueryInfo.SubQueries.Values.ToList().First());
+            var queryInfo = deleteQueryInfo.SubQueries.Values.ToList().First();
+            
+            if (!(queryInfo is SelectQueryInfo selectQueryInfo))
+            {
+                throw new Exception("No select");
+            }
+
+            var pk = _analyzerConfigurationProvider.GetEntityPrimaryKey(selectQueryInfo.Entity);
+            selectQueryInfo.Fields = new List<string>() { pk };
+            var subQueryWorkPlan = AnalyzeQuery(selectQueryInfo);
             var dbs = _analyzerConfigurationProvider.GetDbsToFields(deleteQueryInfo.Entity).Keys.ToList();
             foreach (var db in dbs)
             {
