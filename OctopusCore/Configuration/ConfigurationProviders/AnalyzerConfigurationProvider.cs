@@ -9,12 +9,14 @@ namespace OctopusCore.Configuration.ConfigurationProviders
     {
         private readonly Dictionary<string, Dictionary<string, List<string>>> _entityTypeToFieldNameToDatabaseKeys;
         private readonly Dictionary<string, Dictionary<string, List<string>>> _entityTypeToDatabaseToFields;
+        private readonly Dictionary<string, string> _entityTypeToPrimaryKey;
         public AnalyzerConfigurationProvider(Scheme scheme, DbConfigurations dbConfigurations)
         {
             Scheme = scheme;
             DbConfigurations = dbConfigurations;
             _entityTypeToFieldNameToDatabaseKeys = new Dictionary<string, Dictionary<string, List<string>>>();
             _entityTypeToDatabaseToFields = new Dictionary<string, Dictionary<string, List<string>>>();
+            _entityTypeToPrimaryKey = new Dictionary<string, string>();
             InitializeDictionaries();
         }
 
@@ -44,6 +46,11 @@ namespace OctopusCore.Configuration.ConfigurationProviders
                     _entityTypeToDatabaseToFields.Add(entity.Name, new Dictionary<string, List<string>>());
                 _entityTypeToDatabaseToFields[entity.Name][dbConfiguration.Id] = entity.Fields.Select(x => x.Name).ToList();
             }
+
+            foreach (var entity in Scheme.Entities)
+            {
+                _entityTypeToPrimaryKey.Add(entity.Name, entity.Fields.First().Name);
+            }
         }
         
         public Dictionary<string, List<string>> GetDbsToFields(string entityType)
@@ -55,12 +62,22 @@ namespace OctopusCore.Configuration.ConfigurationProviders
 
         public string GetFieldDatabaseKey(string entityType, string fieldName)
         {
+            if (fieldName == StringConstants.Guid)
+            {
+                fieldName = GetEntityPrimaryKey(entityType);
+            }
+
             if (_entityTypeToFieldNameToDatabaseKeys.TryGetValue(entityType, out var fieldNameToDatabaseKeys) == false)
                 throw new ArgumentException($"no db to handle this entity type:{entityType}");
             if (fieldNameToDatabaseKeys.TryGetValue(fieldName, out var databaseKeys) == false)
                 throw new ArgumentException(
                     $"no db to handle this field: {nameof(entityType)}= {entityType}: {nameof(fieldName)} = {fieldName}");
             return databaseKeys.First();
+        }
+
+        public string GetEntityPrimaryKey(string entityType)
+        {
+            return _entityTypeToPrimaryKey[entityType];
         }
     }
 }

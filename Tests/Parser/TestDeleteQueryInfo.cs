@@ -25,6 +25,7 @@ namespace Tests.Parser
                     "Delete From Person p | Where p.id == \"5\"",
                     new DeleteQueryInfo()
                     {
+                        Entity = "person",
                         SubQueries = new Dictionary<string, QueryInfo>()
                         {
                             {
@@ -35,7 +36,10 @@ namespace Tests.Parser
                                     {
                                         new EqFilter(new List<string>() {"id"}, "\"5\"")
                                     },
-                                    Fields = new List<string>() {StringConstants.Guid},
+                                    Fields = new List<string>()
+                                    {
+                                        StringConstants.Guid
+                                    },
                                     Includes = new List<Include>(),
                                     NestedProperty = new List<string>()
                                 }

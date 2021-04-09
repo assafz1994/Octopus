@@ -7,6 +7,7 @@ namespace OctopusCore.Parser
 {
     class DeleteQueryInfo : QueryInfo
     {
+        public string Entity { get; set; }
         public DeleteQueryInfo()
         {
             SubQueries = new Dictionary<string, QueryInfo>();

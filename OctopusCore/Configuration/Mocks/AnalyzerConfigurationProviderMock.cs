@@ -21,5 +21,10 @@ namespace OctopusCore.Configuration.Mocks
         {
             return _entityTypeToFieldNameToDatabaseKeyMappings[entityType][fieldName];
         }
+
+        public string GetEntityPrimaryKey(string entityType)
+        {
+            throw new System.NotImplementedException();
+        }
     }
 }
