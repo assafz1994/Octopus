@@ -13,19 +13,19 @@ namespace OctopusCore.Analyzer.Jobs
     {
         private readonly IDbHandler _dbHandler;
 
-        public DeleteQueryJob(IDbHandler dbHandler, string entityType, WorkPlan subQueryWorkPlan)
+        public DeleteQueryJob(IDbHandler dbHandler, string entityType, Dictionary<string, WorkPlan> subQueryWorkPlans)
         {
             _dbHandler = dbHandler;
             EntityType = entityType;
-            SubQueryWorkPlan = subQueryWorkPlan;
+            SubQueryWorkPlans = subQueryWorkPlans;
         }
 
-        public WorkPlan SubQueryWorkPlan { get; set; }
+        public Dictionary<string, WorkPlan> SubQueryWorkPlans { get; set; }
         public string EntityType { get; }
 
         protected override Task<ExecutionResult> ExecuteInternalAsync()
         {
-            var result = SubQueryWorkPlan.Jobs.Last().Result;
+            var result = SubQueryWorkPlans.Values.First().Jobs.Last().Result;
             var guids = result.EntityResults.Values.Select(x => (string)x.Fields[StringConstants.Guid]).ToList();
             return _dbHandler.ExecuteDeleteQuery(EntityType, guids);
         }

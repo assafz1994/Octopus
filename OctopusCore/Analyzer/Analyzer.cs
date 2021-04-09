@@ -8,6 +8,7 @@ using OctopusCore.Configuration;
 using OctopusCore.Configuration.ConfigurationProviders;
 using OctopusCore.Contract;
 using OctopusCore.Parser;
+using static System.Guid;
 
 namespace OctopusCore.Analyzer
 {
@@ -44,16 +45,17 @@ namespace OctopusCore.Analyzer
                 throw new Exception("No select");
             }
 
-            var pk = _analyzerConfigurationProvider.GetEntityPrimaryKey(selectQueryInfo.Entity);
-            selectQueryInfo.Fields = new List<string>() { pk };
-            var subQueryWorkPlan = AnalyzeQuery(selectQueryInfo);
+            var subQueryWorkPlans = new Dictionary<string, WorkPlan>()
+            {
+                {NewGuid().ToString(), AnalyzeQuery(selectQueryInfo)}
+            };
             var dbs = _analyzerConfigurationProvider.GetDbsToFields(deleteQueryInfo.Entity).Keys.ToList();
             foreach (var db in dbs)
             {
                 var dbHandler = _dbHandlersResolver.ResolveDbHandler(db);
-                jobs.Add(new DeleteQueryJob(dbHandler, deleteQueryInfo.Entity, subQueryWorkPlan));
+                jobs.Add(new DeleteQueryJob(dbHandler, deleteQueryInfo.Entity, subQueryWorkPlans));
             }
-            return new WorkPlan(jobs);
+            return new WorkPlan(jobs, subQueryWorkPlans);
         }
 
         private WorkPlan AnalyzeSelectQuery(SelectQueryInfo selectQueryInfo)
@@ -85,7 +87,7 @@ namespace OctopusCore.Analyzer
             foreach (var parserEntity in parserEntities)
             {
                 var dbsToFields = _analyzerConfigurationProvider.GetDbsToFields(parserEntity.EntityType);
-                var guid = Guid.NewGuid();
+                var guid = NewGuid();
                 foreach (var dbToFields in dbsToFields)
                 {
                     var dbHandler = _dbHandlersResolver.ResolveDbHandler(dbToFields.Key);

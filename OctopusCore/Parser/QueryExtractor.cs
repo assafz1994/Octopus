@@ -5,6 +5,7 @@ using System.Text;
 using Antlr4.Runtime.Misc;
 using OctopusCore.Common;
 using OctopusCore.Parser.Filters;
+using static System.Guid;
 
 namespace OctopusCore.Parser
 {
@@ -47,8 +48,9 @@ namespace OctopusCore.Parser
             }
 
             var selectQueryInfo = HandleDeleteSelect(deleteSelect);
+            selectQueryInfo.Fields.Add(StringConstants.Guid);
             deleteQueryInfo.Entity = selectQueryInfo.Entity;
-            deleteQueryInfo.SubQueries.Add(System.Guid.NewGuid().ToString(), selectQueryInfo);
+            deleteQueryInfo.SubQueries.Add(NewGuid().ToString(), selectQueryInfo);
             return deleteQueryInfo;
         }
 
@@ -72,7 +74,7 @@ namespace OctopusCore.Parser
                 var isQueried = false;
                 if (whereClause.value().select() != null)
                 {
-                    var guid = System.Guid.NewGuid().ToString();
+                    var guid = NewGuid().ToString();
                     selectQueryInfo.SubQueries.Add(guid, HandleSelect(whereClause.value().select()));
                     value = guid;
                     isQueried = true;

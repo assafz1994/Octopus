@@ -36,7 +36,10 @@ namespace Tests.Parser
                                     {
                                         new EqFilter(new List<string>() {"id"}, "\"5\"")
                                     },
-                                    Fields = new List<string>(),
+                                    Fields = new List<string>()
+                                    {
+                                        StringConstants.Guid
+                                    },
                                     Includes = new List<Include>(),
                                     NestedProperty = new List<string>()
                                 }
