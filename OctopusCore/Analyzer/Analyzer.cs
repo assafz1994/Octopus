@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using OctopusCore.Analyzer.Jobs;
 using OctopusCore.Common;
@@ -35,9 +36,15 @@ namespace OctopusCore.Analyzer
 
         private WorkPlan AnalyzeDeleteQuery(DeleteQueryInfo deleteQueryInfo)
         {
-            var subQueryWorkPlans = deleteQueryInfo.SubQueries.ToDictionary(v => v.Key, v => AnalyzeQuery(v.Value));
-            var dbsToFields = _analyzerConfigurationProvider.GetDbsToFields(deleteQueryInfo.Entity);
-            return null;
+            var jobs = new List<Job>();
+            var subQueryWorkPlan = AnalyzeQuery(deleteQueryInfo.SubQueries.Values.ToList().First());
+            var dbs = _analyzerConfigurationProvider.GetDbsToFields(deleteQueryInfo.Entity).Keys.ToList();
+            foreach (var db in dbs)
+            {
+                var dbHandler = _dbHandlersResolver.ResolveDbHandler(db);
+                jobs.Add(new DeleteQueryJob(dbHandler, deleteQueryInfo.Entity, subQueryWorkPlan));
+            }
+            return new WorkPlan(jobs);
         }
 
         private WorkPlan AnalyzeSelectQuery(SelectQueryInfo selectQueryInfo)
