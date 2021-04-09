@@ -32,8 +32,8 @@ namespace OctopusCore.Parser
             {
                 return HandleDelete(context.@delete());
             }
-            return new SelectQueryInfo();
-            // return base.VisitR(context);
+            
+            throw new Exception("Unsupported query");
         }
 
         private DeleteQueryInfo HandleDelete(OctopusQLParser.DeleteContext delete)
