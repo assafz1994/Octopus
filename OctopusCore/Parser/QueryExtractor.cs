@@ -48,6 +48,7 @@ namespace OctopusCore.Parser
 
             var selectQueryInfo = HandleDeleteSelect(deleteSelect);
             selectQueryInfo.Fields.Add(StringConstants.Guid);
+            deleteQueryInfo.Entity = selectQueryInfo.Entity;
             deleteQueryInfo.SubQueries.Add(System.Guid.NewGuid().ToString(), selectQueryInfo);
             return deleteQueryInfo;
         }

@@ -25,6 +25,7 @@ namespace Tests.Parser
                     "Delete From Person p | Where p.id == \"5\"",
                     new DeleteQueryInfo()
                     {
+                        Entity = "person",
                         SubQueries = new Dictionary<string, QueryInfo>()
                         {
                             {

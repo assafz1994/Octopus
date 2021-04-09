@@ -28,8 +28,16 @@ namespace OctopusCore.Analyzer
             {
                 SelectQueryInfo selectQueryInfo => AnalyzeSelectQuery(selectQueryInfo),
                 InsertQueryInfo insertQueryInfo => AnalyzeInsertQuery(insertQueryInfo),
+                DeleteQueryInfo deleteQueryInfo => AnalyzeDeleteQuery(deleteQueryInfo),
                 _ => throw new Exception("Unsupported query type")
             };
+        }
+
+        private WorkPlan AnalyzeDeleteQuery(DeleteQueryInfo deleteQueryInfo)
+        {
+            var subQueryWorkPlans = deleteQueryInfo.SubQueries.ToDictionary(v => v.Key, v => AnalyzeQuery(v.Value));
+            var dbsToFields = _analyzerConfigurationProvider.GetDbsToFields(deleteQueryInfo.Entity);
+            return null;
         }
 
         private WorkPlan AnalyzeSelectQuery(SelectQueryInfo selectQueryInfo)
