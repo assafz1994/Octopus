@@ -42,10 +42,20 @@ namespace OctopusCore.Configuration.ConfigurationProviders
             return table.Count == 0 ? $"{entityType}_table" : $"{entityType}_table_by_{string.Join("_", table)}";
         }
 
+        public List<List<string>> GetTables(string entityType)
+        {
+            return TableNamesToTables(entityType).Values.ToList();
+        }
+
         public List<string> GetTableNames(string entityType)
         {
+            return TableNamesToTables(entityType).Keys.ToList();
+        }
+
+        public Dictionary<string, List<string>> TableNamesToTables(string entityType)
+        {
             var entity = Entities.First(x => x.Name == entityType);
-            var tables = entity.TablesByFields.Select(table => TableToString(entityType, table)).ToList();
+            var tables = entity.TablesByFields.ToDictionary(table => TableToString(entityType, table), table => table);
             return tables;
         }
     }
