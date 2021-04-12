@@ -42,7 +42,7 @@ namespace OctopusCore.DbHandlers
 
             //fieldsToSelect are the fields that will be shown to the user.
             //Guid field is inside the command that will be executed, but it won't be shown to the user
-            var result = await ExecuteCommand(fieldsToSelect, command);
+            var result = await ExecuteCommand(fieldsToSelect,joinsTuples, command);
 
             return new ExecutionResult(entityType, result);
         }
@@ -52,8 +52,16 @@ namespace OctopusCore.DbHandlers
             var allFields = rootFields.Select(field => $"{rootTable}.{field}").ToList();
             foreach (var tuple in joinTuples)
             {
+
                 var tableName = _configurationProvider.GetTableName(tuple.field.EntityName);
-                allFields.AddRange(tuple.fieldsToSelect.Select((fieldName => $"{tableName}_{tuple.field.Name}.{fieldName} as {tableName}_{tuple.field.Name}_{fieldName}")));
+                allFields.AddRange(tuple.fieldsToSelect.Select(GetSelectedFields));
+                allFields.Add(GetSelectedFields(StringConstants.Guid));
+
+
+                string GetSelectedFields(string fieldName)
+                {
+                    return  $"{tableName}_{tuple.field.Name}.{fieldName} as {tableName}_{tuple.field.Name}_{fieldName}";
+                }
             }
 
             return string.Join(",", allFields);
@@ -97,8 +105,9 @@ namespace OctopusCore.DbHandlers
         }
 
 
-        private static async Task<Dictionary<string, EntityResult>> ExecuteCommand(
+        private  async Task<Dictionary<string, EntityResult>> ExecuteCommand(
             IReadOnlyCollection<string> fieldsToSelect,
+            List<(string entityType, Field field, List<string> fieldsToSelect)> joinsTuples,
             SqliteCommand command)
         {
             using var reader = await command.ExecuteReaderAsync();
@@ -107,14 +116,30 @@ namespace OctopusCore.DbHandlers
             while (await reader.ReadAsync())
             {
                 var dictionary = new Dictionary<string, dynamic>();
-                for (int i = 0; i < reader.FieldCount; i++)
+                foreach (var fieldName in fieldsToSelect)
                 {
-                    if (reader.GetName(i) == StringConstants.Guid)
-                    {
-                        continue;
-                    }
-                    dictionary[reader.GetName(i)] = reader[i];
+                    dictionary[fieldName] = reader[fieldName];
                 }
+
+                foreach (var joinsTuple in joinsTuples)
+                {
+                    var complexFieldsToFields = new Dictionary<string,dynamic>();
+                    var tableName = _configurationProvider.GetTableName(joinsTuple.field.EntityName);
+                    foreach (var fieldNameOfComplexField in joinsTuple.fieldsToSelect)
+                    {
+                        complexFieldsToFields[fieldNameOfComplexField] =
+                            reader[$"{tableName}_{joinsTuple.field.Name}_{fieldNameOfComplexField}"];
+                    }
+
+                    var guidOfComplexField = reader[$"{tableName}_{joinsTuple.field.Name}_{StringConstants.Guid}"].ToString();
+                    dictionary[joinsTuple.field.Name] = new Dictionary<string,EntityResult>()
+                    {
+                        {
+                            guidOfComplexField,new EntityResult(complexFieldsToFields)
+                        }
+                    };
+                }
+
                 var fieldToValueMap = new EntityResult(dictionary);
 
                 output.Add(reader[StringConstants.Guid].ToString(), fieldToValueMap);
