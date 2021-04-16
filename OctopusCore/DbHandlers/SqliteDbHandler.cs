@@ -57,13 +57,24 @@ namespace OctopusCore.DbHandlers
             command.CommandText = query;
 
             var row = await command.ExecuteNonQueryAsync();
-            
+
             return new ExecutionResult(entityType, new Dictionary<string, EntityResult>());
         }
 
-        public Task<ExecutionResult> ExecuteDeleteQuery(string entityType, IReadOnlyCollection<string> guidCollection)
+        public async Task<ExecutionResult> ExecuteDeleteQuery(string entityType, IReadOnlyCollection<string> guidCollection)
         {
-            throw new NotImplementedException();
+            using var connection = new SqliteConnection(_configurationProvider.ConnectionString);
+            connection.Open();
+            var table = _configurationProvider.GetTableName(entityType);
+            var guidList = $"({string.Join(",", guidCollection.Select(x => $"'{x}'"))})";
+            var query = $"DELETE FROM {table} WHERE GUID IN {guidList}";
+
+            var command = connection.CreateCommand();
+            command.CommandText = query;
+
+            var row = await command.ExecuteNonQueryAsync();
+
+            return new ExecutionResult(entityType, new Dictionary<string, EntityResult>());
         }
 
         //todo reuse this logic for all handlers
