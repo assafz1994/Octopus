@@ -123,9 +123,9 @@
       ]
     },
     {
-      "Id": "mongo1",
+      "Id": "mongo2",
       "DbType": "MongoDB",
-      "ConnectionString": "mongodb://localhost:27017/mongodb_1",
+      "ConnectionString": "mongodb://localhost:27017/mongodb_2",
       "Entities": [
         {
           "Name": "person",
