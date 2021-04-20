@@ -20,7 +20,7 @@ namespace OctopusCore.DbHandlers
         public Neo4JDbHandler(Neo4jConfigurationProvider configurationProvider)
         {
             _configurationProvider = configurationProvider;
-            _filterTypeToOperatorRepresentation = new Dictionary<FilterType, string> {{FilterType.Eq, "="}};
+            _filterTypeToOperatorRepresentation = new Dictionary<FilterType, string> { { FilterType.Eq, "=" } };
         }
 
         public async Task<ExecutionResult> ExecuteQueryWithFiltersAsync(IReadOnlyCollection<string> fieldsToSelect,
@@ -30,7 +30,12 @@ namespace OctopusCore.DbHandlers
                 _configurationProvider.Username, _configurationProvider.Password);
 
             await client.ConnectAsync(); //todo check if it should happen only once
-            var fieldsNames = fieldsToSelect.ToList().Append(StringConstants.Guid).ToList();
+            var fieldsNames = fieldsToSelect.ToList();
+            if (!fieldsNames.Contains(StringConstants.Guid))
+            {
+                fieldsNames.Append(StringConstants.Guid).ToList();
+            }
+
             var queryFields = fieldsNames.Select(GetQueryField);
             var query = client.Cypher.Match(GetQueryEntity(entityType));
             if (filters.Any())
@@ -60,9 +65,19 @@ namespace OctopusCore.DbHandlers
             return new ExecutionResult(entityType, new Dictionary<string, EntityResult>());
         }
 
-        public Task<ExecutionResult> ExecuteDeleteQuery(string entityType, IReadOnlyCollection<string> guidCollection)
+        public async Task<ExecutionResult> ExecuteDeleteQuery(string entityType, IReadOnlyCollection<string> guidCollection)
         {
-            throw new NotImplementedException();
+            var client = new GraphClient(new Uri(_configurationProvider.ConnectionString),
+                _configurationProvider.Username, _configurationProvider.Password);
+
+            await client.ConnectAsync();
+            var guidsAsString = $"['{string.Join(",", guidCollection)}']";
+            var withStatement = $"{guidsAsString} as guids";
+            // var query = $"{withStatement} match (e:{entityType}) where e.{StringConstants.Guid} in guids detach delete e";
+            await client.Cypher.With(withStatement).Match($"(e:{entityType})").Where($"e.{StringConstants.Guid} in guids").DetachDelete("e").ExecuteWithoutResultsAsync();
+            // await client.Cypher
+            return new ExecutionResult(entityType, new Dictionary<string, EntityResult>());
+
         }
 
         private string BuildInsertQuery(string entityType, IReadOnlyDictionary<string, dynamic> fields)
@@ -88,11 +103,11 @@ namespace OctopusCore.DbHandlers
             {
                 var dict = new Dictionary<string, dynamic>();
                 for (var i = 0; i < fieldsNames.Count; i++) dict.Add(fieldsNames[i], nodeFields[i]);
-
                 var guid = dict[StringConstants.Guid];
                 dict.Remove(StringConstants.Guid);
                 var entityResult = new EntityResult(dict);
                 entityResults.Add(guid, entityResult);
+
             }
 
             return entityResults;

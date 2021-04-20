@@ -1,34 +1,49 @@
 {
     "Entities": [
-        {
-            "Name": "person",
-            "Fields": [
-                {
-                    "Name": "id",
-                    "Type": "string",
-                    "ConnectedTo": null
-                },
-                {
-                    "Name": "age",
-                    "Type": "string",
-                    "ConnectedTo": null
-                },
-                {
-                    "Name": "name",
-                    "Type": "string",
-                    "ConnectedTo": null
-                },
-                {
-                    "Name": "email",
-                    "Type": "string",
-                    "ConnectedTo": null
-                },
-                {
-                    "Name": "hobby",
-                    "Type": "string",
-                    "ConnectedTo": null
-                }
-            ]
-        }
+      {
+        "Name": "person",
+        "Fields": [
+          {
+            "Name": "id",
+            "Type": "string",
+            "ConnectedTo": null
+          },
+          {
+            "Name": "age",
+            "Type": "string",
+            "ConnectedTo": null
+          },
+          {
+            "Name": "name",
+            "Type": "string",
+            "ConnectedTo": null
+          },
+          {
+            "Name": "email",
+            "Type": "string",
+            "ConnectedTo": null
+          },
+          {
+            "Name": "hobby",
+            "Type": "string",
+            "ConnectedTo": null
+          }
+        ]
+      },
+      {
+        "Name": "neoperson",
+        "Fields": [
+          {
+            "Name": "email",
+            "Type": "string",
+            "ConnectedTo": null
+          },
+          {
+            "Name": "hobby",
+            "Type": "string",
+            "ConnectedTo": null
+          }
+        ]
+      }
     ]
 }

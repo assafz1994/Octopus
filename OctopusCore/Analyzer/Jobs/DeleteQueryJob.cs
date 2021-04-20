@@ -26,7 +26,7 @@ namespace OctopusCore.Analyzer.Jobs
         protected override Task<ExecutionResult> ExecuteInternalAsync()
         {
             var result = SubQueryWorkPlans.Values.First().Jobs.Last().Result;
-            var guids = result.EntityResults.Values.Select(x => (string)x.Fields[StringConstants.Guid].ToString()).ToList();
+            var guids = result.EntityResults.Keys.ToList();
             return _dbHandler.ExecuteDeleteQuery(EntityType, guids);
         }
     }
