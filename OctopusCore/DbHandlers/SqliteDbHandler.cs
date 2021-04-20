@@ -22,7 +22,12 @@ namespace OctopusCore.DbHandlers
         public SqliteDbHandler(SqliteConfigurationProvider configurationProvider)
         {
             _configurationProvider = configurationProvider;
-            _filterTypeToOperatorRepresentation = new Dictionary<FilterType, string> {{FilterType.Eq, "="}};
+            _filterTypeToOperatorRepresentation = new Dictionary<FilterType, string>
+            {
+                {FilterType.Eq, "="},
+                {FilterType.In, "in"}
+
+            };
         }
 
         public async Task<ExecutionResult> ExecuteQueryWithFiltersAsync(IReadOnlyCollection<string> fieldsToSelect,
@@ -159,9 +164,17 @@ namespace OctopusCore.DbHandlers
             {
                 if (filter.FieldNames.Count > 1) throw new ArgumentException("Fields with Include are not supported");
 
-                var filterAsString = new StringBuilder().Append($"{rootTableName}.{filter.FieldNames[0]}").Append(GetFilterOperator(filter))
-                    .Append(filter.Expression).ToString();
-                filtersAsString.Add(filterAsString);
+                if(filter.Type == FilterType.In)
+                {
+                    var values = filter.CalcValue().Select(x=>$"\"{x}\"");//todo just do something
+                    filtersAsString.Add($"{rootTableName}.{filter.FieldNames[0]} {GetFilterOperator(filter)} ({string.Join(",", values)})");
+                }
+                else
+                {
+                    var filterAsString = new StringBuilder().Append($"{rootTableName}.{filter.FieldNames[0]} ").Append(GetFilterOperator(filter))
+                        .Append(filter.Expression).ToString();
+                    filtersAsString.Add(filterAsString);
+                }
             }
 
             var conditions = string.Join(" and ", filtersAsString);

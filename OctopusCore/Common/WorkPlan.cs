@@ -6,8 +6,8 @@ namespace OctopusCore.Contract
 {
     public class WorkPlan
     {
-        public IReadOnlyDictionary<string, WorkPlan> SubQueryWorkPlans { get; set; }
         public IReadOnlyCollection<Job> Jobs { get; }
+        public IReadOnlyDictionary<string, WorkPlan> SubQueryWorkPlans { get; set; }
 
         public WorkPlan(IReadOnlyCollection<Job> jobs, IReadOnlyDictionary<string, WorkPlan> subQueryWorkPlans)
         {

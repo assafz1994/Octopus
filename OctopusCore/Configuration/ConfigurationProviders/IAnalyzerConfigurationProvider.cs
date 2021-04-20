@@ -4,10 +4,10 @@ namespace OctopusCore.Configuration.ConfigurationProviders
 {
     public interface IAnalyzerConfigurationProvider
     {
-        public Dictionary<string, List<string>> GetDbsToFields(string entityType);
+        Dictionary<string, List<string>> GetDbsToFields(string entityType);
         string GetFieldDatabaseKey(string entityType, string fieldName);
         bool IsComplexField(string entityType, string fieldName);
-        public Field GetField(string entityType, string fieldName);
+        Field GetField(string entityType, string fieldName);
 
     }
 }

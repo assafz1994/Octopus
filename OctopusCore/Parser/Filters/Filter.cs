@@ -9,9 +9,11 @@ namespace OctopusCore.Parser
         public List<string> FieldNames { get; set; }
 
         public dynamic Expression { get; set; }
-        
+
         public bool IsSubQueried { get; set; }
 
         public abstract FilterType Type { get; }
+
+        public Func<IEnumerable<dynamic>> CalcValue { get; set; }
     }
 }
