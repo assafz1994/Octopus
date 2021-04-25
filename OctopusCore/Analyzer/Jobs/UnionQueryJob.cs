@@ -40,13 +40,46 @@ namespace OctopusCore.Analyzer.Jobs
             foreach (var complexFieldName in _complexFieldsToWorkPlan.Keys)
             {
                 var complexFieldResult = _complexFieldsToWorkPlan[complexFieldName].Jobs.Last().Result.EntityResults;
-                foreach (var entityFields in outputEntityResult.Values)
+                var entitiesToRemove = new List<string>();
+                foreach (var outputEntityGuid in outputEntityResult.Keys)
                 {
-                    var complexEntityGuid = ((Dictionary<string,EntityResult>)entityFields.Fields[complexFieldName]).First().Key;//todo we use first because we assume it is not an array
-                    entityFields.Fields[complexFieldName] = complexFieldResult[complexEntityGuid].Fields;
+                    var entityFields = outputEntityResult[outputEntityGuid].Fields;
+                    if(entityFields.ContainsKey(complexFieldName) == false)
+                    {
+                        if (complexFieldResult.ContainsKey(outputEntityGuid))
+                        {
+                            entityFields[complexFieldName] = ((Dictionary<string, EntityResult>)complexFieldResult[outputEntityGuid].Fields[complexFieldName]).First().Value.Fields;
+                        }
+                        else
+                        {
+                            entitiesToRemove.Add(outputEntityGuid);
+                        }
+                    }
+                    else
+                    {
+                        var complexEntityGuid = ((Dictionary<string, EntityResult>)entityFields[complexFieldName]).First().Key;//todo we use first because we assume it is not an array
+
+                        if (complexFieldResult.ContainsKey(complexEntityGuid))
+                        {
+                            entityFields[complexFieldName] = complexFieldResult[complexEntityGuid].Fields;
+                        }
+                        else
+                        {
+                            //if the guid is not present in the complex field results, we should remove the entire entity from the outputEntityResult.
+                            //it can happens when an entity is filtered in the complex field query
+                            entitiesToRemove.Add(outputEntityGuid);
+                        }
+                    }
+
+
+                }
+
+                foreach (var entityToRemove in entitiesToRemove)
+                {
+                    outputEntityResult.Remove(entityToRemove);
                 }
             }
-            
+
             var executionResult = new ExecutionResult(_primitiveFieldsJobs.First().Result.Type, outputEntityResult);
             return Task.FromResult(executionResult);
         }

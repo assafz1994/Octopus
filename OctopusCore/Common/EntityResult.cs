@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace OctopusCore.Contract
 {
@@ -9,7 +11,7 @@ namespace OctopusCore.Contract
 
         public EntityResult(Dictionary<string, dynamic> fields)
         {
-            Fields = fields;
+            Fields = fields.ToDictionary(x=>x.Key,x=>x.Value,StringComparer.OrdinalIgnoreCase);
         }
 
     }

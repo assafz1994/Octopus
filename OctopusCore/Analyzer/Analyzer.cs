@@ -16,7 +16,7 @@ namespace OctopusCore.Analyzer
         private readonly IDbHandlersResolver _dbHandlersResolver;
         private readonly IAnalyzerConfigurationProvider _analyzerConfigurationProvider;
 
-        public Analyzer(IDbHandlersResolver dbHandlersResolver ,IAnalyzerConfigurationProvider analyzerConfigurationProvider)
+        public Analyzer(IDbHandlersResolver dbHandlersResolver, IAnalyzerConfigurationProvider analyzerConfigurationProvider)
         {
             _dbHandlersResolver = dbHandlersResolver;
             _analyzerConfigurationProvider = analyzerConfigurationProvider;
@@ -38,10 +38,10 @@ namespace OctopusCore.Analyzer
             var subQueryWorkPlans = selectQueryInfo.SubQueries.ToDictionary(v => v.Key, v => AnalyzeQuery(v.Value));
             foreach (var queryFilter in selectQueryInfo.Filters ?? Enumerable.Empty<Filter>())
             {
-                workPlanBuilder.AddFilter(selectQueryInfo.Entity,queryFilter);
+                workPlanBuilder.AddFilter(selectQueryInfo.Entity, queryFilter);
                 if (queryFilter.IsSubQueried)
                 {
-                    workPlanBuilder.AddSubQueriedWorkPlan(queryFilter, queryFilter.Expression, subQueryWorkPlans[queryFilter.Expression],selectQueryInfo.Entity);
+                    workPlanBuilder.AddSubQueriedWorkPlan(queryFilter, queryFilter.Expression, subQueryWorkPlans[queryFilter.Expression], selectQueryInfo.Entity);
                 }
             }
 
@@ -50,8 +50,8 @@ namespace OctopusCore.Analyzer
                 if (_analyzerConfigurationProvider.IsComplexField(selectQueryInfo.Entity, fieldName))
                 {
                     //todo yonatan will validate that query includes fields!
-                    var field =_analyzerConfigurationProvider.GetField(selectQueryInfo.Entity, fieldName);
-                    workPlanBuilder.AddProjectionComplexField(selectQueryInfo.Entity,field,selectQueryInfo.Includes.Single(x=> x.Name.Equals(fieldName,StringComparison.OrdinalIgnoreCase)));
+                    var field = _analyzerConfigurationProvider.GetField(selectQueryInfo.Entity, fieldName);
+                    workPlanBuilder.AddProjectionComplexField(selectQueryInfo.Entity, field, selectQueryInfo.Includes.Single(x => x.Name.Equals(fieldName, StringComparison.OrdinalIgnoreCase)));
                 }
                 else
                 {

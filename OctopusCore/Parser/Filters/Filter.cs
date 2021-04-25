@@ -15,5 +15,7 @@ namespace OctopusCore.Parser
         public abstract FilterType Type { get; }
 
         public Func<IEnumerable<dynamic>> CalcValue { get; set; }
+
+        public abstract Filter GetNextFilter();
     }
 }

@@ -25,14 +25,14 @@ namespace OctopusCore.Configuration.ConfigurationProviders
             string entity1, entity2, field1, field2;
             var connectedToFieldValue = field.ConnectedToField ?? string.Empty; 
             var compareResult = string.Compare(entityType, field.EntityName, StringComparison.OrdinalIgnoreCase);
-            if (compareResult < 1)
+            if (compareResult < 0)
             {
                 entity1 = entityType;
                 entity2 = field.EntityName;
                 field1 = field.Name;
                 field2 = connectedToFieldValue;
             }
-            else if (compareResult > 1)
+            else if (compareResult > 0)
             {
                 entity1 = field.EntityName;
                 entity2 = entityType;

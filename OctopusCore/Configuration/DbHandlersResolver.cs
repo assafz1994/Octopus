@@ -9,9 +9,12 @@ namespace OctopusCore.Configuration
     public class DbHandlersResolver : IDbHandlersResolver
     {
         private readonly ConcurrentDictionary<string, IDbHandler> _databaseKeyToDbHandlerMapping;
+        private AnalyzerConfigurationProvider _analyzerConfigurationProvider; // todo remove it and move the get field into the SqlIteProvider how? IDK Yonatan will fix it
+
 
         public DbHandlersResolver(Scheme scheme, DbConfigurations dbConfigurations)
         {
+            _analyzerConfigurationProvider = new AnalyzerConfigurationProvider(scheme, dbConfigurations);
             _databaseKeyToDbHandlerMapping = new ConcurrentDictionary<string, IDbHandler>();
             foreach (var dbConfiguration in dbConfigurations.Configurations)
             {
@@ -37,10 +40,10 @@ namespace OctopusCore.Configuration
             {
                 case DbType.Sqlite:
                     var sqliteProvider = new SqliteConfigurationProvider(scheme, dbConfiguration);
-                    return new SqliteDbHandler(sqliteProvider);
+                    return new SqliteDbHandler(sqliteProvider, _analyzerConfigurationProvider);
                 case DbType.MongoDB:
-                    var MongoDBprovider = new MongoDBConfigurationProvider(scheme, dbConfiguration);
-                    return new MongoDBHandler(MongoDBprovider);
+                    var mongoDbProvider = new MongoDBConfigurationProvider(scheme, dbConfiguration);
+                    return new MongoDBHandler(mongoDbProvider);
                 case DbType.Neo4j:
                     return new Neo4JDbHandler(new Neo4jConfigurationProvider(scheme, dbConfiguration));
                 case DbType.Cassandra:
