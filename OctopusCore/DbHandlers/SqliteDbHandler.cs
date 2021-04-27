@@ -54,7 +54,8 @@ namespace OctopusCore.DbHandlers
             return new ExecutionResult(entityType, result);
         }
 
-        private string GetFields(List<string> rootFields, string rootTable, List<(string entityType, Field field, List<string> fieldsToSelect)> joinTuples)
+        private string GetFields(List<string> rootFields, string rootTable,
+            List<(string entityType, Field field, List<string> fieldsToSelect)> joinTuples)
         {
             var allFields = rootFields.Select(field => $"{rootTable}.{field}").ToList();
             foreach (var tuple in joinTuples)
@@ -69,6 +70,8 @@ namespace OctopusCore.DbHandlers
                     return $"{tableName}_{tuple.field.Name}.{fieldName} as {tableName}_{tuple.field.Name}_{fieldName}";
                 }
             }
+            return string.Join(",", allFields);
+        }
 
         public async Task<ExecutionResult> ExecuteInsertQuery(string entityType, IReadOnlyDictionary<string, dynamic> fields)
         {
