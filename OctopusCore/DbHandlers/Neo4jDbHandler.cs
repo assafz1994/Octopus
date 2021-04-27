@@ -71,11 +71,10 @@ namespace OctopusCore.DbHandlers
                 _configurationProvider.Username, _configurationProvider.Password);
 
             await client.ConnectAsync();
-            var guidsAsString = $"['{string.Join(",", guidCollection)}']";
+            var guids = guidCollection.Select(guid => $"'{guid}'");
+            var guidsAsString =  $"[{string.Join(",", guids)}]";
             var withStatement = $"{guidsAsString} as guids";
-            // var query = $"{withStatement} match (e:{entityType}) where e.{StringConstants.Guid} in guids detach delete e";
             await client.Cypher.With(withStatement).Match($"(e:{entityType})").Where($"e.{StringConstants.Guid} in guids").DetachDelete("e").ExecuteWithoutResultsAsync();
-            // await client.Cypher
             return new ExecutionResult(entityType, new Dictionary<string, EntityResult>());
 
         }
