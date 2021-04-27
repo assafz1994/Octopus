@@ -11,7 +11,6 @@ namespace Tests.Parser
     public class TestInsertQueryInfo
     {
         private IParser _parser;
-        private const string All = "$ALL$";
         [OneTimeSetUp]
         public void SetUp()
         {

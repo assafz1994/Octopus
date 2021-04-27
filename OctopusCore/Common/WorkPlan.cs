@@ -14,5 +14,11 @@ namespace OctopusCore.Contract
             Jobs = jobs;
             SubQueryWorkPlans = subQueryWorkPlans;
         }
+
+        public WorkPlan(IReadOnlyCollection<Job> jobs)
+        {
+            Jobs = jobs;
+            SubQueryWorkPlans = new ConcurrentDictionary<string, WorkPlan>();
+        }
     }
 }

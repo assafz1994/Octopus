@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 using Neo4jClient;
 using OctopusCore.Common;
@@ -20,7 +21,7 @@ namespace OctopusCore.DbHandlers
         public Neo4JDbHandler(Neo4jConfigurationProvider configurationProvider)
         {
             _configurationProvider = configurationProvider;
-            _filterTypeToOperatorRepresentation = new Dictionary<FilterType, string> {{FilterType.Eq, "="}};
+            _filterTypeToOperatorRepresentation = new Dictionary<FilterType, string> { { FilterType.Eq, "=" } };
         }
 
         public async Task<ExecutionResult> ExecuteQueryWithFiltersAsync(IReadOnlyCollection<string> fieldsToSelect,
@@ -32,7 +33,12 @@ namespace OctopusCore.DbHandlers
                 _configurationProvider.Username, _configurationProvider.Password);
 
             await client.ConnectAsync(); //todo check if it should happen only once
-            var fieldsNames = fieldsToSelect.ToList().Append(StringConstants.Guid).ToList();
+            var fieldsNames = fieldsToSelect.ToList();
+            if (!fieldsNames.Contains(StringConstants.Guid))
+            {
+                fieldsNames.Append(StringConstants.Guid).ToList();
+            }
+
             var queryFields = fieldsNames.Select(GetQueryField);
             var query = client.Cypher.Match(GetQueryEntity(entityType));
             if (filters.Any())
@@ -48,9 +54,42 @@ namespace OctopusCore.DbHandlers
             return new ExecutionResult(entityType, entityResults);
         }
 
-        public Task<ExecutionResult> ExecuteInsertQuery(string entityType, IReadOnlyDictionary<string, dynamic> fields)
+        public async Task<ExecutionResult> ExecuteInsertQuery(string entityType, IReadOnlyDictionary<string, dynamic> fields)
         {
-            throw new NotImplementedException();
+            var client = new GraphClient(new Uri(_configurationProvider.ConnectionString),
+                _configurationProvider.Username, _configurationProvider.Password);
+
+            await client.ConnectAsync();
+            //todo check if indeed necessary to surround fields with ''. (probably not, it should return from the parser as string)
+            //todo check what type should be guid(String?)
+            var query = BuildInsertQuery(entityType, fields);
+            //"(n:neoperson {email: 'ba@mail', hobby: 'mba'})"
+            await client.Cypher.Create(query).ExecuteWithoutResultsAsync();
+            return new ExecutionResult(entityType, new Dictionary<string, EntityResult>());
+        }
+
+        public async Task<ExecutionResult> ExecuteDeleteQuery(string entityType, IReadOnlyCollection<string> guidCollection)
+        {
+            var client = new GraphClient(new Uri(_configurationProvider.ConnectionString),
+                _configurationProvider.Username, _configurationProvider.Password);
+
+            await client.ConnectAsync();
+            var guids = guidCollection.Select(guid => $"'{guid}'");
+            var guidsAsString =  $"[{string.Join(",", guids)}]";
+            var withStatement = $"{guidsAsString} as guids";
+            await client.Cypher.With(withStatement).Match($"(e:{entityType})").Where($"e.{StringConstants.Guid} in guids").DetachDelete("e").ExecuteWithoutResultsAsync();
+            return new ExecutionResult(entityType, new Dictionary<string, EntityResult>());
+
+        }
+
+        private string BuildInsertQuery(string entityType, IReadOnlyDictionary<string, dynamic> fields)
+        {
+            var query = new StringBuilder($"(e:{entityType} ").Append("{");
+            //in case the key is Guid, need to wrap it with '', so it will be stored in db as string
+            var keyValueFormatted = fields.Select(field => string.Format(field.Key.Equals(StringConstants.Guid) ? "{0}: '{1}'" : "{0}: {1}", field.Key, field.Value));
+            query.Append(string.Join(",", keyValueFormatted));
+            query.Append("})");
+            return query.ToString();
         }
 
         private string GetFilterOperator(Filter filter)
@@ -66,11 +105,11 @@ namespace OctopusCore.DbHandlers
             {
                 var dict = new Dictionary<string, dynamic>();
                 for (var i = 0; i < fieldsNames.Count; i++) dict.Add(fieldsNames[i], nodeFields[i]);
-
                 var guid = dict[StringConstants.Guid];
                 dict.Remove(StringConstants.Guid);
                 var entityResult = new EntityResult(dict);
                 entityResults.Add(guid, entityResult);
+
             }
 
             return entityResults;

@@ -9,5 +9,7 @@ namespace OctopusCore.Configuration.ConfigurationProviders
         bool IsComplexField(string entityType, string fieldName);
         Field GetField(string entityType, string fieldName);
 
+        string GetEntityPrimaryKey(string entityType);
+        List<string> GetEntityFields(string entityType);
     }
 }

@@ -60,6 +60,18 @@ public partial class OctopusQLBaseListener : IOctopusQLListener {
 	/// <param name="context">The parse tree.</param>
 	public virtual void ExitSelect([NotNull] OctopusQLParser.SelectContext context) { }
 	/// <summary>
+	/// Enter a parse tree produced by <see cref="OctopusQLParser.deleteSelect"/>.
+	/// <para>The default implementation does nothing.</para>
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	public virtual void EnterDeleteSelect([NotNull] OctopusQLParser.DeleteSelectContext context) { }
+	/// <summary>
+	/// Exit a parse tree produced by <see cref="OctopusQLParser.deleteSelect"/>.
+	/// <para>The default implementation does nothing.</para>
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	public virtual void ExitDeleteSelect([NotNull] OctopusQLParser.DeleteSelectContext context) { }
+	/// <summary>
 	/// Enter a parse tree produced by <see cref="OctopusQLParser.insert"/>.
 	/// <para>The default implementation does nothing.</para>
 	/// </summary>

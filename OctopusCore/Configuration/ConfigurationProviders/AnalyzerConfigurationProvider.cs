@@ -11,6 +11,7 @@ namespace OctopusCore.Configuration.ConfigurationProviders
         private readonly Dictionary<string, Dictionary<string,Field>> _entityTypeToFieldNameToField;
 
         private readonly Dictionary<string, Dictionary<string, List<string>>> _entityTypeToDatabaseToFields;
+        private readonly Dictionary<string, List<string>> _entityTypeToFields;
         public AnalyzerConfigurationProvider(Scheme scheme, DbConfigurations dbConfigurations)
         {
             Scheme = scheme;
@@ -20,7 +21,6 @@ namespace OctopusCore.Configuration.ConfigurationProviders
             _entityTypeToFieldNameToField = new Dictionary<string, Dictionary<string, Field>>(StringComparer.OrdinalIgnoreCase);
             InitializeDictionaries();
         }
-
 
         public Scheme Scheme { get; }
         public DbConfigurations DbConfigurations { get; }
@@ -68,6 +68,11 @@ namespace OctopusCore.Configuration.ConfigurationProviders
 
         public string GetFieldDatabaseKey(string entityType, string fieldName)
         {
+            if (fieldName == StringConstants.Guid)
+            {
+                fieldName = GetEntityPrimaryKey(entityType);
+            }
+
             if (_entityTypeToFieldNameToDatabaseKeys.TryGetValue(entityType, out var fieldNameToDatabaseKeys) == false)
                 throw new ArgumentException($"no db to handle this entity type:{entityType}");
             if (fieldNameToDatabaseKeys.TryGetValue(fieldName, out var databaseKeys) == false)
@@ -98,5 +103,15 @@ namespace OctopusCore.Configuration.ConfigurationProviders
             return field;
         }
 
+
+        public string GetEntityPrimaryKey(string entityType)
+        {
+            return _entityTypeToFields[entityType].First();
+        }
+
+        public List<string> GetEntityFields(string entityType)
+        {
+            return _entityTypeToFields[entityType];
+        }
     }
 }

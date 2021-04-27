@@ -70,11 +70,56 @@ namespace OctopusCore.DbHandlers
                 }
             }
 
-            return string.Join(",", allFields);
-        }
-        public Task<ExecutionResult> ExecuteInsertQuery(string entityType, IReadOnlyDictionary<string, dynamic> fields)
+        public async Task<ExecutionResult> ExecuteInsertQuery(string entityType, IReadOnlyDictionary<string, dynamic> fields)
         {
-            throw new NotImplementedException();
+            using var connection = new SqliteConnection(_configurationProvider.ConnectionString);
+            connection.Open();
+            var table = _configurationProvider.GetTableName(entityType);
+
+            var fieldsNames = fields.Keys.ToList();
+            var fieldsValues = fieldsNames.Select(fieldName => ValueToString(fields[fieldName]));
+            var query = $"INSERT INTO {table} ({string.Join(",", fields.Keys)}) Values ({string.Join(",", fieldsValues)})";
+
+            var command = connection.CreateCommand();
+            command.CommandText = query;
+
+            var row = await command.ExecuteNonQueryAsync();
+
+            return new ExecutionResult(entityType, new Dictionary<string, EntityResult>());
+        }
+
+        public async Task<ExecutionResult> ExecuteDeleteQuery(string entityType, IReadOnlyCollection<string> guidCollection)
+        {
+            using var connection = new SqliteConnection(_configurationProvider.ConnectionString);
+            connection.Open();
+            var table = _configurationProvider.GetTableName(entityType);
+            var guidList = $"({string.Join(",", guidCollection.Select(x => $"'{x}'"))})";
+            var query = $"DELETE FROM {table} WHERE GUID IN {guidList}";
+
+            var command = connection.CreateCommand();
+            command.CommandText = query;
+
+            var row = await command.ExecuteNonQueryAsync();
+
+            return new ExecutionResult(entityType, new Dictionary<string, EntityResult>());
+        }
+
+        //todo reuse this logic for all handlers
+        private static string ValueToString(object argValue)
+        {
+            return argValue switch
+            {
+                string s => GetExpression(s),
+                int _ => $"{argValue}",
+                Guid _ => $"'{argValue}'",
+                _ => null
+            };
+        }
+        private static string GetExpression(string expression)
+        {
+            if (!expression.StartsWith("\"") || !expression.EndsWith("\"")) return expression;
+            var res = expression.Trim('"');
+            return $"'{res}'";
         }
 
         private string SetCommandText(string fields, string rootEntity, string table, string conditions,

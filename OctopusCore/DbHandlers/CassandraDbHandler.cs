@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Cassandra;
+using OctopusCore.Common;
 using OctopusCore.Configuration;
 using OctopusCore.Configuration.ConfigurationProviders;
 using OctopusCore.Contract;
@@ -25,7 +26,7 @@ namespace OctopusCore.DbHandlers
             var cluster = Cluster.Builder()
                 .AddContactPoint(_configurationProvider.ConnectionString)
                 .Build();
-            var fieldsToSelectWithGuid = fieldsToSelect.ToList().Append("guid").ToList();
+            var fieldsToSelectWithGuid = fieldsToSelect.ToList().Append(StringConstants.Guid).ToList();
             var fields = string.Join(",", fieldsToSelectWithGuid);
             // var table = _configurationProvider.GetTableName(entityType, filters);
             var conditions = ConvertFiltersToWhereStatement(filters);
@@ -49,6 +50,60 @@ namespace OctopusCore.DbHandlers
                 session.Execute(query);
             }
             return Task.FromResult(new ExecutionResult(entityType, new Dictionary<string, EntityResult>()));
+        }
+
+        public Task<ExecutionResult> ExecuteDeleteQuery(string entityType, IReadOnlyCollection<string> guidCollection)
+        {
+            var cluster = Cluster.Builder()
+                .AddContactPoint(_configurationProvider.ConnectionString)
+                .Build();
+            var session = cluster.Connect(_configurationProvider.KeySpace);
+            var tableNamesToTables = _configurationProvider.TableNamesToTables(entityType);
+            var tableNames = _configurationProvider.GetTableNames(entityType);
+            var mainTable = tableNames.First();
+            var tables = _configurationProvider.GetTables(entityType);
+            var byFields = GetByFields(tables);
+            byFields.Add(StringConstants.Guid);
+            var guidList = $"({string.Join(",", guidCollection)})";
+            var selectQuery = $"SELECT {string.Join(",", byFields)} FROM {mainTable} WHERE GUID IN {guidList}";
+            var rs = session.Execute(selectQuery);
+            var entities = new List<Dictionary<string, dynamic>>();
+            
+            foreach (var row in rs)
+            {
+                var fieldToValueMap = byFields.ToDictionary(field => field, field => row.GetValue(typeof(object), field));
+                entities.Add(fieldToValueMap);
+            }
+
+            foreach (var tableElement in tableNamesToTables)
+            foreach (var entity in entities)
+            {
+                var deleteQuery = $"DELETE FROM {tableElement.Key} WHERE guid={entity[StringConstants.Guid]}";
+                foreach (var field in tableElement.Value)
+                {
+                    deleteQuery += $" AND {field}={FieldToString(entity[field])}";
+                }
+                session.Execute(deleteQuery);
+            }
+            return Task.FromResult(new ExecutionResult(entityType, new Dictionary<string, EntityResult>()));
+        }
+
+        private string FieldToString(object o)
+        {
+            if (o is string s) return $"'{s}'";
+            return $"{o}";
+        }
+        private List<string> GetByFields(List<List<string>> tables)
+        {
+            var set = new HashSet<string>();
+            
+            foreach (var table in tables)
+            foreach (var field in table)
+            {
+                set.Add(field);
+            }
+
+            return set.ToList();
         }
 
         private List<string> AssembleInsertQueries(List<string> tables, IReadOnlyDictionary<string, dynamic> fields)
@@ -121,7 +176,7 @@ namespace OctopusCore.DbHandlers
             foreach (var row in rs)
             {
                 var fieldToValueMap = new EntityResult(fieldsToSelect.ToDictionary(field => field, field => row.GetValue(typeof(object), field)));
-                output.Add(row.GetValue(typeof(object), "guid").ToString(), fieldToValueMap);
+                output.Add(row.GetValue(typeof(object), StringConstants.Guid).ToString(), fieldToValueMap);
             }
             return output;
         }

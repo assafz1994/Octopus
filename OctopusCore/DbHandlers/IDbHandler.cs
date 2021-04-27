@@ -11,5 +11,6 @@ namespace OctopusCore.DbHandlers
         Task<ExecutionResult> ExecuteQueryWithFiltersAsync(IReadOnlyCollection<string> fieldsToSelect,
             IReadOnlyCollection<Filter> filters, string entityType, List<(string entityType, Field field, List<string> fieldsToSelect)> joinsTuples);
         Task<ExecutionResult> ExecuteInsertQuery(string entityType, IReadOnlyDictionary<string, dynamic> fields);
+        Task<ExecutionResult> ExecuteDeleteQuery(string entityType, IReadOnlyCollection<string> guidCollection);
     }
 }
