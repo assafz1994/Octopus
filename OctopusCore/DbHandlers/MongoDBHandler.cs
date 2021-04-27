@@ -9,24 +9,29 @@ using OctopusCore.Parser.Filters;
 using OctopusCore.Configuration.ConfigurationProviders;
 using MongoDB.Driver;
 using MongoDB.Bson;
+using OctopusCore.Configuration;
+using OctopusCore.Parser.Filters;
 
 namespace OctopusCore.DbHandlers
 {
     class MongoDBHandler : IDbHandler
     {
-        private readonly MongoDBConfigurationProvider  _configurationProvider;
+        private readonly MongoDBConfigurationProvider _configurationProvider;
 
         public MongoDBHandler(MongoDBConfigurationProvider configurationProvider)
         {
             _configurationProvider = configurationProvider;
         }
 
-        public Task<ExecutionResult> ExecuteQueryWithFiltersAsync(IReadOnlyCollection<string> fieldsToSelect, IReadOnlyCollection<Filter> filters, string entityType)
+        public Task<ExecutionResult> ExecuteQueryWithFiltersAsync(IReadOnlyCollection<string> fieldsToSelect,
+            IReadOnlyCollection<Filter> filters, string entityType,
+            List<(string entityType, Field field, List<string> fieldsToSelect)>
+                joinsTuples)
         {
             MongoClient dbClient = new MongoClient(); // no need to insert connection string -> local db is the default
             var databaseName = MongoUrl.Create(_configurationProvider.ConnectionString).DatabaseName;
 
-            var db = dbClient.GetDatabase(databaseName); 
+            var db = dbClient.GetDatabase(databaseName);
             string collectionName = _configurationProvider.GetTableName(entityType);
             var collection = db.GetCollection<BsonDocument>(collectionName);
             
@@ -92,7 +97,9 @@ namespace OctopusCore.DbHandlers
 
         private Dictionary<string, EntityResult> ExecuteCommand(IMongoCollection<BsonDocument> collection, ProjectionDefinition<BsonDocument> project, FilterDefinition<BsonDocument> conditions, bool guidIsRequested)
         {
-            List<BsonDocument> result = (conditions == null) ? collection.Find(_ => true).Project(project).ToList() :  collection.Find(conditions).Project(project).ToList();
+            List<BsonDocument> result = (conditions == null)
+                ? collection.Find(_ => true).Project(project).ToList()
+                : collection.Find(conditions).Project(project).ToList();
             Dictionary<string, EntityResult> entityResults = new Dictionary<string, EntityResult>();
             foreach (var entity in result)
             {

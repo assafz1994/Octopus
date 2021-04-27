@@ -69,7 +69,7 @@ namespace Tests
         {
             var databaseKeyToDbHandlerMappings = new Dictionary<string, IDbHandler>
             {
-                {DatabaseKey, new SqliteDbHandler(null)}
+                {DatabaseKey, new SqliteDbHandler(null,null)}
             };
             return new DbHandlerResolverMock(databaseKeyToDbHandlerMappings);
         }

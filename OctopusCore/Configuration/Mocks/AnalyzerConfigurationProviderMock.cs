@@ -22,6 +22,16 @@ namespace OctopusCore.Configuration.Mocks
             return _entityTypeToFieldNameToDatabaseKeyMappings[entityType][fieldName];
         }
 
+        public bool IsComplexField(string entityType, string fieldName)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public Field GetField(string entityType, string fieldName)
+        {
+            throw new System.NotImplementedException();
+        }
+
         public string GetEntityPrimaryKey(string entityType)
         {
             throw new System.NotImplementedException();

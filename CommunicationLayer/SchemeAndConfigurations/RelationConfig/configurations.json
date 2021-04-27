@@ -1,0 +1,43 @@
+{
+  "Configurations": [
+    {
+      "Id": "sql1",
+      "DbType": "Sqlite",
+      "ConnectionString": "Data Source=DataBases\\Relations.db",
+      "Entities": [
+        {
+          "Name": "student",
+          "Fields": [
+            {
+              "Name": "name",
+              "Type": "Primitive",
+              "PrimitiveType": "String"
+            },
+            {
+              "Name": "taughtBy",
+              "Type": "Object",
+              "EntityName": "teacher",
+              "ConnectedToField": "teach"
+            }
+          ]
+        },
+        {
+          "Name": "teacher",
+          "Fields": [
+            {
+              "Name": "name",
+              "Type": "Primitive",
+              "PrimitiveType": "String"
+            },
+            {
+              "Name": "teach",
+              "Type": "Object",
+              "EntityName": "student",
+              "ConnectedToField": "taughtBy"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
