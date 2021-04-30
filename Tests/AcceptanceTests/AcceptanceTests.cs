@@ -20,6 +20,7 @@ namespace Tests.AcceptanceTests
         {
             _client = new OctopusClient("http://localhost:5000");
             _dbsConfigurator = new DbsConfigurator();
+            _dbsConfigurator.SetUpDbs();
         }
 
         [SetUp]
@@ -31,7 +32,19 @@ namespace Tests.AcceptanceTests
         [TearDown]
         public void TearDown()
         {
+            _dbsConfigurator.TearDownDbs();
+        }
 
+        [Test]
+        public void TestSelect1()
+        {
+            SetUpTestSelect1();
+            var query = 
+        }
+
+        private void SetUpTestSelect1()
+        {
+            throw new NotImplementedException();
         }
     }
 }

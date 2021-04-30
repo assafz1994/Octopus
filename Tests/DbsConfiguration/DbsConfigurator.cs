@@ -18,5 +18,21 @@ namespace Tests.DbsConfiguration
             _neo4JDbConfigurator = new Neo4jDbConfigurator();
             _sqliteDbConfigurator = new SqliteDbConfigurator();
         }
+
+        public void SetUpDbs()
+        {
+            _cassandraDbConfigurator.SetUpDb();
+            _mongoDbConfigurator.SetUpDb();
+            _neo4JDbConfigurator.SetUpDb();
+            _sqliteDbConfigurator.SetUpDb();
+        }
+
+        public void TearDownDbs()
+        {
+            _cassandraDbConfigurator.TearDownDb();
+            _mongoDbConfigurator.TearDownDb();
+            _neo4JDbConfigurator.TearDownDb();
+            _sqliteDbConfigurator.TearDownDb();
+        }
     }
 }

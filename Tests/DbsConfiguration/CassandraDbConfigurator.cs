@@ -25,5 +25,14 @@ namespace Tests.DbsConfiguration
         {
             _session.Execute(System.IO.File.ReadAllText(_cassandraCreateTableFile));
         }
+
+        public void TearDownDb()
+        {
+            _session.Execute(
+                "TRUNCATE Animal_table;" +
+                "TRUNCATE Animal_table_by_height;" +
+                "TRUNCATE Animal_table_by_food_height;"
+                );
+        }
     }
 }

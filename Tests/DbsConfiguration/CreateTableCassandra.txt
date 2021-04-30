@@ -18,7 +18,7 @@ Create table Animal_table_by_height
 		PRIMARY KEY(height, guid)
     );
 	
-Create table Person_table_by_food_height
+Create table Animal_table_by_food_height
     (
         guid UUID,
 		aid text,
