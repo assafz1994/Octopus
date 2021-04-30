@@ -32,19 +32,35 @@ namespace Tests.AcceptanceTests
         [TearDown]
         public void TearDown()
         {
-            _dbsConfigurator.TearDownDbs();
+            // _dbsConfigurator.TearDownDbs();
         }
 
         [Test]
         public void TestSelect1()
         {
-            SetUpTestSelect1();
-            var query = 
+            // SetUpTestSelect1();
+            var query = "from animal a | Select(*)";
+            var entities = _client.ExecuteQuery(query).Result;
+            foreach (var entity in entities)
+            {
+                Console.WriteLine(entity.name);
+            }
         }
 
-        private void SetUpTestSelect1()
+        [Test]
+        public void TestSelect2()
         {
-            throw new NotImplementedException();
+            // SetUpTestSelect1();
+            var query = "from animal a | Select(name)";
+            var entities = _client.ExecuteQuery(query).Result;
+            foreach (var entity in entities)
+            {
+                Console.WriteLine(entity.name);
+            }
         }
+        // private void SetUpTestSelect1()
+        // {
+        //     throw new NotImplementedException();
+        // }
     }
 }

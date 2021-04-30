@@ -15,10 +15,10 @@ namespace Tests.DbsConfiguration
 
         public CassandraDbConfigurator()
         {
-            _cluster = Cluster.Builder()
-                .AddContactPoint(_connectionString)
-                .Build();
-            _session = _cluster.Connect(_keySpace);
+            // _cluster = Cluster.Builder()
+            //     .AddContactPoint(_connectionString)
+            //     .Build();
+            // _session = _cluster.Connect(_keySpace);
         }
 
         public void SetUpDb()
