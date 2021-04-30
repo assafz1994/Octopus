@@ -79,30 +79,14 @@
                             "ConnectedToField": null
                         }
                     ]
-                },
-                {
-                    "Name": "teacher",
-                    "Fields": [
-                        {
-                            "Name": "name",
-                            "Type": "Primitive",
-                            "PrimitiveType": "String"
-                        },
-                        {
-                            "Name": "teach",
-                            "Type": "Object",
-                            "EntityName": "student",
-                            "ConnectedToField": "taughtBy"
-                        }
-                    ]
                 }
             ]
         },
         {
-            "Id": "c1",
+            "Id": "cassTests",
             "DbType": "Cassandra",
             "ConnectionString": "127.0.0.1",
-            "KeySpace": "c1",
+            "KeySpace": "OctopusTests",
             "Entities": [
                 {
                     "Name": "Animal",
@@ -132,9 +116,9 @@
             ]
         },
         {
-            "Id": "mongo2",
+            "Id": "mongoTests",
             "DbType": "MongoDB",
-            "ConnectionString": "mongodb://localhost:27017/mongodb_2",
+            "ConnectionString": "mongodb://localhost:27017/mongodbtests_1",
             "Entities": [
                 {
                     "Name": "Animal",

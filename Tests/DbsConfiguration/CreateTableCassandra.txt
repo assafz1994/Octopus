@@ -1,0 +1,28 @@
+CREATE KEYSPACE OctopusTests WITH replication = {'class': 'SimpleStrategy', 'replication_factor': '1'}  AND durable_writes = true;
+
+Create table Animal_table
+    (
+        guid UUID,
+		aid text,
+        food text,
+        height int,
+		PRIMARY KEY(guid)
+    );
+	
+Create table Animal_table_by_height
+    (
+        guid UUID,
+		aid text,
+        food text,
+        height int,
+		PRIMARY KEY(height, guid)
+    );
+	
+Create table Person_table_by_food_height
+    (
+        guid UUID,
+		aid text,
+        food text,
+        height int,
+		PRIMARY KEY(food, height, guid)
+    );

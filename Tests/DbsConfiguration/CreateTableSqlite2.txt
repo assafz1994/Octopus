@@ -1,0 +1,10 @@
+CREATE TABLE IF NOT EXISTS student_table (
+	guid TEXT PRIMARY KEY,
+	sid TEXT NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS address_student__address (
+	address TEXT,
+	student TEXT,
+	PRIMARY KEY(address,student)
+);
