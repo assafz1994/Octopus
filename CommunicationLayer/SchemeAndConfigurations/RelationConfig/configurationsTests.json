@@ -1,0 +1,191 @@
+{
+    "Configurations": [
+        {
+            "Id": "sql1",
+            "DbType": "Sqlite",
+            "ConnectionString": "Data Source=DataBases\\sqlite1_test_db.db",
+            "Entities": [
+                {
+                    "Name": "student",
+                    "Fields": [
+                        {
+                            "Name": "sid",
+                            "Type": "Primitive",
+                            "PrimitiveType": "String"
+                        },
+                        {
+                            "Name": "age",
+                            "Type": "Primitive",
+                            "PrimitiveType": "Int"
+                        },
+                        {
+                            "Name": "name",
+                            "Type": "Primitive",
+                            "PrimitiveType": "String"
+                        },
+                        {
+                            "Name": "taughtBy",
+                            "Type": "Object",
+                            "EntityName": "teacher",
+                            "ConnectedToField": "teach"
+                        }
+                    ]
+                },
+                {
+                    "Name": "teacher",
+                    "Fields": [
+                        {
+                            "Name": "tid",
+                            "Type": "Primitive",
+                            "PrimitiveType": "String"
+                        },
+                        {
+                            "Name": "age",
+                            "Type": "Primitive",
+                            "PrimitiveType": "Int"
+                        },
+                        {
+                            "Name": "name",
+                            "Type": "Primitive",
+                            "PrimitiveType": "String"
+                        },
+                        {
+                            "Name": "teach",
+                            "Type": "Object",
+                            "EntityName": "student",
+                            "ConnectedToField": "taughtBy"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "Id": "sql2",
+            "DbType": "Sqlite",
+            "ConnectionString": "Data Source=DataBases\\sqlite2_test_db.db",
+            "Entities": [
+                {
+                    "Name": "student",
+                    "Fields": [
+                        {
+                            "Name": "sid",
+                            "Type": "Primitive",
+                            "PrimitiveType": "String"
+                        },
+                        {
+                            "Name": "address",
+                            "Type": "Object",
+                            "EntityName": "Address",
+                            "ConnectedToField": null
+                        }
+                    ]
+                },
+                {
+                    "Name": "teacher",
+                    "Fields": [
+                        {
+                            "Name": "name",
+                            "Type": "Primitive",
+                            "PrimitiveType": "String"
+                        },
+                        {
+                            "Name": "teach",
+                            "Type": "Object",
+                            "EntityName": "student",
+                            "ConnectedToField": "taughtBy"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "Id": "c1",
+            "DbType": "Cassandra",
+            "ConnectionString": "127.0.0.1",
+            "KeySpace": "c1",
+            "Entities": [
+                {
+                    "Name": "Animal",
+                    "Fields": [
+                        {
+                            "Name": "aid",
+                            "Type": "Primitive",
+                            "PrimitiveType": "String"
+                        },
+                        {
+                            "Name": "food",
+                            "Type": "Primitive",
+                            "PrimitiveType": "String"
+                        },
+                        {
+                            "Name": "height",
+                            "Type": "Primitive",
+                            "PrimitiveType": "Int"
+                        }
+                    ],
+                    "TablesByFields": [
+                        [],
+                        [ "height" ],
+                        [ "food", "height" ]
+                    ]
+                }
+            ]
+        },
+        {
+            "Id": "mongo2",
+            "DbType": "MongoDB",
+            "ConnectionString": "mongodb://localhost:27017/mongodb_2",
+            "Entities": [
+                {
+                    "Name": "Animal",
+                    "Fields": [
+                        {
+                            "Name": "aid",
+                            "Type": "Primitive",
+                            "PrimitiveType": "String"
+                        },
+                        {
+                            "Name": "name",
+                            "Type": "Primitive",
+                            "PrimitiveType": "String"
+                        },
+                        {
+                            "Name": "age",
+                            "Type": "Primitive",
+                            "PrimitiveType": "Int"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "Id": "neo4j",
+            "DbType": "Neo4j",
+            "ConnectionString": "http://localhost:7474/",
+            "Username": "neo4j",
+            "Password": "1234",
+            "Entities": [
+                {
+                    "Name": "Address",
+                    "Fields": [
+                        {
+                            "Name": "city",
+                            "Type": "Primitive",
+                            "PrimitiveType": "String"
+                        },
+                        {
+                            "Name": "street",
+                            "Type": "Primitive",
+                            "PrimitiveType": "String"
+                        },
+                        {
+                            "Name": "number",
+                            "Type": "Primitive",
+                            "PrimitiveType": "Int"
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+}
