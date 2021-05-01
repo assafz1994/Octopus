@@ -65,9 +65,9 @@ namespace Tests.DbsConfiguration
 
         public void TearDownDb()
         {
-            _session.Execute("DROP animal_table");
-            _session.Execute("DROP animal_table_by_height");
-            _session.Execute("DROP animal_table_by_food_height");
+            _session.Execute("DROP table animal_table");
+            _session.Execute("DROP table animal_table_by_height");
+            _session.Execute("DROP table animal_table_by_food_height");
         }
     }
 }

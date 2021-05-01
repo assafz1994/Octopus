@@ -13,12 +13,12 @@ namespace Tests.DbsConfiguration
         private string _sql2ConnectionString = "Data Source=DataBases\\sqlite2_test_db.db";
         private string _sql1CreateTableFile = "CreateTableSqlite1.txt";
         private string _sql2CreateTableFile = "CreateTableSqlite2.txt";
-        private string _sql1DropTables = "DROP student_table;" +
-                                         "DROP teacher_table;" +
-                                         "DROP student_teacher_taughtBy_teach;";
+        private string _sql1DropTables = "DROP TABLE student_table;" +
+                                         "DROP TABLE teacher_table;" +
+                                         "DROP TABLE student_teacher_taughtBy_teach;";
 
-        private string _sql2DropTables = "DROP student_table;" +
-                                         "DROP address_student__address;";
+        private string _sql2DropTables = "DROP TABLE student_table;" +
+                                         "DROP TABLE address_student__address;";
 
         private string _init1 =
             @"CREATE TABLE IF NOT EXISTS student_table (
@@ -75,6 +75,7 @@ namespace Tests.DbsConfiguration
         private void DropTables(string connectionString, string dropQuery)
         {
             using var connection = new SqliteConnection(connectionString);
+            connection.Open();
             var command = connection.CreateCommand();
             command.CommandText = dropQuery;
             command.ExecuteNonQueryAsync();
