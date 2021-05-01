@@ -1,6 +1,6 @@
-CREATE KEYSPACE OctopusTests WITH replication = {'class': 'SimpleStrategy', 'replication_factor': '1'}  AND durable_writes = true;
+CREATE KEYSPACE IF NOT EXISTS OctopusTests WITH replication = {'class': 'SimpleStrategy', 'replication_factor': '1'}  AND durable_writes = true;
 
-Create table Animal_table
+Create table IF NOT EXISTS Animal_table
     (
         guid UUID,
 		aid text,
@@ -9,7 +9,7 @@ Create table Animal_table
 		PRIMARY KEY(guid)
     );
 	
-Create table Animal_table_by_height
+Create table IF NOT EXISTS Animal_table_by_height
     (
         guid UUID,
 		aid text,
@@ -18,7 +18,7 @@ Create table Animal_table_by_height
 		PRIMARY KEY(height, guid)
     );
 	
-Create table Animal_table_by_food_height
+Create table IF NOT EXISTS Animal_table_by_food_height
     (
         guid UUID,
 		aid text,

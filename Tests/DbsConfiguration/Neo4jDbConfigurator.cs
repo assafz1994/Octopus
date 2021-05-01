@@ -8,12 +8,12 @@ namespace Tests.DbsConfiguration
     {
         public void SetUpDb()
         {
-            throw new NotImplementedException();
+            
         }
 
         public void TearDownDb()
         {
-            throw new NotImplementedException();
+            
         }
     }
 }

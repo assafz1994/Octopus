@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using Microsoft.Data.Sqlite;
+using OctopusCore.Parser;
 
 namespace Tests.DbsConfiguration
 {
@@ -12,37 +13,70 @@ namespace Tests.DbsConfiguration
         private string _sql2ConnectionString = "Data Source=DataBases\\sqlite2_test_db.db";
         private string _sql1CreateTableFile = "CreateTableSqlite1.txt";
         private string _sql2CreateTableFile = "CreateTableSqlite2.txt";
-        private string _sql1TruncateTables = "TRUNCATE student_table;" +
-                                             "TRUNCATE teacher_table;" +
-                                             "TRUNCATE student_teacher_taughtBy_teach;";
+        private string _sql1DropTables = "DROP student_table;" +
+                                         "DROP teacher_table;" +
+                                         "DROP student_teacher_taughtBy_teach;";
 
-        private string _sql2TruncateTables = "TRUNCATE student_table;" +
-                                             "TRUNCATE address_student__address;";
+        private string _sql2DropTables = "DROP student_table;" +
+                                         "DROP address_student__address;";
+
+        private string _init1 =
+            @"CREATE TABLE IF NOT EXISTS student_table (
+	            guid TEXT PRIMARY KEY,
+	            sid TEXT NOT NULL,
+   	            age INT NOT NULL,
+	            name TEXT NOT NULL
+            );
+
+            CREATE TABLE IF NOT EXISTS teacher_table (
+	            guid TEXT PRIMARY KEY,
+	            tid TEXT NOT NULL,
+   	            age INT NOT NULL,
+	            name TEXT NOT NULL
+            );
+
+            CREATE TABLE IF NOT EXISTS student_teacher_taughtBy_teach (
+	            student	TEXT,
+	            teacher	TEXT,
+	            PRIMARY KEY(student,teacher)
+            );";
+        private string _init2 =
+            @"CREATE TABLE IF NOT EXISTS student_table (
+	            guid TEXT PRIMARY KEY,
+	            sid TEXT NOT NULL
+            );
+
+            CREATE TABLE IF NOT EXISTS address_student__address (
+	            address TEXT,
+	            student TEXT,
+	            PRIMARY KEY(address,student)
+            );";
         public void SetUpDb()
         {
-            CreateTables(_sql1ConnectionString, _sql1CreateTableFile);
-            CreateTables(_sql2ConnectionString, _sql2CreateTableFile);
+            CreateTables(_sql1ConnectionString, _init1);
+            CreateTables(_sql2ConnectionString, _init2);
         }
 
         private void CreateTables(string connectionString, string createTableFile)
         {
             using var connection = new SqliteConnection(connectionString);
+            connection.Open();
             var command = connection.CreateCommand();
-            command.CommandText = System.IO.File.ReadAllText(createTableFile);
-            command.ExecuteNonQueryAsync();
+            command.CommandText = createTableFile;
+            command.ExecuteNonQuery();
         }
 
         public void TearDownDb()
         {
-            TruncateTables(_sql1ConnectionString, _sql1TruncateTables);
-            TruncateTables(_sql2ConnectionString, _sql2TruncateTables);
+            DropTables(_sql1ConnectionString, _sql1DropTables);
+            DropTables(_sql2ConnectionString, _sql2DropTables);
         }
 
-        private void TruncateTables(string connectionString, string truncateQuery)
+        private void DropTables(string connectionString, string dropQuery)
         {
             using var connection = new SqliteConnection(connectionString);
             var command = connection.CreateCommand();
-            command.CommandText = truncateQuery;
+            command.CommandText = dropQuery;
             command.ExecuteNonQueryAsync();
         }
     }

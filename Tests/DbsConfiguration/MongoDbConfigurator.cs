@@ -18,8 +18,8 @@ namespace Tests.DbsConfiguration
             var db = _dbClient.GetDatabase("mongodbTests_1");
             var collectionName = "animal";
 
-            // db.CreateCollection(collectionName);
-            Insert();
+            db.CreateCollection(collectionName);
+            // Insert();
         }
 
         public void Insert()
