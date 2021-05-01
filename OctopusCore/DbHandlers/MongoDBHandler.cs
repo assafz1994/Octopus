@@ -26,7 +26,8 @@ namespace OctopusCore.DbHandlers
             List<(string entityType, Field field, List<string> fieldsToSelect)>
                 joinsTuples)
         {
-            var dbClient = new MongoClient(); // no need to insert connection string -> local db is the default
+            MongoClient dbClient = new MongoClient(_configurationProvider.ConnectionString); // no need to insert connection string -> local db is the default
+            
             var databaseName = MongoUrl.Create(_configurationProvider.ConnectionString).DatabaseName;
 
             var db = dbClient.GetDatabase(databaseName);

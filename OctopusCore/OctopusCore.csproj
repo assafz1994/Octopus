@@ -16,14 +16,18 @@
 
 
   <ItemGroup>
+    <ApplicationDefinition Remove="DataBases\sqlite1_test_db.db" />
     <ApplicationDefinition Remove="DataBases\sqlite2_db.db" />
+    <ApplicationDefinition Remove="DataBases\sqlite2_test_db.db" />
   </ItemGroup>
 
 
 
   <ItemGroup>
     <None Remove="DataBases\demoDb.db" />
+    <None Remove="DataBases\sqlite1_test_db.db" />
     <None Remove="DataBases\sqlite2_db.db" />
+    <None Remove="DataBases\sqlite2_test_db.db" />
     <None Remove="DataBases\sqlite_db.db" />
   </ItemGroup>
 
@@ -31,6 +35,12 @@
 
   <ItemGroup>
     <Content Include="DataBases\demoDb.db">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="DataBases\sqlite2_test_db.db">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="DataBases\sqlite1_test_db.db">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="DataBases\sqlite2_db.db">
