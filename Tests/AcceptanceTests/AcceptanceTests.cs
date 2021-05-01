@@ -35,7 +35,7 @@ namespace Tests.AcceptanceTests
             _dbsConfigurator.TearDownDbs();
         }
 
-        // [Test]
+        [Test]
         public void TestSelectNamesOfAnimals()
         {
             SetUpTestSelectNamesOfAnimals();
@@ -63,7 +63,7 @@ namespace Tests.AcceptanceTests
             CollectionAssert.AreEqual(listOfDictionaryEntities, expectedResult);
         }
 
-        // [Test]
+        [Test]
         public void TestSelectNamesOfAnimalsFromEmptyTable()
         {
             var query = "From Animal a | Select a(name)";
@@ -74,11 +74,11 @@ namespace Tests.AcceptanceTests
             CollectionAssert.AreEqual(listOfDictionaryEntities, expectedResult);
         }
 
-        // [Test]
+        [Test]
         public void TestSelectMultipleFieldsOfAnimals()
         {
             SetUpTestSelectNamesOfAnimals();
-            var query = "From Animal a | Select a(name, age)";
+            var query = "From Animal a | Select a(age, name)";
             var entities = _client.ExecuteQuery(query).Result;
             var result = entities.Select(x => new RouteValueDictionary(x));
 
@@ -108,7 +108,7 @@ namespace Tests.AcceptanceTests
         public void TestSelectMultipleFieldsOfAnimalsFromMultipleTablesCassandraAndMongo()
         {
             SetUpTestSelectNamesOfAnimals();
-            var query = "From Animal a | Select a(name, age,aid)";
+            var query = "From Animal a | Select a(aid, age, name)";
             var entities = _client.ExecuteQuery(query).Result;
             var result = entities.Select(x => new RouteValueDictionary(x));
 
@@ -137,13 +137,13 @@ namespace Tests.AcceptanceTests
             CollectionAssert.AreEqual(result, expectedResult);
         }
 
-        // [Test]
+        [Test]
         public void TestSelectAnimalWithFilter()
         {
             SetUpTestSelectNamesOfAnimals();
-            var query = "From Animal a | where a.name == 'Maffin' | Select a(name, age)";
+            var query = "From Animal a | where a.name == \"Maffin\" | Select a(age, name)";
             var entities = _client.ExecuteQuery(query).Result;
-            var result = entities.Select(x => new RouteValueDictionary(x));
+            var result = entities.Select(x => new RouteValueDictionary(x)).ToList();
 
             var expectedResult = new List<Dictionary<string, object>>()
             {
@@ -154,7 +154,7 @@ namespace Tests.AcceptanceTests
                 },
             };
 
-            CollectionAssert.AreEqual(result, expectedResult);
+            CollectionAssert.AreEquivalent(result, expectedResult);
         }
 
 
