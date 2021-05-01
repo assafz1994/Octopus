@@ -10,7 +10,6 @@ using OctopusCore.Configuration.ConfigurationProviders;
 using MongoDB.Driver;
 using MongoDB.Bson;
 using OctopusCore.Configuration;
-using OctopusCore.Parser.Filters;
 
 namespace OctopusCore.DbHandlers
 {
@@ -28,7 +27,7 @@ namespace OctopusCore.DbHandlers
             List<(string entityType, Field field, List<string> fieldsToSelect)>
                 joinsTuples)
         {
-            MongoClient dbClient = new MongoClient(); // no need to insert connection string -> local db is the default
+            MongoClient dbClient = new MongoClient(_configurationProvider.ConnectionString); // no need to insert connection string -> local db is the default
             var databaseName = MongoUrl.Create(_configurationProvider.ConnectionString).DatabaseName;
 
             var db = dbClient.GetDatabase(databaseName);
