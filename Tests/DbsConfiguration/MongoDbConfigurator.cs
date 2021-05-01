@@ -25,10 +25,6 @@ namespace Tests.DbsConfiguration
             }
 
             db.CreateCollection(collectionName);
-<<<<<<< HEAD
-            // Insert();
-=======
->>>>>>> 9d6b98dc730984d7dac48727a8ed62bb2ab60933
         }
 
         public void Insert()
