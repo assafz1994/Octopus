@@ -1,19 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Threading.Tasks;
 using System.Linq;
-
+using System.Threading.Tasks;
+using MongoDB.Bson;
+using MongoDB.Driver;
+using OctopusCore.Configuration;
+using OctopusCore.Configuration.ConfigurationProviders;
 using OctopusCore.Contract;
 using OctopusCore.Parser;
 using OctopusCore.Parser.Filters;
-using OctopusCore.Configuration.ConfigurationProviders;
-using MongoDB.Driver;
-using MongoDB.Bson;
-using OctopusCore.Configuration;
 
 namespace OctopusCore.DbHandlers
 {
-    class MongoDBHandler : IDbHandler
+    internal class MongoDBHandler : IDbHandler
     {
         private readonly MongoDBConfigurationProvider _configurationProvider;
 
@@ -28,106 +27,133 @@ namespace OctopusCore.DbHandlers
                 joinsTuples)
         {
             MongoClient dbClient = new MongoClient(_configurationProvider.ConnectionString); // no need to insert connection string -> local db is the default
+            
             var databaseName = MongoUrl.Create(_configurationProvider.ConnectionString).DatabaseName;
 
             var db = dbClient.GetDatabase(databaseName);
-            string collectionName = _configurationProvider.GetTableName(entityType);
-            var collection = db.GetCollection<BsonDocument>(collectionName);
-            
+            var collection = db.GetCollection<BsonDocument>(entityType);
+
             var fieldsToSelectWithGuid = new List<string>(fieldsToSelect);
+            fieldsToSelectWithGuid.AddRange(joinsTuples.Select(x =>
+                x.field.Name)); //todo we assume for now all fields in join tuple are complex fields of the same entity
             var guidIsRequested = false;
 
             if (!fieldsToSelect.Contains("guid"))
-            {
                 fieldsToSelectWithGuid.Add("guid");
-            }
             else
-            {
                 guidIsRequested = true;
-            }
-            ProjectionDefinition<BsonDocument> project = BuildProjection(fieldsToSelectWithGuid);
+            var project = BuildProjection(fieldsToSelectWithGuid);
 
-            FilterDefinition<BsonDocument> conditions = BuildFilters(filters);
-           
-            var result = ExecuteCommand(collection, project, conditions, guidIsRequested);
+            var conditions = BuildFilters(filters);
 
-            return Task.FromResult(new ExecutionResult(entityType, result));
+            var mongoDocuments =
+                GetRelevantDocuments(collection, project, conditions, guidIsRequested); // todo make this method async!!
+            return Task.FromResult(ConvertDocumentsToExecutionResult(mongoDocuments, entityType, fieldsToSelect, joinsTuples, guidIsRequested));
         }
 
         public Task<ExecutionResult> ExecuteInsertQuery(string entityType, IReadOnlyDictionary<string, dynamic> fields)
         {
-            MongoClient dbClient = new MongoClient(); // no need to insert connection string -> local db is the default
+            var dbClient = new MongoClient(); // no need to insert connection string -> local db is the default
             var databaseName = MongoUrl.Create(_configurationProvider.ConnectionString).DatabaseName;
             var db = dbClient.GetDatabase(databaseName);
-            string collectionName = _configurationProvider.GetTableName(entityType);
+            var collectionName = _configurationProvider.GetTableName(entityType);
             var collection = db.GetCollection<BsonDocument>(collectionName);
 
-            BsonDocument entityToInsert = new BsonDocument();
+            var entityToInsert = new BsonDocument();
             foreach (var key in fields.Keys)
             {
                 var val = fields[key] is string ? GetExpression(fields[key]) : fields[key];
                 entityToInsert.Add(key, val);
             }
-            
+
             collection.InsertOne(entityToInsert);
-        
+
             return Task.FromResult(new ExecutionResult(entityType, new Dictionary<string, EntityResult>()));
         }
 
         public Task<ExecutionResult> ExecuteDeleteQuery(string entityType, IReadOnlyCollection<string> guidCollection)
         {
             var guidsToDelete = new List<Guid>();
-            foreach (var guid in guidCollection)
-            {
-                guidsToDelete.Add(Guid.Parse(guid));
-            }
+            foreach (var guid in guidCollection) guidsToDelete.Add(Guid.Parse(guid));
 
-            MongoClient dbClient = new MongoClient(); // no need to insert connection string -> local db is the default
+            var dbClient = new MongoClient(); // no need to insert connection string -> local db is the default
             var databaseName = MongoUrl.Create(_configurationProvider.ConnectionString).DatabaseName;
             var db = dbClient.GetDatabase(databaseName);
-            string collectionName = _configurationProvider.GetTableName(entityType);
+            var collectionName = _configurationProvider.GetTableName(entityType);
             var collection = db.GetCollection<BsonDocument>(collectionName);
-           
+
             var deleteFilter = Builders<BsonDocument>.Filter.In("guid", guidsToDelete);
             collection.DeleteMany(deleteFilter);
-           
+
             return Task.FromResult(new ExecutionResult(entityType, new Dictionary<string, EntityResult>()));
         }
 
-        private Dictionary<string, EntityResult> ExecuteCommand(IMongoCollection<BsonDocument> collection, ProjectionDefinition<BsonDocument> project, FilterDefinition<BsonDocument> conditions, bool guidIsRequested)
+        private IEnumerable<BsonDocument> GetRelevantDocuments(IMongoCollection<BsonDocument> collection,
+            ProjectionDefinition<BsonDocument> project, FilterDefinition<BsonDocument> conditions, bool guidIsRequested)
         {
-            List<BsonDocument> result = (conditions == null)
+            return conditions == null
                 ? collection.Find(_ => true).Project(project).ToList()
                 : collection.Find(conditions).Project(project).ToList();
-            Dictionary<string, EntityResult> entityResults = new Dictionary<string, EntityResult>();
-            foreach (var entity in result)
+            //Dictionary<string, EntityResult> entityResults = new Dictionary<string, EntityResult>();
+            //foreach (var entity in result)
+            //{
+
+            //    var entityWithOutGuid = entity.ToDictionary();
+            //    if (!guidIsRequested)
+            //    {
+            //        entityWithOutGuid.Remove("guid");
+            //    }
+            //    entityResults.Add(entity["guid"].ToString(), new EntityResult(entityWithOutGuid));
+            //}
+
+            //return entityResults;
+        }
+
+        private ExecutionResult ConvertDocumentsToExecutionResult(IEnumerable<BsonDocument> mongoDocuments, string entityType,
+            IReadOnlyCollection<string> fieldsToSelect,
+            List<(string entityType, Field field, List<string> fieldsToSelect)>
+                joinsTuples, bool guidIsRequested)
+        {
+
+            var entityResults = new Dictionary<string, EntityResult>();
+            foreach (var document in mongoDocuments)
             {
-                var entityWithOutGuid = entity.ToDictionary();
-                if (!guidIsRequested)
+                var currentEntity = new Dictionary<string, dynamic>();
+                foreach (var fieldName in fieldsToSelect)
                 {
-                    entityWithOutGuid.Remove("guid");
+                    currentEntity[fieldName] = document[fieldName]; // todo check about type
                 }
-                entityResults.Add(entity["guid"].ToString(), new EntityResult(entityWithOutGuid));
+                foreach (var joinTuple in joinsTuples)
+                {
+                    var complexFieldsToFields = new Dictionary<string, dynamic>(); // todo add support in fields to select of a join tuple (right now we only get the guid)
+                    var guidOfComplexField = document[joinTuple.field.Name].ToString();
+                    currentEntity[joinTuple.field.Name] = new Dictionary<string, EntityResult>
+                    {
+                        {
+                            guidOfComplexField,new EntityResult(complexFieldsToFields)
+                        }
+                    };
+                }
+
+                if (guidIsRequested)
+                {
+                    currentEntity.Add("guid", document["guid"]);
+                }
+                entityResults.Add(document["guid"].ToString(), new EntityResult(currentEntity));
             }
 
-            return entityResults;
+            return new ExecutionResult(entityType, entityResults);
         }
 
         private ProjectionDefinition<BsonDocument> BuildProjection(IReadOnlyCollection<string> fieldsToSelect)
         {
             ProjectionDefinition<BsonDocument> project = null;
 
-            foreach (string columnName in fieldsToSelect)
-            {
+            foreach (var columnName in fieldsToSelect)
                 if (project == null)
-                {
                     project = Builders<BsonDocument>.Projection.Include(columnName).Exclude("_id");
-                }
                 else
-                {
                     project = project.Include(columnName);
-                }
-            }
 
             return project;
         }
@@ -142,7 +168,7 @@ namespace OctopusCore.DbHandlers
         private FilterDefinition<BsonDocument> BuildFilters(IReadOnlyCollection<Filter> filters_input)
         {
             FilterDefinition<BsonDocument> filterOutput = null;
-            FilterDefinitionBuilder<BsonDocument> builder = Builders<BsonDocument>.Filter;
+            var builder = Builders<BsonDocument>.Filter;
 
             if (filters_input.Count == 0)
                 return filterOutput;
@@ -153,23 +179,29 @@ namespace OctopusCore.DbHandlers
                     throw new ArgumentException("Fields with Include are not supported");
 
                 FilterDefinition<BsonDocument> filterOp;
-                dynamic exp = filter.Expression is string ? GetExpression(filter.Expression) : filter.Expression;
-                
-                switch (GetFilterOperator(filter))
+                var exp = filter.Expression is string ? GetExpression(filter.Expression) : filter.Expression;
+
+                switch (filter.Type)
                 {
-                    case "=":
+                    case FilterType.Eq:
                         {
                             filterOp = builder.Eq(filter.FieldNames[0], exp);
                             break;
                         }
-                    case ">":
+                    //todo not supported yet
+                    //case ">":
+                    //    {
+                    //        filterOp = builder.Gt(filter.FieldNames[0], exp);
+                    //        break;
+                    //    }
+                    //case "<":
+                    //    {
+                    //        filterOp = builder.Lt(filter.FieldNames[0], exp);
+                    //        break;
+                    //    }
+                    case FilterType.In:
                         {
-                            filterOp = builder.Gt(filter.FieldNames[0], exp);
-                            break;
-                        }
-                    case "<":
-                        {
-                            filterOp = builder.Lt(filter.FieldNames[0], exp);
+                            filterOp = builder.In(filter.FieldNames[0], filter.CalcValue());
                             break;
                         }
 
@@ -178,7 +210,8 @@ namespace OctopusCore.DbHandlers
                             throw new ArgumentException("This type of field is not supported");
                         }
                 }
-                filterOutput = (filterOutput == null) ? filterOp : filterOutput & filterOp;
+
+                filterOutput = filterOutput == null ? filterOp : filterOutput & filterOp;
             }
 
             return filterOutput;
