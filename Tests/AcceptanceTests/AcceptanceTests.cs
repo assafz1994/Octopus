@@ -137,6 +137,57 @@ namespace Tests.AcceptanceTests
         //    CollectionAssert.AreEqual(result, expectedResult);
         //}
 
+        [Test]
+        public void TestSelectAnimalWithFilter()
+        {
+            SetUpTestSelectNamesOfAnimals();
+            var query = "From Animal a | where a.name == 'Maffin' | Select a(name, age)";
+            var entities = _client.ExecuteQuery(query).Result;
+            var result = entities.Select(x => new RouteValueDictionary(x));
+
+            var expectedResult = new List<Dictionary<string, object>>()
+            {
+                new Dictionary<string, object>()
+                {
+                    {"age", 5 },
+                    {"name", "Maffin"},
+                },
+            };
+
+            CollectionAssert.AreEqual(result, expectedResult);
+        }
+
+
+        [Test]
+        public void TestDeleteOneAnimal()
+        {
+            SetUpTestSelectNamesOfAnimals();
+            var query = "Delete From Animal a | Where a.name == \"Maffin\"";
+            var entities = _client.ExecuteQuery(query).Result;
+            var result = entities.Select(x => new RouteValueDictionary(x));
+
+            var expectedResult = new List<Dictionary<string, object>>()
+            {
+                new Dictionary<string, object>()
+                {
+                    {"age", 5 },
+                    {"name", "Maffin"},
+                },
+                new Dictionary<string, object>()
+                {
+                    { "age", 6 },
+                    { "name", "Woody"},
+                },
+                new Dictionary<string, object>()
+                {
+                    {"age", 8 },
+                    {"name", "Doggy"},
+                },
+            };
+
+            CollectionAssert.AreEqual(result, expectedResult);
+        }
+
         private void SetUpTestSelectNamesOfAnimals()
         {
             _dbsConfigurator.SetUpTestSelectNamesOfAnimals();
