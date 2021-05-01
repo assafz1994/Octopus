@@ -34,5 +34,10 @@ namespace Tests.DbsConfiguration
             // _neo4JDbConfigurator.TearDownDb();
             // _sqliteDbConfigurator.TearDownDb();
         }
+       
+        public void SetUpTestSelectNamesOfAnimals()
+        {
+            _mongoDbConfigurator.Insert();
+        }
     }
 }

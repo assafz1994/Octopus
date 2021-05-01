@@ -15,18 +15,24 @@ namespace Tests.DbsConfiguration
         }
         public void SetUpDb()
         {
-            var db = _dbClient.GetDatabase("mongodbTests_1");
-            var collectionName = "animal";
+            var dbName = "mongodbtests_1";
+            var db = _dbClient.GetDatabase(dbName);
+            var collectionName = "animal_table";
+            bool collectionExists = db.ListCollectionNames().ToList().Contains(collectionName);
+            if (collectionExists)
+            {
+                db.DropCollection(collectionName);
+            }
 
-            // db.CreateCollection(collectionName);
-            Insert();
+            db.CreateCollection(collectionName);
         }
 
         public void Insert()
         {
-            var db = _dbClient.GetDatabase("mongodbTests_1");
-            var collectionName = "animal";
+            var db = _dbClient.GetDatabase("mongodbtests_1");
+            var collectionName = "animal_table";
             var collection = db.GetCollection<BsonDocument>(collectionName);
+
 
             var listToInsert = new List<BsonDocument>() { //Changed BsonArray to List<BsonDocument>
                 new BsonDocument
@@ -55,12 +61,9 @@ namespace Tests.DbsConfiguration
         }
         public void TearDownDb()
         {
-            var db = _dbClient.GetDatabase("mongodbTests_1");
-            var collectionName = "animal";
-            var collection = db.GetCollection<BsonDocument>(collectionName);
-            var emptyFilter = Builders<BsonDocument>.Filter.Empty;
-
-            collection.DeleteMany(emptyFilter);
+            var db = _dbClient.GetDatabase("mongodbtests_1");
+            var collectionName = "animal_table";
+            db.DropCollection(collectionName);
         }
     }
 }
