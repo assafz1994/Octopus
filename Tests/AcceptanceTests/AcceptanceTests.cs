@@ -38,32 +38,32 @@ namespace Tests.AcceptanceTests
         [Test]
         public void TestSelectNamesOfAnimals()
         {
-            // SetUpTestSelectNamesOfAnimals();
-            // var query = "From Animal a | Select a(name)";
-            // var entities = _client.ExecuteQuery(query).Result;
-            //
-            // var listOfDictionaryEntities = entities.Select(x => new RouteValueDictionary(x));
-            //
-            // var expectedResult = new List<Dictionary<string, object>>()
-            // {
-            //     new Dictionary<string, object>()
-            //     {
-            //         {"name", "Maffin"},
-            //     },
-            //     new Dictionary<string, object>()
-            //     {
-            //         {"name", "Woody"},
-            //     },
-            //     new Dictionary<string, object>()
-            //     {
-            //         {"name", "Doggy"},
-            //     },
-            // };
-            //
-            // CollectionAssert.AreEqual(listOfDictionaryEntities, expectedResult);
+            SetUpTestSelectNamesOfAnimals();
+            var query = "From Animal a | Select a(name)";
+            var entities = _client.ExecuteQuery(query).Result;
+            
+            var listOfDictionaryEntities = entities.Select(x => new RouteValueDictionary(x));
+            
+            var expectedResult = new List<Dictionary<string, object>>()
+            {
+                new Dictionary<string, object>()
+                {
+                    {"name", "Maffin"},
+                },
+                new Dictionary<string, object>()
+                {
+                    {"name", "Woody"},
+                },
+                new Dictionary<string, object>()
+                {
+                    {"name", "Doggy"},
+                },
+            };
+            
+            CollectionAssert.AreEqual(listOfDictionaryEntities, expectedResult);
         }
 
-        // [Test]
+        [Test]
         public void TestSelectNamesOfAnimalsFromEmptyTable()
         {
             var query = "From Animal a | Select a(name)";
@@ -74,7 +74,7 @@ namespace Tests.AcceptanceTests
             CollectionAssert.AreEqual(listOfDictionaryEntities, expectedResult);
         }
 
-        // [Test]
+        [Test]
         public void TestSelectMultipleFieldsOfAnimals()
         {
             SetUpTestSelectNamesOfAnimals();
@@ -104,40 +104,40 @@ namespace Tests.AcceptanceTests
             CollectionAssert.AreEqual(result, expectedResult);
         }
 
-        //[Test]
-        //public void TestSelectMultipleFieldsOfAnimalsFromMultipleTablesCassandraAndMongo()
-        //{
-        //    SetUpTestSelectNamesOfAnimals();
-        //    var query = "From Animal a | Select a(name, age,aid)";
-        //    var entities = _client.ExecuteQuery(query).Result;
-        //    var result = entities.Select(x => new RouteValueDictionary(x));
+        [Test]
+        public void TestSelectMultipleFieldsOfAnimalsFromMultipleTablesCassandraAndMongo()
+        {
+            SetUpTestSelectNamesOfAnimals();
+            var query = "From Animal a | Select a(name, age,aid)";
+            var entities = _client.ExecuteQuery(query).Result;
+            var result = entities.Select(x => new RouteValueDictionary(x));
 
-        //    var expectedResult = new List<Dictionary<string, object>>()
-        //    {
-        //        new Dictionary<string, object>()
-        //        {
-        //            {"aid", "1"},
-        //            {"age", 5 },
-        //            {"name", "Maffin"},
-        //        },
-        //        new Dictionary<string, object>()
-        //        {
-        //            {"aid", "2"},
-        //            { "age", 6 },
-        //            { "name", "Woody"},
-        //        },
-        //        new Dictionary<string, object>()
-        //        {
-        //            {"aid", "3"},
-        //            {"age", 8 },
-        //            {"name", "Doggy"},
-        //        },
-        //    };
+            var expectedResult = new List<Dictionary<string, object>>()
+            {
+                new Dictionary<string, object>()
+                {
+                    {"aid", "1"},
+                    {"age", 5 },
+                    {"name", "Maffin"},
+                },
+                new Dictionary<string, object>()
+                {
+                    {"aid", "2"},
+                    { "age", 6 },
+                    { "name", "Woody"},
+                },
+                new Dictionary<string, object>()
+                {
+                    {"aid", "3"},
+                    {"age", 8 },
+                    {"name", "Doggy"},
+                },
+            };
 
-        //    CollectionAssert.AreEqual(result, expectedResult);
-        //}
+            CollectionAssert.AreEqual(result, expectedResult);
+        }
 
-        // [Test]
+        [Test]
         public void TestSelectAnimalWithFilter()
         {
             SetUpTestSelectNamesOfAnimals();
@@ -158,7 +158,7 @@ namespace Tests.AcceptanceTests
         }
 
 
-        // [Test]
+        [Test]
         public void TestDeleteOneAnimal()
         {
             SetUpTestSelectNamesOfAnimals();
