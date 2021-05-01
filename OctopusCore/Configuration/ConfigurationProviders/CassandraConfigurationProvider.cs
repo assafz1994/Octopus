@@ -19,7 +19,7 @@ namespace OctopusCore.Configuration.ConfigurationProviders
 
         public string AssembleSelectQuery(string entityType, string fields, IReadOnlyCollection<Filter> filters, string conditions)
         {
-            var entity = Entities.First(x => x.Name == entityType);
+            var entity = Entities.First(x => x.Name.ToLower() == entityType);
             var filterNames = filters.Select(x => x.FieldNames[0]).ToList();
             if (filterNames.Count == 0)
             {

@@ -31,7 +31,8 @@ namespace OctopusCore.DbHandlers
             var databaseName = MongoUrl.Create(_configurationProvider.ConnectionString).DatabaseName;
 
             var db = dbClient.GetDatabase(databaseName);
-            var collection = db.GetCollection<BsonDocument>(entityType);
+            var collectionName = _configurationProvider.GetTableName(entityType);
+            var collection = db.GetCollection<BsonDocument>(collectionName);
 
             var fieldsToSelectWithGuid = new List<string>(fieldsToSelect);
             fieldsToSelectWithGuid.AddRange(joinsTuples.Select(x =>

@@ -86,7 +86,7 @@
             "Id": "cassTests",
             "DbType": "Cassandra",
             "ConnectionString": "127.0.0.1",
-            "KeySpace": "OctopusTests",
+            "KeySpace": "octopustests",
             "Entities": [
                 {
                     "Name": "Animal",

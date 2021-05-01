@@ -14,37 +14,7 @@ namespace Tests.DbsConfiguration
         private string _keySpace = "octopustests";
         private string _cassandraCreateTableFile = "CreateTableCassandra.txt";
         private List<string> _tables;
-    private string _init =
-            @"CREATE KEYSPACE IF NOT EXISTS OctopusTests WITH replication = {'class': 'SimpleStrategy', 'replication_factor': '1'}  AND durable_writes = true;
-
-        Create table IF NOT EXISTS Animal_table
-        (
-            guid UUID,
-            aid text,
-            food text,
-            height int,
-        PRIMARY KEY(guid)
-            );
-
-        Create table IF NOT EXISTS Animal_table_by_height
-        (
-            guid UUID,
-            aid text,
-            food text,
-            height int,
-        PRIMARY KEY(height, guid)
-        
-            );
-
-        Create table IF NOT EXISTS Animal_table_by_food_height
-        (
-            guid UUID,
-            aid text,
-            food text,
-            height int,
-        PRIMARY KEY(food, height, guid)
-        
-            );";
+        private string _init;
 
         public CassandraDbConfigurator()
         {
@@ -58,10 +28,41 @@ namespace Tests.DbsConfiguration
                 "animal_table_by_height",
                 "animal_table_by_food_height"
             };
-}
+            _init =
+                @"CREATE KEYSPACE IF NOT EXISTS OctopusTests WITH replication = {'class': 'SimpleStrategy', 'replication_factor': '1'}  AND durable_writes = true;
+
+                Create table IF NOT EXISTS Animal_table
+                (
+                    guid UUID,
+                    aid text,
+                    food text,
+                    height int,
+                PRIMARY KEY(guid)
+                    );
+
+                Create table IF NOT EXISTS Animal_table_by_height
+                (
+                    guid UUID,
+                    aid text,
+                    food text,
+                    height int,
+                PRIMARY KEY(height, guid)
+                
+                    );
+
+                Create table IF NOT EXISTS Animal_table_by_food_height
+                (
+                    guid UUID,
+                    aid text,
+                    food text,
+                    height int,
+                PRIMARY KEY(food, height, guid)
+                );";
+        }
 
         public void SetUpDb()
         {
+            TearDownDb();
             var queries = GetQueriesFromString(_init);
             foreach (var query in queries)
             {
@@ -78,7 +79,7 @@ namespace Tests.DbsConfiguration
         {
             foreach (var table in _tables)
             {
-                _session.Execute($"DROP table {table}");
+                _session.Execute($"DROP table IF EXISTS {table}");
             }
         }
 

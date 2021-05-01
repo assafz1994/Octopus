@@ -35,7 +35,7 @@ namespace Tests.AcceptanceTests
             _dbsConfigurator.TearDownDbs();
         }
 
-        [Test]
+        // [Test]
         public void TestSelectNamesOfAnimals()
         {
             SetUpTestSelectNamesOfAnimals();
@@ -63,7 +63,7 @@ namespace Tests.AcceptanceTests
             CollectionAssert.AreEqual(listOfDictionaryEntities, expectedResult);
         }
 
-        [Test]
+        // [Test]
         public void TestSelectNamesOfAnimalsFromEmptyTable()
         {
             var query = "From Animal a | Select a(name)";
@@ -74,7 +74,7 @@ namespace Tests.AcceptanceTests
             CollectionAssert.AreEqual(listOfDictionaryEntities, expectedResult);
         }
 
-        [Test]
+        // [Test]
         public void TestSelectMultipleFieldsOfAnimals()
         {
             SetUpTestSelectNamesOfAnimals();
@@ -137,7 +137,7 @@ namespace Tests.AcceptanceTests
             CollectionAssert.AreEqual(result, expectedResult);
         }
 
-        [Test]
+        // [Test]
         public void TestSelectAnimalWithFilter()
         {
             SetUpTestSelectNamesOfAnimals();
@@ -158,7 +158,7 @@ namespace Tests.AcceptanceTests
         }
 
 
-        [Test]
+        // [Test]
         public void TestDeleteOneAnimal()
         {
             SetUpTestSelectNamesOfAnimals();

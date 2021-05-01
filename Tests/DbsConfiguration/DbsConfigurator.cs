@@ -16,7 +16,7 @@ namespace Tests.DbsConfiguration
             _cassandraDbConfigurator = new CassandraDbConfigurator();
             _mongoDbConfigurator = new MongoDbConfigurator();
             _neo4JDbConfigurator = new Neo4jDbConfigurator();
-            _sqliteDbConfigurator = new SqliteDbConfigurator();
+            _sqliteDbConfigurator = SqliteDbConfigurator.CreateInstance();
         }
 
         public void SetUpDbs()
@@ -37,8 +37,8 @@ namespace Tests.DbsConfiguration
        
         public void SetUpTestSelectNamesOfAnimals()
         {
-            _mongoDbConfigurator.SetUpTestSelectNamesOfAnimals();
-            _cassandraDbConfigurator.SetUpTestSelectNamesOfAnimals();
+            // _mongoDbConfigurator.SetUpTestSelectNamesOfAnimals();
+            // _cassandraDbConfigurator.SetUpTestSelectNamesOfAnimals();
         }
     }
 }
