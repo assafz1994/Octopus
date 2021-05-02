@@ -138,9 +138,9 @@ namespace OctopusCore.DbHandlers
 
                 if (guidIsRequested)
                 {
-                    currentEntity.Add("guid", document["guid"]);
+                    currentEntity.Add("guid", document["guid"].AsGuid.ToString());
                 }
-                entityResults.Add(document["guid"].ToString(), new EntityResult(currentEntity));
+                entityResults.Add(document["guid"].AsGuid.ToString(), new EntityResult(currentEntity));
             }
 
             return new ExecutionResult(entityType, entityResults);
