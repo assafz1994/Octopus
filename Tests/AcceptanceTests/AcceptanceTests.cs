@@ -43,7 +43,7 @@ namespace Tests.AcceptanceTests
             var entities = _client.ExecuteQuery(query).Result;
             
             var listOfDictionaryEntities = entities.Select(x => new RouteValueDictionary(x));
-
+            
             var expectedResult = new List<Dictionary<string, object>>()
             {
                 new Dictionary<string, object>()
@@ -78,7 +78,7 @@ namespace Tests.AcceptanceTests
         public void TestSelectMultipleFieldsOfAnimals()
         {
             SetUpTestSelectNamesOfAnimals();
-            var query = "From Animal a | Select a(name, age)";
+            var query = "From Animal a | Select a(age, name)";
             var entities = _client.ExecuteQuery(query).Result;
             var result = entities.Select(x => new RouteValueDictionary(x));
 
@@ -104,46 +104,46 @@ namespace Tests.AcceptanceTests
             CollectionAssert.AreEqual(result, expectedResult);
         }
 
-        //[Test]
-        //public void TestSelectMultipleFieldsOfAnimalsFromMultipleTablesCassandraAndMongo()
-        //{
-        //    SetUpTestSelectNamesOfAnimals();
-        //    var query = "From Animal a | Select a(name, age,aid)";
-        //    var entities = _client.ExecuteQuery(query).Result;
-        //    var result = entities.Select(x => new RouteValueDictionary(x));
+        [Test]
+        public void TestSelectMultipleFieldsOfAnimalsFromMultipleTablesCassandraAndMongo()
+        {
+            SetUpTestSelectNamesOfAnimals();
+            var query = "From Animal a | Select a(aid, age, name)";
+            var entities = _client.ExecuteQuery(query).Result;
+            var result = entities.Select(x => new RouteValueDictionary(x));
 
-        //    var expectedResult = new List<Dictionary<string, object>>()
-        //    {
-        //        new Dictionary<string, object>()
-        //        {
-        //            {"aid", "1"},
-        //            {"age", 5 },
-        //            {"name", "Maffin"},
-        //        },
-        //        new Dictionary<string, object>()
-        //        {
-        //            {"aid", "2"},
-        //            { "age", 6 },
-        //            { "name", "Woody"},
-        //        },
-        //        new Dictionary<string, object>()
-        //        {
-        //            {"aid", "3"},
-        //            {"age", 8 },
-        //            {"name", "Doggy"},
-        //        },
-        //    };
+            var expectedResult = new List<Dictionary<string, object>>()
+            {
+                new Dictionary<string, object>()
+                {
+                    {"aid", "1"},
+                    {"age", 5 },
+                    {"name", "Maffin"},
+                },
+                new Dictionary<string, object>()
+                {
+                    {"aid", "2"},
+                    { "age", 6 },
+                    { "name", "Woody"},
+                },
+                new Dictionary<string, object>()
+                {
+                    {"aid", "3"},
+                    {"age", 8 },
+                    {"name", "Doggy"},
+                },
+            };
 
-        //    CollectionAssert.AreEqual(result, expectedResult);
-        //}
+            CollectionAssert.AreEqual(result, expectedResult);
+        }
 
         [Test]
         public void TestSelectAnimalWithFilter()
         {
             SetUpTestSelectNamesOfAnimals();
-            var query = "From Animal a | where a.name == 'Maffin' | Select a(name, age)";
+            var query = "From Animal a | where a.name == \"Maffin\" | Select a(age, name)";
             var entities = _client.ExecuteQuery(query).Result;
-            var result = entities.Select(x => new RouteValueDictionary(x));
+            var result = entities.Select(x => new RouteValueDictionary(x)).ToList();
 
             var expectedResult = new List<Dictionary<string, object>>()
             {
@@ -154,11 +154,11 @@ namespace Tests.AcceptanceTests
                 },
             };
 
-            CollectionAssert.AreEqual(result, expectedResult);
+            CollectionAssert.AreEquivalent(result, expectedResult);
         }
 
 
-        [Test]
+        // [Test]
         public void TestDeleteOneAnimal()
         {
             SetUpTestSelectNamesOfAnimals();

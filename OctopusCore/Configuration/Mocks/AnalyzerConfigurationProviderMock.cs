@@ -32,7 +32,7 @@ namespace OctopusCore.Configuration.Mocks
             throw new System.NotImplementedException();
         }
 
-        public string GetEntityPrimaryKey(string entityType)
+        public string GetEntityFirstField(string entityType)
         {
             throw new System.NotImplementedException();
         }

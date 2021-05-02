@@ -14,7 +14,7 @@ namespace Tests.DbsConfiguration
         public DbsConfigurator()
         {
             _cassandraDbConfigurator = new CassandraDbConfigurator();
-            // _mongoDbConfigurator = new MongoDbConfigurator();
+            _mongoDbConfigurator = new MongoDbConfigurator();
             _neo4JDbConfigurator = new Neo4jDbConfigurator();
             _sqliteDbConfigurator = new SqliteDbConfigurator();
         }
@@ -22,7 +22,7 @@ namespace Tests.DbsConfiguration
         public void SetUpDbs()
         {
             _cassandraDbConfigurator.SetUpDb();
-            // _mongoDbConfigurator.SetUpDb();
+            _mongoDbConfigurator.SetUpDb();
             _neo4JDbConfigurator.SetUpDb();
             _sqliteDbConfigurator.SetUpDb();
         }
@@ -30,14 +30,15 @@ namespace Tests.DbsConfiguration
         public void TearDownDbs()
         {
             _cassandraDbConfigurator.TearDownDb();
-            // _mongoDbConfigurator.TearDownDb();
+            _mongoDbConfigurator.TearDownDb();
             _neo4JDbConfigurator.TearDownDb();
             _sqliteDbConfigurator.TearDownDb();
         }
        
         public void SetUpTestSelectNamesOfAnimals()
         {
-            _mongoDbConfigurator.Insert();
+            _mongoDbConfigurator.SetUpTestSelectNamesOfAnimals();
+            _cassandraDbConfigurator.SetUpTestSelectNamesOfAnimals();
         }
     }
 }
