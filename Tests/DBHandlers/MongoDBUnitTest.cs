@@ -24,21 +24,42 @@ namespace Tests.DBHandlers
         [OneTimeSetUp]
         public void OneTimeSetUp()
         {
-            this._mongoDBHandler = new MongoDBHandler(null); // TODO change to configuration provider
             _client = new OctopusClient("http://localhost:5000");
             _dbsConfigurator = new DbsConfigurator();
-           
-            var reader = new ConfigurationAndSchemeReader(
-               "SchemeAndConfigurations\\RelationConfig\\configurationsTests.json",
-               "SchemeAndConfigurations\\RelationConfig\\schemeTests.json");
 
-            var builder = new Autofac.ContainerBuilder();
+            var schema = new Scheme()
+            {
+                Entities = new List<Entity>(){
+                new Entity()
+                {
+                    Name="Animal",
+                    Fields= new List<Field>()
+                    {
+                        new Field()
+                        {
+                             Name= "aid",
+                            Type =  DbFieldType.Primitive,
+                            PrimitiveType = PrimitiveType.String
+                        },
+                        new Field {
+                             Name = "name",
+                             Type = DbFieldType.Primitive,
+                             PrimitiveType = PrimitiveType.String
+                        },
+                        new Field{
+                             Name = "age",
+                              Type = DbFieldType.Primitive,
+                             PrimitiveType = PrimitiveType.Int
+                        },
+                    }
 
-            builder.RegisterType<DbHandlersResolver>().As<IDbHandlersResolver>();
-            
-            builder.RegisterType<AnalyzerConfigurationProvider>().As<IAnalyzerConfigurationProvider>();
-            builder.RegisterInstance(reader.DbConfigurations).As<DbConfigurations>();
-            builder.RegisterInstance(reader.Scheme).As<Scheme>();
+                }}
+            };
+
+            var configuration = new DbConfiguration() { Entities = null, ConnectionString = "mongodb://localhost:27017/mongodbtests_1" };
+            var provider = new MongoDBConfigurationProvider(schema, configuration);
+            this._mongoDBHandler = new MongoDBHandler(provider); 
+
         }
 
         [SetUp]
@@ -68,7 +89,7 @@ namespace Tests.DBHandlers
                 new OctopusCore.Parser.Filters.EqFilter(new List<string>() {"name"}, "Maffin")
             };
 
-            var entityType = "Animal"; // TODO check 
+            var entityType = "animal";
 
             List<(string entityType, OctopusCore.Configuration.Field field, List<string> fieldsToSelect)> joinsTuples = new List<(string entityType, OctopusCore.Configuration.Field field, List<string> fieldsToSelect)>();
 
@@ -104,7 +125,7 @@ namespace Tests.DBHandlers
 
             IReadOnlyCollection<OctopusCore.Parser.Filter> filters = new List<OctopusCore.Parser.Filter>{};
 
-            var entityType = "Animal"; // TODO check 
+            var entityType = "animal"; 
 
             List<(string entityType, OctopusCore.Configuration.Field field, List<string> fieldsToSelect)> joinsTuples = new List<(string entityType, OctopusCore.Configuration.Field field, List<string> fieldsToSelect)>();
 
@@ -149,12 +170,12 @@ namespace Tests.DBHandlers
 
             IReadOnlyDictionary<string, dynamic> fields = new Dictionary<string, dynamic> {
              {"name", "Roxi"},
-             {"guid", "9264f435-a1c7-4f1c-8b84-cf4bdb935641" },
+             {"guid", new Guid("9264f435-a1c7-4f1c-8b84-cf4bdb935641")},
              {"aid","4"},
              {"age", 16 }
             };
 
-            var entityType = "Animal"; // TODO check 
+            var entityType = "animal"; 
 
             var res = _mongoDBHandler.ExecuteInsertQuery(entityType, fields);
         }
@@ -170,7 +191,7 @@ namespace Tests.DBHandlers
              "9264f435-d1c7-4f1c-8b84-cf4bdb935641",
             };
 
-            var entityType = "Animal"; // TODO check 
+            var entityType = "animal";
 
             var res = _mongoDBHandler.ExecuteDeleteQuery(entityType, guidCollection);
         }
@@ -185,7 +206,7 @@ namespace Tests.DBHandlers
              "e8d706f8-92be-429c-89cc-91973fca7a95",
             };
 
-            var entityType = "Animal"; // TODO check 
+            var entityType = "animal";
 
             var res = _mongoDBHandler.ExecuteDeleteQuery(entityType, guidCollection);
 
