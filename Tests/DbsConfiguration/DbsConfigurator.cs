@@ -40,5 +40,10 @@ namespace Tests.DbsConfiguration
             _mongoDbConfigurator.SetUpTestSelectNamesOfAnimals();
             _cassandraDbConfigurator.SetUpTestSelectNamesOfAnimals();
         }
+
+        public void SetUpTestComplexSelect()
+        {
+            _sqliteDbConfigurator.SetUpTestComplexSelect();
+        }
     }
 }
