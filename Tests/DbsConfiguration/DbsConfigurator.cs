@@ -45,5 +45,14 @@ namespace Tests.DbsConfiguration
         {
             _sqliteDbConfigurator.SetUpTestComplexSelect();
         }
+
+        public void SetUpMongoDB()
+        {
+            _mongoDbConfigurator.SetUpDb();
+        }
+        public void TearDownMongoDB()
+        {
+            _mongoDbConfigurator.TearDownDb();
+        }
     }
 }
