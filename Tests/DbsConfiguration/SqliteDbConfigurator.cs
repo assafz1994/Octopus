@@ -51,6 +51,8 @@ namespace Tests.DbsConfiguration
 	            student TEXT,
 	            PRIMARY KEY(address,student)
             );";
+
+        private string _insert1 = @"";
         public void SetUpDb()
         {
             CreateTables(_sql1ConnectionString, _init1);
