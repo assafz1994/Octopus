@@ -37,7 +37,13 @@ namespace Tests.DbsConfiguration
        
         public void SetUpTestSelectNamesOfAnimals()
         {
-            _mongoDbConfigurator.Insert();
+            _mongoDbConfigurator.SetUpTestSelectNamesOfAnimals();
+            _cassandraDbConfigurator.SetUpTestSelectNamesOfAnimals();
+        }
+
+        public void SetUpTestComplexSelect()
+        {
+            _sqliteDbConfigurator.SetUpTestComplexSelect();
         }
 
         public void SetUpMongoDB()

@@ -19,7 +19,7 @@ namespace OctopusCore.Configuration.ConfigurationProviders
 
         public string AssembleSelectQuery(string entityType, string fields, IReadOnlyCollection<Filter> filters, string conditions)
         {
-            var entity = Entities.First(x => x.Name == entityType);
+            var entity = Entities.First(x => x.Name.ToLower() == entityType);
             var filterNames = filters.Select(x => x.FieldNames[0]).ToList();
             if (filterNames.Count == 0)
             {
@@ -54,7 +54,7 @@ namespace OctopusCore.Configuration.ConfigurationProviders
 
         public Dictionary<string, List<string>> TableNamesToTables(string entityType)
         {
-            var entity = Entities.First(x => x.Name == entityType);
+            var entity = Entities.First(x => x.Name.ToLower() == entityType);
             var tables = entity.TablesByFields.ToDictionary(table => TableToString(entityType, table), table => table);
             return tables;
         }

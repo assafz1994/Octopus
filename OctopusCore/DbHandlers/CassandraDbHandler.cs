@@ -27,7 +27,9 @@ namespace OctopusCore.DbHandlers
                 .AddContactPoint(_configurationProvider.ConnectionString)
                 .Build();
             var fieldsToSelectWithGuid = fieldsToSelect.ToList().Append(StringConstants.Guid).ToList();
-            var fields = string.Join(",", fieldsToSelectWithGuid);
+            var fields = (fieldsToSelectWithGuid.Count == 1) ? 
+                fieldsToSelectWithGuid.First() : 
+                string.Join(",", fieldsToSelectWithGuid);
             // var table = _configurationProvider.GetTableName(entityType, filters);
             var conditions = ConvertFiltersToWhereStatement(filters);
             var session = cluster.Connect(_configurationProvider.KeySpace);
