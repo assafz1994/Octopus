@@ -69,11 +69,6 @@ namespace OctopusCore.Configuration.ConfigurationProviders
 
         public string GetFieldDatabaseKey(string entityType, string fieldName)
         {
-            if (fieldName == StringConstants.Guid)
-            {
-                fieldName = GetEntityPrimaryKey(entityType);
-            }
-
             if (_entityTypeToFieldNameToDatabaseKeys.TryGetValue(entityType, out var fieldNameToDatabaseKeys) == false)
                 throw new ArgumentException($"no db to handle this entity type:{entityType}");
             if (fieldNameToDatabaseKeys.TryGetValue(fieldName, out var databaseKeys) == false)
@@ -105,9 +100,17 @@ namespace OctopusCore.Configuration.ConfigurationProviders
         }
 
 
-        public string GetEntityPrimaryKey(string entityType)
+        public string GetEntityFirstField(string entityType)
         {
-            return _entityTypeToFields[entityType].First();
+            var fieldNameToField =  _entityTypeToFieldNameToField[entityType];
+            foreach (var field in fieldNameToField)
+            {
+                if (field.Value.Type.Equals(DbFieldType.Primitive))
+                {
+                    return field.Key;
+                }
+            }
+            return null;
         }
 
         public List<string> GetEntityFields(string entityType)

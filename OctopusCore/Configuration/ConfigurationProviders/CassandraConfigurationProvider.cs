@@ -54,7 +54,7 @@ namespace OctopusCore.Configuration.ConfigurationProviders
 
         public Dictionary<string, List<string>> TableNamesToTables(string entityType)
         {
-            var entity = Entities.First(x => x.Name == entityType);
+            var entity = Entities.First(x => x.Name.ToLower() == entityType);
             var tables = entity.TablesByFields.ToDictionary(table => TableToString(entityType, table), table => table);
             return tables;
         }
