@@ -102,7 +102,7 @@ namespace OctopusCore.Configuration.ConfigurationProviders
 
         public string GetEntityFirstField(string entityType)
         {
-            var fieldNameToField = _entityTypeToFieldNameToField[entityType];
+            var fieldNameToField =  _entityTypeToFieldNameToField[entityType];
             foreach (var field in fieldNameToField)
             {
                 if (field.Value.Type.Equals(DbFieldType.Primitive))
