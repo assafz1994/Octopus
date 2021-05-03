@@ -198,9 +198,15 @@ namespace Tests.DBHandlers
                         PrimitiveType = null,
                         Type = DbFieldType.Object
                     },
-                    new List<string>(){}
+                    new List<string>(){"name"}
                 )
            };
+            var entityRes = new OctopusCore.Contract.EntityResult(
+                new Dictionary<string, dynamic>() 
+                {
+                    { "name", "tn3" }
+                }
+            );
 
             var res = _sqliteDBHandler.ExecuteQueryWithFiltersAsync(fieldsToSelect, filters, entityType, joinsTuples).Result;
             var expectedResult = new List<Dictionary<string, dynamic>>()
@@ -210,8 +216,13 @@ namespace Tests.DBHandlers
                     { "sid", "3" },
                     { "age", 30 },
                     { "name", "sn3" },
-                    {"taughtBy",  new JObject() {{"name", "tn3"}} }
-                },
+                    {"taughtBy",
+                        new Dictionary<string, OctopusCore.Contract.EntityResult>()
+                        {
+                            {"f7b97e2a-e885-49e3-811d-201e72b27406", entityRes }
+                        }
+                    },
+                }
             };
 
             var entityResults = res.EntityResults.Values.ToList();
