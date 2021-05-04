@@ -237,7 +237,12 @@ namespace OctopusCore.Analyzer
 
             bool IsConnectionInEntityDb()
             {
-                return entityType == "consumer" || entityType== "student";
+                if (field.ConnectedToField == null)
+                {
+                    return true;
+                }
+
+                return string.Compare(entityType, field.EntityName, StringComparison.OrdinalIgnoreCase)<= 0;
             }
 
 
