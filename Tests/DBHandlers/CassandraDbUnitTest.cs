@@ -245,11 +245,45 @@ namespace Tests.DBHandlers
         }
 
         [Test]
+        public void TestDelete1()
+        {
+            _cassandraDbConfigurator.SetUpTestSelectNamesOfAnimals();
+            var actualInsertExecutionResult = _cassandraDbHandler
+                .ExecuteDeleteQuery(
+                    "animal", 
+                    new List<string>()
+                    {
+                        "9264f435-d1c7-4f1c-8b84-cf4bdb935641",
+                        "e8d706f8-92be-429c-89cc-91973fca7a95"
+                    }).Result;
+            var expectedInsertExecutionResult = new ExecutionResult("animal", new Dictionary<string, EntityResult>());
+
+            Assert.AreEqual(expectedInsertExecutionResult, actualInsertExecutionResult);
+
+            var rowSets = _cassandraDbConfigurator.GetTables()
+                .Select(table => _cassandraDbConfigurator.Execute($"select * from {table}")).ToList();
+            var fieldsToSelect = new List<string>() {"aid", "food", "height"};
+            var expectedEntityResult = new EntityResult(new Dictionary<string, dynamic>()
+            {
+                {"aid", "3"},
+                {"food", "f23" },
+                {"height", 45 }
+            });
+            foreach (var rowSet in rowSets)
+            foreach (var row in rowSet)
+            {
+                var actualEntityResult = new EntityResult(fieldsToSelect.ToDictionary(field => field, field => row.GetValue(typeof(object), field)));
+                Assert.AreEqual(expectedEntityResult, actualEntityResult);
+            }
+            
+        }
+
+        [Test]
         public void TestInsert1()
         {
             var actualInsertExecutionResult = _cassandraDbHandler
                 .ExecuteInsertQuery(
-                    "animal", 
+                    "animal",
                     new Dictionary<string, dynamic>()
                     {
                         {"guid", Guid.NewGuid()},
@@ -263,7 +297,7 @@ namespace Tests.DBHandlers
 
             var rowSets = _cassandraDbConfigurator.GetTables()
                 .Select(table => _cassandraDbConfigurator.Execute($"select * from {table}")).ToList();
-            var fieldsToSelect = new List<string>() {"aid", "food", "height"};
+            var fieldsToSelect = new List<string>() { "aid", "food", "height" };
             var expectedEntityResult = new EntityResult(new Dictionary<string, dynamic>()
             {
                 {"aid", "1"},
@@ -276,7 +310,7 @@ namespace Tests.DBHandlers
                 var actualEntityResult = new EntityResult(fieldsToSelect.ToDictionary(field => field, field => row.GetValue(typeof(object), field)));
                 Assert.AreEqual(expectedEntityResult, actualEntityResult);
             }
-            
+
         }
     }
 }
