@@ -95,7 +95,7 @@ namespace Tests.DBHandlers
 
             var res = _mongoDBHandler.ExecuteQueryWithFiltersAsync(fieldsToSelect, filters, entityType, joinsTuples ).Result;
 
-            //var query = "From Animal a | Select a(name)";
+            var query = "From Animal a | Select a(name)";
             //var entities = _client.ExecuteQuery(query).Result;
 
             //var listOfDictionaryEntities = entities.Select(x => new RouteValueDictionary(x));

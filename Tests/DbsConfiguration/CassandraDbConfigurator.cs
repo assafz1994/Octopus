@@ -97,14 +97,14 @@ namespace Tests.DbsConfiguration
                 {
                     {"guid", "e8d706f8-92be-429c-89cc-91973fca7a95"},
                     {"aid", "'2'"},
-                    {"food", "'f2'" },
-                    {"height", "34" }
+                    {"food", "'f23'" },
+                    {"height", "23" }
                 },
                 new Dictionary<string, string>
                 {
                     {"guid", "f443f95a-3d8f-4786-b3e6-0db8b790f7e6"},
                     {"aid", "'3'"},
-                    {"food", "'f3'" },
+                    {"food", "'f23'" },
                     {"height", "45" }
                 }
             };
@@ -119,6 +119,16 @@ namespace Tests.DbsConfiguration
                             $"({string.Join(",", animalToList.Select(x => x.Value))});";
                 _session.Execute(query);
             }
+        }
+
+        public RowSet Execute(string query)
+        {
+            return _session.Execute(query);
+        }
+
+        public List<string> GetTables()
+        {
+            return _tables;
         }
     }
 }
