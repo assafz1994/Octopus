@@ -82,24 +82,24 @@ namespace Tests.AcceptanceTests
             SetUpTestSelectNamesOfAnimals();
             var query = "From Animal a | Select a(age, name)";
             var entities = _client.ExecuteQuery(query).Result;
-            var result = entities.Select(x => new RouteValueDictionary(x));
+            var result = entities.Select(x => new RouteValueDictionary(x)).ToList();
 
             var expectedResult = new List<Dictionary<string, object>>()
             {
                 new Dictionary<string, object>()
                 {
-                    {"name", "Maffin"},
                     {"age", 5 },
+                    {"name", "Maffin"},
                 },
                 new Dictionary<string, object>()
                 {
-                    { "name", "Woody"},
                     { "age", 6 },
+                    { "name", "Woody"},
                 },
                 new Dictionary<string, object>()
                 {
-                    {"name", "Doggy"},
                     {"age", 8 },
+                    {"name", "Doggy"},
                 },
             };
 
@@ -110,27 +110,34 @@ namespace Tests.AcceptanceTests
         public void TestSelectMultipleFieldsOfAnimalsFromMultipleTablesCassandraAndMongo()
         {
             SetUpTestSelectNamesOfAnimals();
-            var query = "From Animal a | Select a(aid, age, name)";
+            var query = "From Animal a | Select a(aid, age, name, food, height)";
             var entities = _client.ExecuteQuery(query).Result;
-            var result = entities.Select(x => new RouteValueDictionary(x));
+            var result = entities.Select(x => new RouteValueDictionary(x)).ToList();
 
             var expectedResult = new List<Dictionary<string, object>>()
             {
                 new Dictionary<string, object>()
                 {
                     {"aid", "1"},
-                    {"name", "Maffin"},
+                    {"food", "f1" },
+                    {"height", 23 },
                     {"age", 5 },
+                    {"name", "Maffin"},
+
                 },
                 new Dictionary<string, object>()
                 {
                     {"aid", "2"},
+                    {"food", "f23" },
+                    {"height", 23 },
                     { "age", 6 },
                     { "name", "Woody"},
                 },
                 new Dictionary<string, object>()
                 {
                     {"aid", "3"},
+                    {"food", "f23" },
+                    {"height", 45 },
                     {"age", 8 },
                     {"name", "Doggy"},
                 },
