@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Neo4jClient.Extensions;
+using Newtonsoft.Json;
 
 namespace OctopusCore.Contract
 {
@@ -21,9 +22,11 @@ namespace OctopusCore.Contract
             if (obj == this) return true;
             if (!(obj is EntityResult)) return false;
             var entityResult = (EntityResult)obj;
-            var thisFields = Fields.ToList();
-            var objFields = entityResult.Fields.ToList();
-            return thisFields.ContentsEqual(objFields);
+            var thisFields = Fields.OrderBy(kvp => kvp.Key).ToList();
+            var objFields = entityResult.Fields.OrderBy(kvp => kvp.Key).ToList();
+            var thisFieldsJson = JsonConvert.SerializeObject(thisFields);
+            var objFieldsJson = JsonConvert.SerializeObject(objFields);
+            return thisFieldsJson.Equals(objFieldsJson);
         }
 
     }
