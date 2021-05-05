@@ -184,14 +184,14 @@ namespace Tests.DBHandlers
                 "name",
             }.AsReadOnly();
 
-            IReadOnlyCollection<OctopusCore.Parser.Filter> filters = new List<OctopusCore.Parser.Filter>
+            IReadOnlyCollection<Filter> filters = new List<Filter>
             {
-                new OctopusCore.Parser.Filters.EqFilter(new List<string>() {"age"}, 30)
+                new EqFilter(new List<string>() {"age"}, 30)
             };
 
             var entityType = "student";
-            List<(string entityType, OctopusCore.Configuration.Field field, List<string> fieldsToSelect)> joinsTuples =
-                new List<(string entityType, OctopusCore.Configuration.Field field, List<string> fieldsToSelect)>() {
+            List<(string entityType, Field field, List<string> fieldsToSelect)> joinsTuples =
+                new List<(string entityType, Field field, List<string> fieldsToSelect)>() {
                 (
                     entityType,
                     new Field()
@@ -205,14 +205,33 @@ namespace Tests.DBHandlers
                     new List<string>(){"name"}
                 )
            };
-            var entityRes = new OctopusCore.Contract.EntityResult(
+            var entityRes = new EntityResult(
                 new Dictionary<string, dynamic>() 
                 {
                     { "name", "tn3" }
                 }
             );
 
-            var res = _sqliteDBHandler.ExecuteQueryWithFiltersAsync(fieldsToSelect, filters, entityType, joinsTuples).Result;
+            var actualExecutionResult = _sqliteDBHandler.ExecuteQueryWithFiltersAsync(fieldsToSelect, filters, entityType, joinsTuples).Result;
+            var expectedExecutionResult = new ExecutionResult(
+                entityType,
+                new Dictionary<string, EntityResult>()
+                {
+                    {"8f147986-8658-4561-860c-d1b23a134660",
+                        new EntityResult(new Dictionary<string, dynamic>()
+                        {
+                            { "sid", "3" },
+                            { "age", 30 },
+                            { "name", "sn3" },
+                            {"taughtBy",
+                                new Dictionary<string, EntityResult>()
+                                {
+                                    {"f7b97e2a-e885-49e3-811d-201e72b27406", entityRes }
+                                }
+                            }
+                        })
+                    }
+                });
             var expectedResult = new List<Dictionary<string, dynamic>>()
             {
                 new Dictionary<string, dynamic>()
@@ -221,7 +240,7 @@ namespace Tests.DBHandlers
                     { "age", 30 },
                     { "name", "sn3" },
                     {"taughtBy",
-                        new Dictionary<string, OctopusCore.Contract.EntityResult>()
+                        new Dictionary<string, EntityResult>()
                         {
                             {"f7b97e2a-e885-49e3-811d-201e72b27406", entityRes }
                         }
@@ -229,9 +248,9 @@ namespace Tests.DBHandlers
                 }
             };
 
-            var entityResults = res.EntityResults.Values.ToList();
-            List<Dictionary<string, dynamic>> fields = entityResults.Select(x => x.Fields).ToList();
-            CollectionAssert.AreEqual(fields, expectedResult);
+            // var entityResults = actualExecutionResult.EntityResults.Values.ToList();
+            // List<Dictionary<string, dynamic>> fields = entityResults.Select(x => x.Fields).ToList();
+            Assert.AreEqual(expectedExecutionResult, actualExecutionResult);
         }
     }
 }
