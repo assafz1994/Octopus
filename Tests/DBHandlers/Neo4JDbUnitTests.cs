@@ -195,5 +195,35 @@ namespace Tests.DBHandlers
 
             return entityResults;
         }
+
+        [Test]
+        public void TestDelete1()
+        {
+            _neo4jDbConfigurator.SetUpAddresses();
+            var actualDeleteExecutionResult = _neo4jDbHandler
+                .ExecuteDeleteQuery(
+                    "address",
+                    new List<string>()
+                    {
+                        "6828e47d-fd3f-42d4-8e59-39621d09d373",
+                        "024768e9-3956-4354-a968-e194c61893bf"
+                    }).Result;
+
+            var expectedDeleteResult = new ExecutionResult("address", new Dictionary<string, EntityResult>());
+            Assert.AreEqual(expectedDeleteResult, actualDeleteExecutionResult);
+
+
+            var result = _neo4jDbConfigurator.Execute("match (e:address) return e.city,e.street,e.number,e.guid");
+            Assert.AreEqual(1, result.Count);
+            var buildResultsDictionary = BuildResultsDictionary(result, new List<string>() { "city", "street", "number", "guid" });
+            var actualEntityResult = buildResultsDictionary.Values.First();
+            var expectedEntityResult = new EntityResult(new Dictionary<string, dynamic>()
+            {
+                {"city", "Beer Sheva"},
+                {"street", "Rager"},
+                {"number", 2}
+            });
+            Assert.AreEqual(actualEntityResult, expectedEntityResult);
+        }
     }
 }
