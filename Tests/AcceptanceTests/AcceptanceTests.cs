@@ -167,34 +167,66 @@ namespace Tests.AcceptanceTests
         }
 
 
-        // [Test]
-        public void TestDeleteOneAnimal()
+        [Test]
+        public void TestDelete1()
         {
             SetUpTestSelectNamesOfAnimals();
-            var query = "Delete From Animal a | Where a.name == \"Maffin\"";
-            var entities = _client.ExecuteQuery(query).Result;
-            var result = entities.Select(x => new RouteValueDictionary(x));
+            var insertQuery = "Delete From Animal a | Where a.name == \"Maffin\"";
+            var insertEntities = _client.ExecuteQuery(insertQuery).Result;
+            Assert.AreEqual(0, insertEntities.Length);
 
-        //    var expectedResult = new List<Dictionary<string, object>>()
-        //    {
-        //        new Dictionary<string, object>()
-        //        {
-        //            {"age", 5 },
-        //            {"name", "Maffin"},
-        //        },
-        //        new Dictionary<string, object>()
-        //        {
-        //            { "age", 6 },
-        //            { "name", "Woody"},
-        //        },
-        //        new Dictionary<string, object>()
-        //        {
-        //            {"age", 8 },
-        //            {"name", "Doggy"},
-        //        },
-        //    };
+            var selectQuery = "From Animal a | Where a.name == \"Maffin\" | select(name)";
+            var selectEntities = _client.ExecuteQuery(insertQuery).Result;
+            Assert.AreEqual(0, selectEntities.Length);
+        }
 
-            //CollectionAssert.AreEqual(result, expectedResult);
+        [Test]
+        public void TestInsert1()
+        {
+            var insertQuery =
+                @"Entity Animal : an1 (aid = ""1"", name = ""Maffin"", Age = 5, food = ""f1"", height = 23)
+                Entity Animal : an2 (aid = ""2"", name = ""Woody"", Age = 6, food = ""f23"", height = 23)
+                Entity Address : ad1 (city = ""Tel-Aviv"", street = ""Kaplan"", number = 1)
+                Entity Address : ad2 (city = ""Beer Sheva"", street = ""Rager"", number = 1)
+                insert an1, an2, ad1, ad2";
+            var insertEntities = _client.ExecuteQuery(insertQuery).Result;
+            Assert.AreEqual(0, insertEntities.Length);
+
+            var selectQuery1 = "From Animal a | select a(name)";
+            var selectEntities1 = _client.ExecuteQuery(selectQuery1).Result;
+            var result1 = selectEntities1.Select(x => new RouteValueDictionary(x)).ToList();
+
+            var expectedResult1 = new List<Dictionary<string, object>>()
+            {
+                new Dictionary<string, object>()
+                {
+                    {"name", "Maffin"},
+                },
+                new Dictionary<string, object>()
+                {
+                    {"name", "Woody"},
+                },
+            };
+
+            CollectionAssert.AreEquivalent(expectedResult1, result1);
+
+            var selectQuery2 = "From Address a | select a(city)";
+            var selectEntities2 = _client.ExecuteQuery(selectQuery2).Result;
+            var result2 = selectEntities2.Select(x => new RouteValueDictionary(x)).ToList();
+
+            var expectedResult2 = new List<Dictionary<string, object>>()
+            {
+                new Dictionary<string, object>()
+                {
+                    {"city", "Tel-Aviv"},
+                },
+                new Dictionary<string, object>()
+                {
+                    {"city", "Beer Sheva"},
+                },
+            };
+
+            CollectionAssert.AreEquivalent(expectedResult2, result2);
         }
 
         [Test]
