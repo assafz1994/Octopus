@@ -145,8 +145,8 @@
         {
             "Id": "neo4j",
             "DbType": "Neo4j",
-            "ConnectionString": "http://localhost:7474/",
-            "Username": "TestOctopus",
+            "ConnectionString": "bolt://localhost:7687/",
+            "Username": "neo4j",
             "Password": "1234",
             "Entities": [
                 {
