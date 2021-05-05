@@ -36,7 +36,7 @@ namespace Tests.DBHandlers
                 ""Password"": ""1234"",
                 ""Entities"": [
                     {
-                        ""Name"": ""Address"",
+                        ""Name"": ""address"",
                         ""Fields"": [
                             {
                                 ""Name"": ""city"",
@@ -63,7 +63,7 @@ namespace Tests.DBHandlers
                 {
                     new Entity()
                     {
-                        Name = "Address",
+                        Name = "address",
                         Fields = new List<Field>()
                         {
                             new Field()

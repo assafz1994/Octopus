@@ -75,7 +75,7 @@
                         {
                             "Name": "address",
                             "Type": "Object",
-                            "EntityName": "Address",
+                            "EntityName": "address",
                             "ConnectedToField": null
                         }
                     ]
@@ -89,7 +89,7 @@
             "KeySpace": "octopustests",
             "Entities": [
                 {
-                    "Name": "Animal",
+                    "Name": "animal",
                     "Fields": [
                         {
                             "Name": "aid",
@@ -121,7 +121,7 @@
             "ConnectionString": "mongodb://localhost:27017/mongodbtests_1",
             "Entities": [
                 {
-                    "Name": "Animal",
+                    "Name": "animal",
                     "Fields": [
                         {
                             "Name": "aid",
@@ -150,7 +150,7 @@
             "Password": "1234",
             "Entities": [
                 {
-                    "Name": "Address",
+                    "Name": "address",
                     "Fields": [
                         {
                             "Name": "city",
