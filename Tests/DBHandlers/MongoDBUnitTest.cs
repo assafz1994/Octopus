@@ -18,14 +18,14 @@ namespace Tests.DBHandlers
     {
 
         private OctopusClient _client;
-        private DbsConfigurator _dbsConfigurator;
+        private MongoDbConfigurator _mongoDbConfigurator;
         private MongoDBHandler _mongoDBHandler;
 
         [OneTimeSetUp]
         public void OneTimeSetUp()
         {
             _client = new OctopusClient("http://localhost:5000");
-            _dbsConfigurator = new DbsConfigurator();
+            _mongoDbConfigurator = new MongoDbConfigurator();
 
             var schema = new Scheme()
             {
@@ -58,20 +58,20 @@ namespace Tests.DBHandlers
 
             var configuration = new DbConfiguration() { Entities = null, ConnectionString = "mongodb://localhost:27017/mongodbtests_1" };
             var provider = new MongoDBConfigurationProvider(schema, configuration);
-            this._mongoDBHandler = new MongoDBHandler(provider); 
+            _mongoDBHandler = new MongoDBHandler(provider); 
 
         }
 
         [SetUp]
         public void SetUp()
         {
-            _dbsConfigurator.SetUpMongoDB();
+            _mongoDbConfigurator.SetUpDb();
         }
 
         [TearDown]
         public void TearDown()
         {
-            _dbsConfigurator.TearDownMongoDB();
+            _mongoDbConfigurator.TearDownDb();
         }
 
         [Test]
@@ -299,7 +299,7 @@ namespace Tests.DBHandlers
 
         private void SetUpTestSelectNamesOfAnimals()
         {
-            _dbsConfigurator.SetUpTestSelectNamesOfAnimals();
+            _mongoDbConfigurator.SetUpTestSelectNamesOfAnimals();
         }
 
     }
