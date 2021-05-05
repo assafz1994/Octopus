@@ -21,15 +21,10 @@ namespace Tests.DBHandlers
 
         private CassandraDbHandler _cassandraDbHandler;
 
-        private List<string> _tables;
         [OneTimeSetUp]
         public void OneTimeSetUp()
         {
             _cassandraDbConfigurator = new CassandraDbConfigurator();
-            _tables = new List<string>()
-            {
-
-            };
             var configString = @"{
                 ""Id"": ""cassTests"",
                 ""DbType"": ""Cassandra"",
