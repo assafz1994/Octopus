@@ -186,6 +186,7 @@ namespace OctopusCore.Analyzer
 
                     var jobResult = queryJob.Result;
 
+
                     return jobResult.EntityResults.Values.Select(x => x.Fields[field.Name]).Cast<Dictionary<string, EntityResult>>().SelectMany(x => x.Keys);
                 }
             }
@@ -236,7 +237,12 @@ namespace OctopusCore.Analyzer
 
             bool IsConnectionInEntityDb()
             {
-                return entityType == "student";
+                if (field.ConnectedToField == null)
+                {
+                    return true;
+                }
+
+                return string.Compare(entityType, field.EntityName, StringComparison.OrdinalIgnoreCase)<= 0;
             }
 
 
