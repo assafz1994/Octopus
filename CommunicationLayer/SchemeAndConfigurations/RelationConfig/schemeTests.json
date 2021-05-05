@@ -21,7 +21,7 @@
                 {
                     "Name": "address",
                     "Type": "Object",
-                    "EntityName": "Address",
+                    "EntityName": "address",
                     "ConnectedToField": null
                 },
                 {
@@ -59,7 +59,7 @@
             ]
         },
         {
-            "Name": "Address",
+            "Name": "address",
             "Fields": [
                 {
                     "Name": "city",
@@ -79,7 +79,7 @@
             ]
         },
         {
-            "Name": "Animal",
+            "Name": "animal",
             "Fields": [
                 {
                     "Name": "aid",

@@ -32,7 +32,7 @@ namespace Tests.DBHandlers
                 ""KeySpace"": ""octopustests"",
                 ""Entities"": [
                     {
-                        ""Name"": ""Animal"",
+                        ""Name"": ""animal"",
                         ""Fields"": [
                             {
                                 ""Name"": ""aid"",
@@ -64,7 +64,7 @@ namespace Tests.DBHandlers
                 {
                     new Entity()
                     {
-                        Name = "Animal",
+                        Name = "animal",
                         Fields = new List<Field>()
                         {
                             new Field()

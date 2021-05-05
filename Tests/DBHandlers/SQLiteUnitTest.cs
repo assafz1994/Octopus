@@ -53,7 +53,7 @@ namespace Tests.DBHandlers
                         {
                             Name = "address",
                             Type = DbFieldType.Object,
-                            EntityName = "Address",
+                            EntityName = "address",
                             ConnectedToField = null
                         },
                         new Field

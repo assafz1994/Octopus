@@ -13,7 +13,7 @@ namespace Tests.DbsConfiguration
         private string _password = "1234";
         public void SetUpDb()
         {
-            
+            TearDownDb();
         }
 
         public void TearDownDb()
@@ -58,6 +58,11 @@ namespace Tests.DbsConfiguration
             var driver = GraphDatabase.Driver(_connectionString, AuthTokens.Basic(_username, _password));
             var session = driver.AsyncSession();
             return session;
+        }
+
+        public void SetUpTestComplexSelect()
+        {
+            SetUpAddresses();
         }
     }
 }
