@@ -8,6 +8,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using OctopusCore.Contract;
+using OctopusCore.Parser;
+using OctopusCore.Parser.Filters;
 using Tests.DbsConfiguration;
 
 namespace Tests.DBHandlers
@@ -137,36 +140,37 @@ namespace Tests.DBHandlers
                 "name",
             }.AsReadOnly();
 
-            IReadOnlyCollection<OctopusCore.Parser.Filter> filters = new List<OctopusCore.Parser.Filter>
+            IReadOnlyCollection<Filter> filters = new List<Filter>
             {
-                new OctopusCore.Parser.Filters.EqFilter(new List<string>() {"age"}, 10)
+                new EqFilter(new List<string>() {"age"}, 10)
             };
 
             var entityType = "student";
             List<(string entityType, OctopusCore.Configuration.Field field, List<string> fieldsToSelect)> joinsTuples = new List<(string entityType, OctopusCore.Configuration.Field field, List<string> fieldsToSelect)>();
-            var res = _sqliteDBHandler.ExecuteQueryWithFiltersAsync(fieldsToSelect, filters, entityType, joinsTuples).Result;
+            var actualExecutionResult = _sqliteDBHandler.ExecuteQueryWithFiltersAsync(fieldsToSelect, filters, entityType, joinsTuples).Result;
             
-            var expectedResult = new List<Dictionary<string, dynamic>>()
-            {
-                new Dictionary<string, dynamic>()
+            var expectedExecutionResult = new ExecutionResult(
+                entityType,
+                new Dictionary<string, EntityResult>()
                 {
-                    { "sid", "1" },
-                    { "age", 10 },
-                    { "name", "sn1" }
-                },
-                new Dictionary<string, dynamic>()
-                {
-                    { "sid", "2" },
-                    { "age", 10 },
-                    { "name", "sn2" }
-                },
-            };
-
-
-            var entityResults = res.EntityResults.Values.ToList();
-            List<Dictionary<string, dynamic>> fields = entityResults.Select(x => x.Fields).ToList();
-
-            CollectionAssert.AreEqual(fields, expectedResult);            
+                    {"ba78c4f3-deb0-4d51-8604-ae95c16cb147", 
+                        new EntityResult(new Dictionary<string, dynamic>()
+                        {
+                            { "sid", "1" },
+                            { "age", 10 },
+                            { "name", "sn1" }
+                        })
+                    },
+                    {"0433b07f-1d77-4f58-a58d-91daae887502", 
+                        new EntityResult(new Dictionary<string, dynamic>()
+                        {
+                            { "sid", "2" },
+                            { "age", 10 },
+                            { "name", "sn2" }
+                        })
+                    },
+                });
+            Assert.AreEqual(expectedExecutionResult, actualExecutionResult);            
         }
 
         [Test]
