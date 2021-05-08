@@ -16,14 +16,18 @@
 
 
   <ItemGroup>
+    <ApplicationDefinition Remove="DataBases\sqlite1_test_db.db" />
     <ApplicationDefinition Remove="DataBases\sqlite2_db.db" />
+    <ApplicationDefinition Remove="DataBases\sqlite2_test_db.db" />
   </ItemGroup>
 
 
 
   <ItemGroup>
     <None Remove="DataBases\demoDb.db" />
+    <None Remove="DataBases\sqlite1_test_db.db" />
     <None Remove="DataBases\sqlite2_db.db" />
+    <None Remove="DataBases\sqlite2_test_db.db" />
     <None Remove="DataBases\sqlite_db.db" />
   </ItemGroup>
 
@@ -31,6 +35,12 @@
 
   <ItemGroup>
     <Content Include="DataBases\demoDb.db">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="DataBases\sqlite2_test_db.db">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="DataBases\sqlite1_test_db.db">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="DataBases\sqlite2_db.db">
@@ -50,6 +60,7 @@
     <PackageReference Include="Microsoft.CSharp" Version="4.7.0" />
     <PackageReference Include="Microsoft.Data.SQLite" Version="1.1.0" />
     <PackageReference Include="MongoDB.Driver" Version="2.11.6" />
+    <PackageReference Include="Neo4j.Driver" Version="4.2.0" />
     <PackageReference Include="Neo4jClient" Version="4.0.3" />
     <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
   </ItemGroup>
@@ -57,6 +68,13 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Octopus.Common\Octopus.Common.csproj" />
+  </ItemGroup>
+
+
+  <ItemGroup>
+    <None Update="DataBases\Relations.db">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 
 </Project>

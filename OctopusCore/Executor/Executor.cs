@@ -12,7 +12,7 @@ namespace OctopusCore.Executor
             
             foreach (var job in workPlan.Jobs) await job.ExecuteAsync();
 
-            return workPlan.Jobs.Last().Result as ExecutionResult;
+            return workPlan.Jobs.Last().Result;
         }
     }
 }

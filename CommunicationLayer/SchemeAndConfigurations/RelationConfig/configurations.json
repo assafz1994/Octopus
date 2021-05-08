@@ -1,0 +1,89 @@
+{
+  "Configurations": [
+    {
+      "Id": "sql1",
+      "DbType": "Sqlite",
+      "ConnectionString": "Data Source=DataBases\\Relations.db",
+      "Entities": [
+        {
+          "Name": "student",
+          "Fields": [
+            {
+              "Name": "name",
+              "Type": "Primitive",
+              "PrimitiveType": "String"
+            },
+            {
+              "Name": "taughtBy",
+              "Type": "Object",
+              "EntityName": "teacher",
+              "ConnectedToField": "teach"
+            }
+          ]
+        },
+        {
+          "Name": "teacher",
+          "Fields": [
+            {
+              "Name": "name",
+              "Type": "Primitive",
+              "PrimitiveType": "String"
+            },
+            {
+              "Name": "teach",
+              "Type": "Object",
+              "EntityName": "student",
+              "ConnectedToField": "taughtBy"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "Id": "neo4j",
+      "DbType": "Neo4j",
+      "ConnectionString": "bolt://localhost:7687/",
+      "Username": "neo4j",
+      "Password": "1234",
+      "Entities": [
+        {
+          "Name": "producer",
+          "Fields": [
+            {
+              "Name": "name",
+              "Type": "Primitive",
+              "PrimitiveType": "String"
+            },
+            {
+              "Name": "produceTo",
+              "Type": "Object",
+              "EntityName": "consumer",
+              "ConnectedToField": "consumeFrom"
+            }
+          ]
+        },
+        {
+          "Name": "consumer",
+          "Fields": [
+            {
+              "Name": "name",
+              "Type": "Primitive",
+              "PrimitiveType": "String"
+            },
+            {
+              "Name": "consumeFrom",
+              "Type": "Object",
+              "EntityName": "producer",
+              "ConnectedToField": "produceTo"
+            },
+            {
+              "Name": "complex",
+              "Type": "Object",
+              "EntityName": "producer"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

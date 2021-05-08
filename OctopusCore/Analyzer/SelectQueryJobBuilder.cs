@@ -1,5 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 using OctopusCore.Analyzer.Jobs;
+using OctopusCore.Configuration;
 using OctopusCore.Contract;
 using OctopusCore.DbHandlers;
 using OctopusCore.Parser;
@@ -13,20 +16,28 @@ namespace OctopusCore.Analyzer
         private readonly List<Filter> _filters;
         private readonly string _entityType;
         private Dictionary<string, WorkPlan> _subQueriesWorkPlans;
+        private List<(string entityType, Field field, List<string> fieldsToSelect)> _joinsTuples;//todo assaf will rename it
+        private TaskCompletionSource<SelectQueryJob> _tcs;
 
-        public SelectQueryJobBuilder(IDbHandler dbHandler, string entityType)
+        public SelectQueryJobBuilder(string entityType,IDbHandler dbHandler)
         {
             _dbHandler = dbHandler;
+            _entityType = entityType;
 
             _fieldsToSelect = new List<string>();
             _filters = new List<Filter>();
-            _entityType = entityType;
             _subQueriesWorkPlans = new Dictionary<string, WorkPlan>();
+            _joinsTuples = new List<(string entityType, Field field, List<string> fieldsToSelect)>();
+            _tcs = new TaskCompletionSource<SelectQueryJob>();
         }
 
-        public void AddProjectionField(string fieldName)
+        public void AddProjectionSimpleField(string fieldName)
         {
             _fieldsToSelect.Add(fieldName);
+        }
+        public void AddProjectionComplexField(string entityType, Field field,List<string> fieldsToSelect)
+        {
+            _joinsTuples.Add((entityType,field,fieldsToSelect));
         }
 
         public void AddFilter(Filter filter)
@@ -40,7 +51,18 @@ namespace OctopusCore.Analyzer
 
         public SelectQueryJob Build()
         {
-            return new SelectQueryJob(_dbHandler, _fieldsToSelect, _filters, _entityType, _subQueriesWorkPlans);
+            if (_tcs.Task.IsCompleted)
+            {
+                return _tcs.Task.Result;
+            }
+            var job = new SelectQueryJob(_dbHandler, _entityType, _fieldsToSelect, _joinsTuples, _filters, _subQueriesWorkPlans);
+            _tcs.SetResult(job);
+            return job;
+        }
+
+        public Task<SelectQueryJob> GetFutureJob()
+        {
+            return _tcs.Task;
         }
     }
 }

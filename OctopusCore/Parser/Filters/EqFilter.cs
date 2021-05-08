@@ -13,7 +13,7 @@ namespace OctopusCore.Parser.Filters
             IsSubQueried = false;
             Type = FilterType.Eq;
         }
-        
+
         public EqFilter(List<string> fieldNames, dynamic expression, bool isQueried)
         {
             FieldNames = fieldNames;
@@ -23,13 +23,23 @@ namespace OctopusCore.Parser.Filters
         }
 
         public override FilterType Type { get; }
+        public override Filter GetNextFilter()
+        {
+            var nextFieldsNames = FieldNames.ToList();
+            nextFieldsNames.RemoveAt(0);
+
+            return new EqFilter(nextFieldsNames, Expression, IsSubQueried)
+            {
+                CalcValue = CalcValue
+            };
+        }
 
         public override bool Equals(object obj)
         {
             if (obj == null) return false;
             if (obj == this) return true;
             if (!(obj is EqFilter)) return false;
-            var eqFilter = (EqFilter) obj;
+            var eqFilter = (EqFilter)obj;
             return FieldNames.SequenceEqual(eqFilter.FieldNames)
                    && Expression.Equals(eqFilter.Expression)
                    && IsSubQueried.Equals(eqFilter.IsSubQueried)
@@ -45,5 +55,7 @@ namespace OctopusCore.Parser.Filters
         {
             return HashCode.Combine(FieldNames, Expression, Type);
         }
+
+
     }
 }

@@ -1,0 +1,73 @@
+{
+  "Entities": [
+    {
+      "Name": "student",
+      "Fields": [
+        {
+          "Name": "name",
+          "Type": "Primitive",
+          "PrimitiveType": "String"
+        },
+        {
+          "Name": "taughtBy",
+          "Type": "Object",
+          "EntityName": "teacher",
+          "ConnectedToField": "teach"
+        }
+      ]
+    },
+    {
+      "Name": "teacher",
+      "Fields": [
+        {
+          "Name": "name",
+          "Type": "Primitive",
+          "PrimitiveType": "String"
+        },
+        {
+          "Name": "teach",
+          "Type": "Object",
+          "EntityName": "student",
+          "ConnectedToField": "taughtBy"
+        }
+      ]
+    },
+    {
+      "Name": "producer",
+      "Fields": [
+        {
+          "Name": "name",
+          "Type": "Primitive",
+          "PrimitiveType": "String"
+        },
+        {
+          "Name": "produceTo",
+          "Type": "Object",
+          "EntityName": "consumer",
+          "ConnectedToField": "consumeFrom"
+        }
+      ]
+    },
+    {
+      "Name": "consumer",
+      "Fields": [
+        {
+          "Name": "name",
+          "Type": "Primitive",
+          "PrimitiveType": "String"
+        },
+        {
+          "Name": "consumeFrom",
+          "Type": "Object",
+          "EntityName": "producer",
+          "ConnectedToField": "produceTo"
+        },
+        {
+          "Name": "complex",
+          "Type": "Object",
+          "EntityName": "producer"
+        }
+      ]
+    }
+  ]
+}

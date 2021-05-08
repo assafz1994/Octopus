@@ -7,16 +7,19 @@ namespace OctopusCore.Configuration.ConfigurationProviders
 {
     public class AnalyzerConfigurationProvider : IAnalyzerConfigurationProvider
     {
+        //todo refactor dictionaries. create object for fields and database keys(entity -> fieldName -> object)
         private readonly Dictionary<string, Dictionary<string, List<string>>> _entityTypeToFieldNameToDatabaseKeys;
+        private readonly Dictionary<string, Dictionary<string,Field>> _entityTypeToFieldNameToField;
+
         private readonly Dictionary<string, Dictionary<string, List<string>>> _entityTypeToDatabaseToFields;
         private readonly Dictionary<string, List<string>> _entityTypeToFields;
         public AnalyzerConfigurationProvider(Scheme scheme, DbConfigurations dbConfigurations)
         {
             Scheme = scheme;
             DbConfigurations = dbConfigurations;
-            _entityTypeToFieldNameToDatabaseKeys = new Dictionary<string, Dictionary<string, List<string>>>();
-            _entityTypeToDatabaseToFields = new Dictionary<string, Dictionary<string, List<string>>>();
-            _entityTypeToFields = new Dictionary<string, List<string>>();
+            _entityTypeToFieldNameToDatabaseKeys = new Dictionary<string, Dictionary<string, List<string>>>(StringComparer.OrdinalIgnoreCase);
+            _entityTypeToDatabaseToFields = new Dictionary<string, Dictionary<string, List<string>>>(StringComparer.OrdinalIgnoreCase);
+            _entityTypeToFieldNameToField = new Dictionary<string, Dictionary<string, Field>>(StringComparer.OrdinalIgnoreCase);
             InitializeDictionaries();
         }
 
@@ -29,11 +32,20 @@ namespace OctopusCore.Configuration.ConfigurationProviders
             foreach (var entity in dbConfiguration.Entities)
             {
                 // InitializeDictionaries
+                if (_entityTypeToFieldNameToField.ContainsKey(entity.Name) == false)
+                {
+                    _entityTypeToFieldNameToField.Add(entity.Name,new Dictionary<string, Field>(StringComparer.OrdinalIgnoreCase));
+                }
                 if (_entityTypeToFieldNameToDatabaseKeys.ContainsKey(entity.Name) == false)
                     _entityTypeToFieldNameToDatabaseKeys.Add(entity.Name, new Dictionary<string, List<string>>());
 
                 foreach (var field in entity.Fields)
                 {
+
+                    if (_entityTypeToFieldNameToField[entity.Name].ContainsKey(field.Name) == false)
+                    {
+                        _entityTypeToFieldNameToField[entity.Name][field.Name] = field;
+                    }
                     var fieldNameToDatabaseKey = _entityTypeToFieldNameToDatabaseKeys[entity.Name];
                     if (fieldNameToDatabaseKey.ContainsKey(field.Name) == false)
                         fieldNameToDatabaseKey.Add(field.Name, new List<string> {dbConfiguration.Id});
@@ -46,11 +58,6 @@ namespace OctopusCore.Configuration.ConfigurationProviders
                     _entityTypeToDatabaseToFields.Add(entity.Name, new Dictionary<string, List<string>>());
                 _entityTypeToDatabaseToFields[entity.Name][dbConfiguration.Id] = entity.Fields.Select(x => x.Name).ToList();
             }
-
-            foreach (var entity in Scheme.Entities)
-            {
-                _entityTypeToFields.Add(entity.Name, entity.Fields.Select(x => x.Name).ToList());
-            }
         }
         
         public Dictionary<string, List<string>> GetDbsToFields(string entityType)
@@ -62,11 +69,6 @@ namespace OctopusCore.Configuration.ConfigurationProviders
 
         public string GetFieldDatabaseKey(string entityType, string fieldName)
         {
-            if (fieldName == StringConstants.Guid)
-            {
-                fieldName = GetEntityPrimaryKey(entityType);
-            }
-
             if (_entityTypeToFieldNameToDatabaseKeys.TryGetValue(entityType, out var fieldNameToDatabaseKeys) == false)
                 throw new ArgumentException($"no db to handle this entity type:{entityType}");
             if (fieldNameToDatabaseKeys.TryGetValue(fieldName, out var databaseKeys) == false)
@@ -75,9 +77,40 @@ namespace OctopusCore.Configuration.ConfigurationProviders
             return databaseKeys.First();
         }
 
-        public string GetEntityPrimaryKey(string entityType)
+        public bool IsComplexField(string entityType, string fieldName)
         {
-            return _entityTypeToFields[entityType].First();
+            var field = GetField(entityType, fieldName);
+
+            return field.Type != DbFieldType.Primitive;
+        }
+
+        public Field GetField(string entityType, string fieldName)
+        {
+            if (_entityTypeToFieldNameToField.TryGetValue(entityType, out var fieldNameToField) == false)
+            {
+                throw new ArgumentException($"entity not exist. entity type = {entityType}");
+            }
+
+            if (fieldNameToField.TryGetValue(fieldName, out var field) == false)
+            {
+                throw new ArgumentException($"field not exist. field = {fieldName}");
+            }
+
+            return field;
+        }
+
+
+        public string GetEntityFirstField(string entityType)
+        {
+            var fieldNameToField =  _entityTypeToFieldNameToField[entityType];
+            foreach (var field in fieldNameToField)
+            {
+                if (field.Value.Type.Equals(DbFieldType.Primitive))
+                {
+                    return field.Key;
+                }
+            }
+            return null;
         }
 
         public List<string> GetEntityFields(string entityType)
