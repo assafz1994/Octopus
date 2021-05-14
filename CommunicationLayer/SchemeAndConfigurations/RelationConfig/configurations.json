@@ -15,7 +15,7 @@
             },
             {
               "Name": "taughtBy",
-              "Type": "Object",
+              "Type": "Array",
               "EntityName": "teacher",
               "ConnectedToField": "teach"
             }
@@ -31,7 +31,7 @@
             },
             {
               "Name": "teach",
-              "Type": "Object",
+              "Type": "Array",
               "EntityName": "student",
               "ConnectedToField": "taughtBy"
             }

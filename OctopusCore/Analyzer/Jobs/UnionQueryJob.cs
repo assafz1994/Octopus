@@ -1,8 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
+using OctopusCore.Configuration;
+using OctopusCore.Configuration.ConfigurationProviders;
 using OctopusCore.Contract;
 
 namespace OctopusCore.Analyzer.Jobs
@@ -11,11 +11,15 @@ namespace OctopusCore.Analyzer.Jobs
     {
         private readonly List<Job> _primitiveFieldsJobs;
         private readonly Dictionary<string, WorkPlan> _complexFieldsToWorkPlan;
+        private readonly IAnalyzerConfigurationProvider _configurationProvider;
+        private readonly string _entityType;
 
-        public UnionQueryJob(List<Job> primitiveFieldsJobs, Dictionary<string, WorkPlan> complexFieldsToWorkPlan)
+        public UnionQueryJob(IAnalyzerConfigurationProvider configurationProvider, string entityType, List<Job> primitiveFieldsJobs, Dictionary<string, WorkPlan> complexFieldsToWorkPlan)
         {
+            _configurationProvider = configurationProvider;
             _primitiveFieldsJobs = primitiveFieldsJobs;
             _complexFieldsToWorkPlan = complexFieldsToWorkPlan;
+            _entityType = entityType;
         }
         protected override Task<ExecutionResult> ExecuteInternalAsync()
         {
@@ -39,16 +43,25 @@ namespace OctopusCore.Analyzer.Jobs
 
             foreach (var complexFieldName in _complexFieldsToWorkPlan.Keys)
             {
-                var complexFieldResult = _complexFieldsToWorkPlan[complexFieldName].Jobs.Last().Result.EntityResults;
+                var currentWorkPlan = _complexFieldsToWorkPlan[complexFieldName];
+                var complexFieldResult = currentWorkPlan.Jobs.Last().Result.EntityResults;
                 var entitiesToRemove = new List<string>();
+                var complexField = _configurationProvider.GetField(_entityType, complexFieldName);
                 foreach (var outputEntityGuid in outputEntityResult.Keys)
                 {
                     var entityFields = outputEntityResult[outputEntityGuid].Fields;
-                    if(entityFields.ContainsKey(complexFieldName) == false)
+                    if (entityFields.ContainsKey(complexFieldName) == false)
                     {
                         if (complexFieldResult.ContainsKey(outputEntityGuid))
                         {
-                            entityFields[complexFieldName] = ((Dictionary<string, EntityResult>)complexFieldResult[outputEntityGuid].Fields[complexFieldName]).First().Value.Fields;
+                            if (complexField.Type == DbFieldType.Array)
+                            {
+                                entityFields[complexFieldName] = ((Dictionary<string, EntityResult>)complexFieldResult[outputEntityGuid].Fields[complexFieldName]).Select(x=>x.Value.Fields);
+                            }
+                            else
+                            {
+                                entityFields[complexFieldName] = ((Dictionary<string, EntityResult>)complexFieldResult[outputEntityGuid].Fields[complexFieldName]).First().Value.Fields;
+                            }
                         }
                         else
                         {
@@ -57,17 +70,28 @@ namespace OctopusCore.Analyzer.Jobs
                     }
                     else
                     {
-                        var complexEntityGuid = ((Dictionary<string, EntityResult>)entityFields[complexFieldName]).First().Key;//todo we use first because we assume it is not an array
-
-                        if (complexFieldResult.ContainsKey(complexEntityGuid))
+                        var complexFieldEntities = ((Dictionary<string, EntityResult>)entityFields[complexFieldName]);
+                        var entitiesList = new List<dynamic>();//the entity list that will be returned as the value of the complex field
+                        foreach (var complexEntityGuid in complexFieldEntities.Keys)
                         {
-                            entityFields[complexFieldName] = complexFieldResult[complexEntityGuid].Fields;
+                            if (complexFieldResult.ContainsKey(complexEntityGuid))
+                            {
+                                entitiesList.Add(complexFieldResult[complexEntityGuid].Fields);
+                            }
+                            else
+                            {
+                                //if the guid is not present in the complex field results, we should remove the entire entity from the outputEntityResult.
+                                //it can happens when an entity is filtered in the complex field query
+                                entitiesToRemove.Add(outputEntityGuid);
+                            }
+                        }
+                        if (complexField.Type == DbFieldType.Array)
+                        {
+                            entityFields[complexFieldName] = entitiesList;
                         }
                         else
                         {
-                            //if the guid is not present in the complex field results, we should remove the entire entity from the outputEntityResult.
-                            //it can happens when an entity is filtered in the complex field query
-                            entitiesToRemove.Add(outputEntityGuid);
+                            entityFields[complexFieldName] = entitiesList.FirstOrDefault();
                         }
                     }
 
