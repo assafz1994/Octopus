@@ -40,7 +40,7 @@ namespace Tests.AcceptanceTests
         [Test]
         public void TestSelectNamesOfAnimals()
         {
-            SetUpTestSelectNamesOfAnimals();
+            SetUpTestOfAnimals();
             var query = "From Animal a | Select a(name)";
             var entities = _client.ExecuteQuery(query).Result;
             
@@ -79,7 +79,7 @@ namespace Tests.AcceptanceTests
         [Test]
         public void TestSelectMultipleFieldsOfAnimals()
         {
-            SetUpTestSelectNamesOfAnimals();
+            SetUpTestOfAnimals();
             var query = "From Animal a | Select a(age, name)";
             var entities = _client.ExecuteQuery(query).Result;
             var result = entities.Select(x => new RouteValueDictionary(x)).ToList();
@@ -109,7 +109,7 @@ namespace Tests.AcceptanceTests
         [Test]
         public void TestSelectMultipleFieldsOfAnimalsFromMultipleTablesCassandraAndMongo()
         {
-            SetUpTestSelectNamesOfAnimals();
+            SetUpTestOfAnimals();
             var query = "From Animal a | Select a(aid, age, name, food, height)";
             var entities = _client.ExecuteQuery(query).Result;
             var result = entities.Select(x => new RouteValueDictionary(x)).ToList();
@@ -149,7 +149,7 @@ namespace Tests.AcceptanceTests
         [Test]
         public void TestSelectAnimalWithFilter()
         {
-            SetUpTestSelectNamesOfAnimals();
+            SetUpTestOfAnimals();
             var query = "From Animal a | where a.name == \"Maffin\" | Select a(age, name)";
             var entities = _client.ExecuteQuery(query).Result;
             var result = entities.Select(x => new RouteValueDictionary(x)).ToList();
@@ -166,11 +166,33 @@ namespace Tests.AcceptanceTests
             CollectionAssert.AreEquivalent(result, expectedResult);
         }
 
+        [Test]
+        public void TestUpdateAnimalAge()
+        {
+            SetUpTestOfAnimals();
+            var query = @"Entity Animal : an1(From Animal a | where a.aid == ""1"" | select a(aid, age))
+                          Update an1.age = 23";
+            var executeUpdateQuery = _client.ExecuteQuery(query).Result;
+
+            // execute select query of the updated entity to validate that the age changed as expected
+            var selectQueryToValidateUpdate = "From Animal a | where a.aid == \"1\" | Select a(age, aid)";
+            var resSelectQueryToValidateUpdate = _client.ExecuteQuery(selectQueryToValidateUpdate).Result;
+            var updatedEntity = resSelectQueryToValidateUpdate.Select(x => new RouteValueDictionary(x)).ToList();
+            var expectedResult = new List<Dictionary<string, object>>()
+            {
+                new Dictionary<string, object>()
+                {
+                    {"age", 23 },
+                    {"aid", "1"},
+                },
+            };
+            CollectionAssert.AreEquivalent(updatedEntity, expectedResult);
+        }
 
         [Test]
         public void TestDelete1()
         {
-            SetUpTestSelectNamesOfAnimals();
+            SetUpTestOfAnimals();
             var insertQuery = "Delete From Animal a | Where a.name == \"Maffin\"";
             var insertEntities = _client.ExecuteQuery(insertQuery).Result;
             Assert.AreEqual(0, insertEntities.Length);
@@ -455,9 +477,9 @@ namespace Tests.AcceptanceTests
             };
             CollectionAssert.AreEqual(result, expectedResult);
         }
-        private void SetUpTestSelectNamesOfAnimals()
+        private void SetUpTestOfAnimals()
         {
-            _dbsConfigurator.SetUpTestSelectNamesOfAnimals();
+            _dbsConfigurator.SetUpTestOfAnimals();
         }
 
         private void SetUpTestComplexSelect()
