@@ -107,21 +107,6 @@ namespace OctopusCore.DbHandlers
             return Task.FromResult(new ExecutionResult(entityType, new Dictionary<string, EntityResult>()));
         }
 
-        private List<string> AssembleUpdateQueries(List<string> tables, string guid, dynamic value)
-        {
-            var queries = new List<string>();
-
-            foreach (var table in tables)
-            {
-                var query = $"INSERT INTO {table} " +
-                            $"({string.Join(",", fieldsList.Select(x => x.Key))}) " +
-                            $"values " +
-                            $"({string.Join(",", fieldsList.Select(x => ValueToString(x.Value)))});";
-                queries.Add(query);
-            }
-            return queries;
-        }
-
         private string FieldToString(object o)
         {
             if (o is string s) return $"'{s}'";

@@ -32,6 +32,8 @@ all                 : '*' ;
 /*
  * Lexer Rules
  */
+
+ASSIGN              : EQUALS | ADD | REMOVE ;
 EQUALS              : '=' ;
 COMPARATOR          : ISEQUALS | GT | GTE | LT | LTE ; 
 SELECT              : 'select' | 'SELECT' | 'Select' ;
@@ -42,7 +44,6 @@ ENTITY              : 'entity' | 'ENTITY' | 'Entity' ;
 INSERT              : 'insert' | 'INSERT' | 'Insert' ;
 DELETE              : 'delete' | 'DELETE' | 'Delete' ;
 UPDATE              : 'update' | 'UPDATE' | 'Update' ;
-ASSIGN              : EQUALS | ADD | REMOVE ;
 PIPELINE            : '|' ;
 COLON               : ':' ;
 ISEQUALS            : '==' ;
