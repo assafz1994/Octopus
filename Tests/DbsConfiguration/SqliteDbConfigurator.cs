@@ -9,8 +9,8 @@ namespace Tests.DbsConfiguration
     class SqliteDbConfigurator
     {
         // private string _initFilePath = "somepath";
-        private string _sql1ConnectionString = "Data Source=DataBases\\sqlite1_test_db.db";
-        private string _sql2ConnectionString = "Data Source=DataBases\\sqlite2_test_db.db";
+        public string Sql1ConnectionString = "Data Source=DataBases\\sqlite1_test_db.db";
+        public string Sql2ConnectionString = "Data Source=DataBases\\sqlite2_test_db.db";
         private string _sql1CreateTableFile = "CreateTableSqlite1.txt";
         private string _sql2CreateTableFile = "CreateTableSqlite2.txt";
         private string _sql1DropTables;
@@ -76,17 +76,17 @@ namespace Tests.DbsConfiguration
         }
         public void SetUpDb()
         {
-            SendCommand(_sql1ConnectionString, _init1);
-            SendCommand(_sql2ConnectionString, _init2);
+            SendCommand(Sql1ConnectionString, _init1);
+            SendCommand(Sql2ConnectionString, _init2);
         }
 
         public void TearDownDb()
         {
-            SendCommand(_sql1ConnectionString, _sql1DropTables);
-            SendCommand(_sql2ConnectionString, _sql2DropTables);
+            SendCommand(Sql1ConnectionString, _sql1DropTables);
+            SendCommand(Sql2ConnectionString, _sql2DropTables);
         }
 
-        private void SendCommand(string connectionString, string commandText)
+        public void SendCommand(string connectionString, string commandText)
         {
             using var connection = new SqliteConnection(connectionString);
             connection.Open();
@@ -97,7 +97,7 @@ namespace Tests.DbsConfiguration
 
         public void SetUpTestComplexSelect()
         {
-            SendCommand(_sql1ConnectionString, _insert1);
+            SendCommand(Sql1ConnectionString, _insert1);
         }
     }
 }
