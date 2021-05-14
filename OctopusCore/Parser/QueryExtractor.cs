@@ -82,7 +82,7 @@ namespace OctopusCore.Parser
                 value = update.value().GetText();
             }
 
-            return new UpdateQueryInfo(entityType, entityToSubQuery, entityRepToEntityType, fields, value, subQueries);
+            return new UpdateQueryInfo(entityType, entityRep, entityToSubQuery, entityRepToEntityType, fields, value, subQueries);
         }
 
         private DeleteQueryInfo HandleDelete(OctopusQLParser.DeleteContext delete)
