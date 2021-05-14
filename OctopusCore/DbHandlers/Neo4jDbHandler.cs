@@ -190,6 +190,11 @@ namespace OctopusCore.DbHandlers
             return new ExecutionResult(entityType, new Dictionary<string, EntityResult>());
         }
 
+        public Task<ExecutionResult> ExecuteUpdateQuery(string entityType, string guid, string field, dynamic value)
+        {
+            throw new NotImplementedException();
+        }
+
         private string BuildInsertQuery(string entityType, IReadOnlyDictionary<string, dynamic> fields)
         {
             var query = new StringBuilder($"create (e:{entityType} ").Append("{");

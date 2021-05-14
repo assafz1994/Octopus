@@ -107,6 +107,11 @@ namespace OctopusCore.DbHandlers
             return new ExecutionResult(entityType, new Dictionary<string, EntityResult>());
         }
 
+        public Task<ExecutionResult> ExecuteUpdateQuery(string entityType, string guid, string field, dynamic value)
+        {
+            throw new NotImplementedException();
+        }
+
         //todo reuse this logic for all handlers
         private static string ValueToString(object argValue)
         {

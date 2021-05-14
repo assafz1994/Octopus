@@ -89,6 +89,11 @@ namespace OctopusCore.DbHandlers
             return Task.FromResult(new ExecutionResult(entityType, new Dictionary<string, EntityResult>()));
         }
 
+        public Task<ExecutionResult> ExecuteUpdateQuery(string entityType, string guid, string field, dynamic value)
+        {
+            throw new NotImplementedException();
+        }
+
         private IEnumerable<BsonDocument> GetRelevantDocuments(IMongoCollection<BsonDocument> collection,
             ProjectionDefinition<BsonDocument> project, FilterDefinition<BsonDocument> conditions, bool guidIsRequested)
         {
