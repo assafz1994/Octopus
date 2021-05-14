@@ -18,24 +18,26 @@ namespace Tests.DBHandlers
     class SQLiteUnitTest
     {
         private OctopusClient _client;
-        private DbsConfigurator _dbsConfigurator;
+        private SqliteDbConfigurator _sqliteDbConfigurator;
         private SqliteDbHandler _sqliteDBHandler;
 
         [OneTimeSetUp]
         public void OneTimeSetUp()
         {
             _client = new OctopusClient("http://localhost:5000");
-            _dbsConfigurator = new DbsConfigurator();
-            var entities = new List<Entity>(){
+            _sqliteDbConfigurator = new SqliteDbConfigurator();
+            var entities = new List<Entity>()
+            {
                 new Entity()
                 {
-                    Name="Student",
-                    Fields= new List<Field>()
+                    Name = "Student",
+                    Fields = new List<Field>()
                     {
-                        new Field {
-                        Name = "sid",
-                        Type = DbFieldType.Primitive,
-                        PrimitiveType = PrimitiveType.String
+                        new Field
+                        {
+                            Name = "sid",
+                            Type = DbFieldType.Primitive,
+                            PrimitiveType = PrimitiveType.String
                         },
                         new Field
                         {
@@ -67,8 +69,8 @@ namespace Tests.DBHandlers
                 },
                 new Entity
                 {
-                    Name="Student",
-                    Fields= new List<Field>()
+                    Name = "Student",
+                    Fields = new List<Field>()
                     {
                         new Field
                         {
@@ -104,11 +106,13 @@ namespace Tests.DBHandlers
                 Entities = entities,
             };
 
-            DbConfiguration configuration = new DbConfiguration() { Entities = entities, Id = "sql1", ConnectionString = "Data Source=DataBases\\sqlite1_test_db.db" };
+            DbConfiguration configuration = new DbConfiguration()
+                {Entities = entities, Id = "sql1", ConnectionString = "Data Source=DataBases\\sqlite1_test_db.db"};
             var provider = new SqliteConfigurationProvider(schema, configuration);
             var configurations = new DbConfigurations()
             {
-                Configurations = new List<DbConfiguration>(){
+                Configurations = new List<DbConfiguration>()
+                {
                     configuration,
                 }
             };
@@ -120,21 +124,22 @@ namespace Tests.DBHandlers
         [SetUp]
         public void SetUp()
         {
-            _dbsConfigurator.SetUpDbs();
+            _sqliteDbConfigurator.SetUpDb();
         }
 
         [TearDown]
         public void TearDown()
         {
-            _dbsConfigurator.TearDownDbs();
+            _sqliteDbConfigurator.TearDownDb();
         }
 
         [Test]
         public void TestSelectMultipleFieldsWithFilterOfStudentUT()
         {
-            _dbsConfigurator.SetUpTestComplexSelect();
+            _sqliteDbConfigurator.SetUpTestComplexSelect();
 
-            IReadOnlyCollection<string> fieldsToSelect = new List<string> {
+            IReadOnlyCollection<string> fieldsToSelect = new List<string>
+            {
                 "sid",
                 "age",
                 "name",
@@ -146,39 +151,44 @@ namespace Tests.DBHandlers
             };
 
             var entityType = "student";
-            List<(string entityType, OctopusCore.Configuration.Field field, List<string> fieldsToSelect)> joinsTuples = new List<(string entityType, OctopusCore.Configuration.Field field, List<string> fieldsToSelect)>();
-            var actualExecutionResult = _sqliteDBHandler.ExecuteQueryWithFiltersAsync(fieldsToSelect, filters, entityType, joinsTuples).Result;
-            
+            List<(string entityType, OctopusCore.Configuration.Field field, List<string> fieldsToSelect)> joinsTuples =
+                new List<(string entityType, OctopusCore.Configuration.Field field, List<string> fieldsToSelect)>();
+            var actualExecutionResult = _sqliteDBHandler
+                .ExecuteQueryWithFiltersAsync(fieldsToSelect, filters, entityType, joinsTuples).Result;
+
             var expectedExecutionResult = new ExecutionResult(
                 entityType,
                 new Dictionary<string, EntityResult>()
                 {
-                    {"ba78c4f3-deb0-4d51-8604-ae95c16cb147", 
+                    {
+                        "ba78c4f3-deb0-4d51-8604-ae95c16cb147",
                         new EntityResult(new Dictionary<string, dynamic>()
                         {
-                            { "sid", "1" },
-                            { "age", 10 },
-                            { "name", "sn1" }
+                            {"sid", "1"},
+                            {"age", 10},
+                            {"name", "sn1"}
                         })
                     },
-                    {"0433b07f-1d77-4f58-a58d-91daae887502", 
+                    {
+                        "0433b07f-1d77-4f58-a58d-91daae887502",
                         new EntityResult(new Dictionary<string, dynamic>()
                         {
-                            { "sid", "2" },
-                            { "age", 10 },
-                            { "name", "sn2" }
+                            {"sid", "2"},
+                            {"age", 10},
+                            {"name", "sn2"}
                         })
                     },
                 });
-            Assert.AreEqual(expectedExecutionResult, actualExecutionResult);            
+            Assert.AreEqual(expectedExecutionResult, actualExecutionResult);
         }
 
         [Test]
         public void TestSelectMultipleFieldsWithFilterAndWithComplexFieldOfStudentUT()
         {
-            _dbsConfigurator.SetUpTestComplexSelect();
+            _sqliteDbConfigurator.SetUpTestComplexSelect();
 
-            IReadOnlyCollection<string> fieldsToSelect = new List<string> {
+            IReadOnlyCollection<string> fieldsToSelect = new List<string>
+            {
                 "sid",
                 "age",
                 "name",
@@ -191,42 +201,46 @@ namespace Tests.DBHandlers
 
             var entityType = "student";
             List<(string entityType, Field field, List<string> fieldsToSelect)> joinsTuples =
-                new List<(string entityType, Field field, List<string> fieldsToSelect)>() {
-                (
-                    entityType,
-                    new Field()
-                    {
-                        ConnectedToField = "teach",
-                        EntityName = "teacher",
-                        Name = "taughtBy",
-                        PrimitiveType = null,
-                        Type = DbFieldType.Object
-                    },
-                    new List<string>(){"name"}
-                )
-           };
-            var entityRes = new EntityResult(
-                new Dictionary<string, dynamic>() 
+                new List<(string entityType, Field field, List<string> fieldsToSelect)>()
                 {
-                    { "name", "tn3" }
+                    (
+                        entityType,
+                        new Field()
+                        {
+                            ConnectedToField = "teach",
+                            EntityName = "teacher",
+                            Name = "taughtBy",
+                            PrimitiveType = null,
+                            Type = DbFieldType.Object
+                        },
+                        new List<string>() {"name"}
+                    )
+                };
+            var entityRes = new EntityResult(
+                new Dictionary<string, dynamic>()
+                {
+                    {"name", "tn3"}
                 }
             );
 
-            var actualExecutionResult = _sqliteDBHandler.ExecuteQueryWithFiltersAsync(fieldsToSelect, filters, entityType, joinsTuples).Result;
+            var actualExecutionResult = _sqliteDBHandler
+                .ExecuteQueryWithFiltersAsync(fieldsToSelect, filters, entityType, joinsTuples).Result;
             var expectedExecutionResult = new ExecutionResult(
                 entityType,
                 new Dictionary<string, EntityResult>()
                 {
-                    {"8f147986-8658-4561-860c-d1b23a134660",
+                    {
+                        "8f147986-8658-4561-860c-d1b23a134660",
                         new EntityResult(new Dictionary<string, dynamic>()
                         {
-                            { "sid", "3" },
-                            { "age", 30 },
-                            { "name", "sn3" },
-                            {"taughtBy",
+                            {"sid", "3"},
+                            {"age", 30},
+                            {"name", "sn3"},
+                            {
+                                "taughtBy",
                                 new Dictionary<string, EntityResult>()
                                 {
-                                    {"f7b97e2a-e885-49e3-811d-201e72b27406", entityRes }
+                                    {"f7b97e2a-e885-49e3-811d-201e72b27406", entityRes}
                                 }
                             }
                         })
@@ -236,13 +250,14 @@ namespace Tests.DBHandlers
             {
                 new Dictionary<string, dynamic>()
                 {
-                    { "sid", "3" },
-                    { "age", 30 },
-                    { "name", "sn3" },
-                    {"taughtBy",
+                    {"sid", "3"},
+                    {"age", 30},
+                    {"name", "sn3"},
+                    {
+                        "taughtBy",
                         new Dictionary<string, EntityResult>()
                         {
-                            {"f7b97e2a-e885-49e3-811d-201e72b27406", entityRes }
+                            {"f7b97e2a-e885-49e3-811d-201e72b27406", entityRes}
                         }
                     },
                 }
@@ -252,5 +267,25 @@ namespace Tests.DBHandlers
             // List<Dictionary<string, dynamic>> fields = entityResults.Select(x => x.Fields).ToList();
             Assert.AreEqual(expectedExecutionResult, actualExecutionResult);
         }
+
+        // [Test]
+        // public void TestUpdate1()
+        // {
+        //     _sqliteDbConfigurator.SetUpTestComplexSelect();
+        //     var actualUpdateExecutionResult = _sqliteDBHandler
+        //         .ExecuteUpdateQuery("student", "ba78c4f3-deb0-4d51-8604-ae95c16cb147", "age", 20).Result;
+        //     var expectedUpdateExecutionResult = new ExecutionResult("animal", new Dictionary<string, EntityResult>());
+        //
+        //     Assert.AreEqual(expectedUpdateExecutionResult, actualUpdateExecutionResult);
+        //
+        //     var executionResult = _sqliteDBHandler.ExecuteQueryWithFiltersAsync()
+        //     var expectedEntityResult = new EntityResult(new Dictionary<string, dynamic>()
+        //     {
+        //         {"sid", "1"},
+        //         {"name", "sn1" },
+        //         {"age", 20 }
+        //     });
+        //
+        // }
     }
 }
