@@ -91,7 +91,16 @@ namespace OctopusCore.DbHandlers
 
         public Task<ExecutionResult> ExecuteUpdateQuery(string entityType, string guid, string field, dynamic value)
         {
-            throw new NotImplementedException();
+            var dbClient = new MongoClient(); // no need to insert connection string -> local db is the default
+            var databaseName = MongoUrl.Create(_configurationProvider.ConnectionString).DatabaseName;
+            var db = dbClient.GetDatabase(databaseName);
+            var collectionName = _configurationProvider.GetTableName(entityType);
+            var collection = db.GetCollection<BsonDocument>(collectionName);
+
+            var filter = Builders<BsonDocument>.Filter.Eq("guid", Guid.Parse(guid));
+            var update = Builders<BsonDocument>.Update.Set(field, value);
+            collection.UpdateOne(filter, update);
+            return Task.FromResult(new ExecutionResult(entityType, new Dictionary<string, EntityResult>()));
         }
 
         private IEnumerable<BsonDocument> GetRelevantDocuments(IMongoCollection<BsonDocument> collection,
