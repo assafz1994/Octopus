@@ -9,7 +9,7 @@ select              : FROM entity entityRep (whereClause)* (selectClause | aggre
 deleteSelect        : FROM entity entityRep (whereClause)* ;
 insert              : (insertClause)+ INSERT entityReps ;
 delete              : DELETE deleteSelect ;
-update              : (getClause)+ UPDATE entityRep (fieldsWithDot)? ASSIGN value ;
+update              : (getClause)+ UPDATE entityRep (fieldsWithDot)? EQUALS value ;
 insertClause        : ENTITY entity COLON entityRep '(' (assignments | select) ')' ;
 getClause           : ENTITY entity COLON entityRep '(' select ')' ;
 assignments         : assignmentList+=assignment (',' assignmentList+=assignment)* ;
@@ -34,7 +34,6 @@ all                 : '*' ;
  */
 
 EQUALS              : '=' ;
-ASSIGN              : EQUALS | ADD | REMOVE ;
 COMPARATOR          : ISEQUALS | GT | GTE | LT | LTE ; 
 SELECT              : 'select' | 'SELECT' | 'Select' ;
 FROM                : 'from' | 'FROM' | 'From' ;
