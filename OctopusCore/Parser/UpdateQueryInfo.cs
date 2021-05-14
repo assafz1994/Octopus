@@ -8,6 +8,7 @@ namespace OctopusCore.Parser
     class UpdateQueryInfo : QueryInfo
     {
         public string Entity { get; set; }
+        public string EntityRep { get; set; }
         public Dictionary<string, string> EntityToSubQuery;
         public Dictionary<string, string> EntityRepToEntityType;
         public List<string> Fields;
@@ -18,7 +19,8 @@ namespace OctopusCore.Parser
             EntityToSubQuery = new Dictionary<string, string>();
         }
 
-        public UpdateQueryInfo(string entity, 
+        public UpdateQueryInfo(string entity,
+            string entityRep,
             Dictionary<string, string> entityToSubQuery, 
             Dictionary<string, string> entityRepToEntityType,
             List<string> fields,
@@ -27,6 +29,7 @@ namespace OctopusCore.Parser
         {
             SubQueries = subQueries;
             Entity = entity;
+            EntityRep = entityRep;
             EntityRepToEntityType = entityRepToEntityType;
             EntityToSubQuery = entityToSubQuery;
             Fields = fields;
