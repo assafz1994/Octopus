@@ -37,7 +37,7 @@ namespace OctopusCore.Analyzer.Jobs
             var entityKey = EntityToSubQuery[EntityRep];
             var result = SubQueryWorkPlans[entityKey].Jobs.Last().Result;
             var guid = result.EntityResults.First().Key;
-            return _dbHandler.ExecuteUpdateQuery(EntityType, guid, Value);
+            return _dbHandler.ExecuteUpdateQuery(EntityType, guid, Field, Value);
         }
     }
 }
