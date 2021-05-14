@@ -67,11 +67,6 @@ namespace OctopusCore.Parser
             var entityType = entityRepToEntityType[entityRep];
             var fields = update.fieldsWithDot()._el.Select(field => field.GetText().ToLower()).ToList();
 
-            if (!update.ASSIGN().GetText().Equals("="))
-            {
-                throw new Exception("Only = is supported");
-            }
-
             dynamic value;
             if (update.value().NUMBER() != null)
             {
