@@ -33,8 +33,8 @@ all                 : '*' ;
  * Lexer Rules
  */
 
-ASSIGN              : EQUALS | ADD | REMOVE ;
 EQUALS              : '=' ;
+ASSIGN              : EQUALS | ADD | REMOVE ;
 COMPARATOR          : ISEQUALS | GT | GTE | LT | LTE ; 
 SELECT              : 'select' | 'SELECT' | 'Select' ;
 FROM                : 'from' | 'FROM' | 'From' ;

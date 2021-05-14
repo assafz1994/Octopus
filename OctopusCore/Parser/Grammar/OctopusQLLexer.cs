@@ -34,7 +34,7 @@ public partial class OctopusQLLexer : Lexer {
 	protected static PredictionContextCache sharedContextCache = new PredictionContextCache();
 	public const int
 		T__0=1, T__1=2, T__2=3, T__3=4, T__4=5, T__5=6, T__6=7, T__7=8, T__8=9, 
-		T__9=10, T__10=11, ASSIGN=12, EQUALS=13, COMPARATOR=14, SELECT=15, FROM=16, 
+		T__9=10, T__10=11, EQUALS=12, ASSIGN=13, COMPARATOR=14, SELECT=15, FROM=16, 
 		WHERE=17, INCLUDE=18, ENTITY=19, INSERT=20, DELETE=21, UPDATE=22, PIPELINE=23, 
 		COLON=24, ISEQUALS=25, GT=26, GTE=27, LT=28, LTE=29, ADD=30, REMOVE=31, 
 		WORD=32, NUMBER=33, ENT=34, ENTREP=35, TEXT=36, WHITESPACE=37;
@@ -48,7 +48,7 @@ public partial class OctopusQLLexer : Lexer {
 
 	public static readonly string[] ruleNames = {
 		"T__0", "T__1", "T__2", "T__3", "T__4", "T__5", "T__6", "T__7", "T__8", 
-		"T__9", "T__10", "ASSIGN", "EQUALS", "COMPARATOR", "SELECT", "FROM", "WHERE", 
+		"T__9", "T__10", "EQUALS", "ASSIGN", "COMPARATOR", "SELECT", "FROM", "WHERE", 
 		"INCLUDE", "ENTITY", "INSERT", "DELETE", "UPDATE", "PIPELINE", "COLON", 
 		"ISEQUALS", "GT", "GTE", "LT", "LTE", "ADD", "REMOVE", "LOWERCASE", "UPPERCASE", 
 		"WORD", "NUMBER", "ENT", "ENTREP", "TEXT", "WHITESPACE"
@@ -66,13 +66,13 @@ public partial class OctopusQLLexer : Lexer {
 
 	private static readonly string[] _LiteralNames = {
 		null, "'('", "')'", "','", "'.'", "'['", "']'", "'AVG'", "'SUM'", "'MIN'", 
-		"'MAX'", "'*'", null, "'='", null, null, null, null, null, null, null, 
+		"'MAX'", "'*'", "'='", null, null, null, null, null, null, null, null, 
 		null, null, "'|'", "':'", "'=='", "'>'", "'>='", "'<'", "'<='", "'+='", 
 		"'-='"
 	};
 	private static readonly string[] _SymbolicNames = {
 		null, null, null, null, null, null, null, null, null, null, null, null, 
-		"ASSIGN", "EQUALS", "COMPARATOR", "SELECT", "FROM", "WHERE", "INCLUDE", 
+		"EQUALS", "ASSIGN", "COMPARATOR", "SELECT", "FROM", "WHERE", "INCLUDE", 
 		"ENTITY", "INSERT", "DELETE", "UPDATE", "PIPELINE", "COLON", "ISEQUALS", 
 		"GT", "GTE", "LT", "LTE", "ADD", "REMOVE", "WORD", "NUMBER", "ENT", "ENTREP", 
 		"TEXT", "WHITESPACE"
@@ -126,8 +126,8 @@ public partial class OctopusQLLexer : Lexer {
 		'\a', '\x3', '\b', '\x3', '\b', '\x3', '\b', '\x3', '\b', '\x3', '\t', 
 		'\x3', '\t', '\x3', '\t', '\x3', '\t', '\x3', '\n', '\x3', '\n', '\x3', 
 		'\n', '\x3', '\n', '\x3', '\v', '\x3', '\v', '\x3', '\v', '\x3', '\v', 
-		'\x3', '\f', '\x3', '\f', '\x3', '\r', '\x3', '\r', '\x3', '\r', '\x5', 
-		'\r', 's', '\n', '\r', '\x3', '\xE', '\x3', '\xE', '\x3', '\xF', '\x3', 
+		'\x3', '\f', '\x3', '\f', '\x3', '\r', '\x3', '\r', '\x3', '\xE', '\x3', 
+		'\xE', '\x3', '\xE', '\x5', '\xE', 'u', '\n', '\xE', '\x3', '\xF', '\x3', 
 		'\xF', '\x3', '\xF', '\x3', '\xF', '\x3', '\xF', '\x5', '\xF', '|', '\n', 
 		'\xF', '\x3', '\x10', '\x3', '\x10', '\x3', '\x10', '\x3', '\x10', '\x3', 
 		'\x10', '\x3', '\x10', '\x3', '\x10', '\x3', '\x10', '\x3', '\x10', '\x3', 
@@ -212,7 +212,7 @@ public partial class OctopusQLLexer : Lexer {
 		'\xF', ']', '\x3', '\x2', '\x2', '\x2', '\x11', '\x61', '\x3', '\x2', 
 		'\x2', '\x2', '\x13', '\x65', '\x3', '\x2', '\x2', '\x2', '\x15', 'i', 
 		'\x3', '\x2', '\x2', '\x2', '\x17', 'm', '\x3', '\x2', '\x2', '\x2', '\x19', 
-		'r', '\x3', '\x2', '\x2', '\x2', '\x1B', 't', '\x3', '\x2', '\x2', '\x2', 
+		'o', '\x3', '\x2', '\x2', '\x2', '\x1B', 't', '\x3', '\x2', '\x2', '\x2', 
 		'\x1D', '{', '\x3', '\x2', '\x2', '\x2', '\x1F', '\x8F', '\x3', '\x2', 
 		'\x2', '\x2', '!', '\x9D', '\x3', '\x2', '\x2', '\x2', '#', '\xAE', '\x3', 
 		'\x2', '\x2', '\x2', '%', '\xC5', '\x3', '\x2', '\x2', '\x2', '\'', '\xD9', 
@@ -244,10 +244,10 @@ public partial class OctopusQLLexer : Lexer {
 		'i', 'j', '\a', 'O', '\x2', '\x2', 'j', 'k', '\a', '\x43', '\x2', '\x2', 
 		'k', 'l', '\a', 'Z', '\x2', '\x2', 'l', '\x16', '\x3', '\x2', '\x2', '\x2', 
 		'm', 'n', '\a', ',', '\x2', '\x2', 'n', '\x18', '\x3', '\x2', '\x2', '\x2', 
-		'o', 's', '\x5', '\x1B', '\xE', '\x2', 'p', 's', '\x5', '=', '\x1F', '\x2', 
-		'q', 's', '\x5', '?', ' ', '\x2', 'r', 'o', '\x3', '\x2', '\x2', '\x2', 
-		'r', 'p', '\x3', '\x2', '\x2', '\x2', 'r', 'q', '\x3', '\x2', '\x2', '\x2', 
-		's', '\x1A', '\x3', '\x2', '\x2', '\x2', 't', 'u', '\a', '?', '\x2', '\x2', 
+		'o', 'p', '\a', '?', '\x2', '\x2', 'p', '\x1A', '\x3', '\x2', '\x2', '\x2', 
+		'q', 'u', '\x5', '\x19', '\r', '\x2', 'r', 'u', '\x5', '=', '\x1F', '\x2', 
+		's', 'u', '\x5', '?', ' ', '\x2', 't', 'q', '\x3', '\x2', '\x2', '\x2', 
+		't', 'r', '\x3', '\x2', '\x2', '\x2', 't', 's', '\x3', '\x2', '\x2', '\x2', 
 		'u', '\x1C', '\x3', '\x2', '\x2', '\x2', 'v', '|', '\x5', '\x33', '\x1A', 
 		'\x2', 'w', '|', '\x5', '\x35', '\x1B', '\x2', 'x', '|', '\x5', '\x37', 
 		'\x1C', '\x2', 'y', '|', '\x5', '\x39', '\x1D', '\x2', 'z', '|', '\x5', 
@@ -401,7 +401,7 @@ public partial class OctopusQLLexer : Lexer {
 		'\x3', '\x2', '\x2', '\x2', '\x15B', '\x15C', '\x3', '\x2', '\x2', '\x2', 
 		'\x15C', '\x15D', '\x3', '\x2', '\x2', '\x2', '\x15D', '\x15E', '\b', 
 		'(', '\x2', '\x2', '\x15E', 'P', '\x3', '\x2', '\x2', '\x2', '\x15', '\x2', 
-		'r', '{', '\x8F', '\x9D', '\xAE', '\xC5', '\xD9', '\xED', '\x101', '\x115', 
+		't', '{', '\x8F', '\x9D', '\xAE', '\xC5', '\xD9', '\xED', '\x101', '\x115', 
 		'\x134', '\x136', '\x13B', '\x141', '\x147', '\x14C', '\x153', '\x15B', 
 		'\x3', '\b', '\x2', '\x2',
 	};

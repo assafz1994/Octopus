@@ -17,7 +17,7 @@ public class OctopusQLParser extends Parser {
 		new PredictionContextCache();
 	public static final int
 		T__0=1, T__1=2, T__2=3, T__3=4, T__4=5, T__5=6, T__6=7, T__7=8, T__8=9, 
-		T__9=10, T__10=11, ASSIGN=12, EQUALS=13, COMPARATOR=14, SELECT=15, FROM=16, 
+		T__9=10, T__10=11, EQUALS=12, ASSIGN=13, COMPARATOR=14, SELECT=15, FROM=16, 
 		WHERE=17, INCLUDE=18, ENTITY=19, INSERT=20, DELETE=21, UPDATE=22, PIPELINE=23, 
 		COLON=24, ISEQUALS=25, GT=26, GTE=27, LT=28, LTE=29, ADD=30, REMOVE=31, 
 		WORD=32, NUMBER=33, ENT=34, ENTREP=35, TEXT=36, WHITESPACE=37;
@@ -41,7 +41,7 @@ public class OctopusQLParser extends Parser {
 	private static String[] makeLiteralNames() {
 		return new String[] {
 			null, "'('", "')'", "','", "'.'", "'['", "']'", "'AVG'", "'SUM'", "'MIN'", 
-			"'MAX'", "'*'", null, "'='", null, null, null, null, null, null, null, 
+			"'MAX'", "'*'", "'='", null, null, null, null, null, null, null, null, 
 			null, null, "'|'", "':'", "'=='", "'>'", "'>='", "'<'", "'<='", "'+='", 
 			"'-='"
 		};
@@ -50,7 +50,7 @@ public class OctopusQLParser extends Parser {
 	private static String[] makeSymbolicNames() {
 		return new String[] {
 			null, null, null, null, null, null, null, null, null, null, null, null, 
-			"ASSIGN", "EQUALS", "COMPARATOR", "SELECT", "FROM", "WHERE", "INCLUDE", 
+			"EQUALS", "ASSIGN", "COMPARATOR", "SELECT", "FROM", "WHERE", "INCLUDE", 
 			"ENTITY", "INSERT", "DELETE", "UPDATE", "PIPELINE", "COLON", "ISEQUALS", 
 			"GT", "GTE", "LT", "LTE", "ADD", "REMOVE", "WORD", "NUMBER", "ENT", "ENTREP", 
 			"TEXT", "WHITESPACE"
@@ -1733,13 +1733,13 @@ public class OctopusQLParser extends Parser {
 		"\2\2\2TU\3\2\2\2UV\7\26\2\2VW\5\34\17\2W\t\3\2\2\2XY\7\27\2\2YZ\5\6\4"+
 		"\2Z\13\3\2\2\2[]\5\20\t\2\\[\3\2\2\2]^\3\2\2\2^\\\3\2\2\2^_\3\2\2\2_`"+
 		"\3\2\2\2`a\7\30\2\2ac\5\60\31\2bd\5\30\r\2cb\3\2\2\2cd\3\2\2\2de\3\2\2"+
-		"\2ef\7\16\2\2fg\5,\27\2g\r\3\2\2\2hi\7\25\2\2ij\5.\30\2jk\7\32\2\2kl\5"+
+		"\2ef\7\17\2\2fg\5,\27\2g\r\3\2\2\2hi\7\25\2\2ij\5.\30\2jk\7\32\2\2kl\5"+
 		"\60\31\2lo\7\3\2\2mp\5\22\n\2np\5\4\3\2om\3\2\2\2on\3\2\2\2pq\3\2\2\2"+
 		"qr\7\4\2\2r\17\3\2\2\2st\7\25\2\2tu\5.\30\2uv\7\32\2\2vw\5\60\31\2wx\7"+
 		"\3\2\2xy\5\4\3\2yz\7\4\2\2z\21\3\2\2\2{\u0080\5\24\13\2|}\7\5\2\2}\177"+
 		"\5\24\13\2~|\3\2\2\2\177\u0082\3\2\2\2\u0080~\3\2\2\2\u0080\u0081\3\2"+
 		"\2\2\u0081\23\3\2\2\2\u0082\u0080\3\2\2\2\u0083\u0084\5*\26\2\u0084\u0085"+
-		"\7\17\2\2\u0085\u0086\5,\27\2\u0086\25\3\2\2\2\u0087\u0088\7\31\2\2\u0088"+
+		"\7\16\2\2\u0085\u0086\5,\27\2\u0086\25\3\2\2\2\u0087\u0088\7\31\2\2\u0088"+
 		"\u0089\7\23\2\2\u0089\u008a\5\60\31\2\u008a\u008b\5\30\r\2\u008b\u008c"+
 		"\7\20\2\2\u008c\u008d\5,\27\2\u008d\27\3\2\2\2\u008e\u008f\7\6\2\2\u008f"+
 		"\u0091\5*\26\2\u0090\u008e\3\2\2\2\u0091\u0092\3\2\2\2\u0092\u0090\3\2"+

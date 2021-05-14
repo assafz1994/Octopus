@@ -37,7 +37,7 @@ public partial class OctopusQLParser : Parser {
 	protected static PredictionContextCache sharedContextCache = new PredictionContextCache();
 	public const int
 		T__0=1, T__1=2, T__2=3, T__3=4, T__4=5, T__5=6, T__6=7, T__7=8, T__8=9, 
-		T__9=10, T__10=11, ASSIGN=12, EQUALS=13, COMPARATOR=14, SELECT=15, FROM=16, 
+		T__9=10, T__10=11, EQUALS=12, ASSIGN=13, COMPARATOR=14, SELECT=15, FROM=16, 
 		WHERE=17, INCLUDE=18, ENTITY=19, INSERT=20, DELETE=21, UPDATE=22, PIPELINE=23, 
 		COLON=24, ISEQUALS=25, GT=26, GTE=27, LT=28, LTE=29, ADD=30, REMOVE=31, 
 		WORD=32, NUMBER=33, ENT=34, ENTREP=35, TEXT=36, WHITESPACE=37;
@@ -57,13 +57,13 @@ public partial class OctopusQLParser : Parser {
 
 	private static readonly string[] _LiteralNames = {
 		null, "'('", "')'", "','", "'.'", "'['", "']'", "'AVG'", "'SUM'", "'MIN'", 
-		"'MAX'", "'*'", null, "'='", null, null, null, null, null, null, null, 
+		"'MAX'", "'*'", "'='", null, null, null, null, null, null, null, null, 
 		null, null, "'|'", "':'", "'=='", "'>'", "'>='", "'<'", "'<='", "'+='", 
 		"'-='"
 	};
 	private static readonly string[] _SymbolicNames = {
 		null, null, null, null, null, null, null, null, null, null, null, null, 
-		"ASSIGN", "EQUALS", "COMPARATOR", "SELECT", "FROM", "WHERE", "INCLUDE", 
+		"EQUALS", "ASSIGN", "COMPARATOR", "SELECT", "FROM", "WHERE", "INCLUDE", 
 		"ENTITY", "INSERT", "DELETE", "UPDATE", "PIPELINE", "COLON", "ISEQUALS", 
 		"GT", "GTE", "LT", "LTE", "ADD", "REMOVE", "WORD", "NUMBER", "ENT", "ENTREP", 
 		"TEXT", "WHITESPACE"
@@ -1937,7 +1937,7 @@ public partial class OctopusQLParser : Parser {
 		'`', '\x61', '\a', '\x18', '\x2', '\x2', '\x61', '\x63', '\x5', '\x30', 
 		'\x19', '\x2', '\x62', '\x64', '\x5', '\x18', '\r', '\x2', '\x63', '\x62', 
 		'\x3', '\x2', '\x2', '\x2', '\x63', '\x64', '\x3', '\x2', '\x2', '\x2', 
-		'\x64', '\x65', '\x3', '\x2', '\x2', '\x2', '\x65', '\x66', '\a', '\xE', 
+		'\x64', '\x65', '\x3', '\x2', '\x2', '\x2', '\x65', '\x66', '\a', '\xF', 
 		'\x2', '\x2', '\x66', 'g', '\x5', ',', '\x17', '\x2', 'g', '\r', '\x3', 
 		'\x2', '\x2', '\x2', 'h', 'i', '\a', '\x15', '\x2', '\x2', 'i', 'j', '\x5', 
 		'.', '\x18', '\x2', 'j', 'k', '\a', '\x1A', '\x2', '\x2', 'k', 'l', '\x5', 
@@ -1955,7 +1955,7 @@ public partial class OctopusQLParser : Parser {
 		'\x82', '\x3', '\x2', '\x2', '\x2', '\x80', '~', '\x3', '\x2', '\x2', 
 		'\x2', '\x80', '\x81', '\x3', '\x2', '\x2', '\x2', '\x81', '\x13', '\x3', 
 		'\x2', '\x2', '\x2', '\x82', '\x80', '\x3', '\x2', '\x2', '\x2', '\x83', 
-		'\x84', '\x5', '*', '\x16', '\x2', '\x84', '\x85', '\a', '\xF', '\x2', 
+		'\x84', '\x5', '*', '\x16', '\x2', '\x84', '\x85', '\a', '\xE', '\x2', 
 		'\x2', '\x85', '\x86', '\x5', ',', '\x17', '\x2', '\x86', '\x15', '\x3', 
 		'\x2', '\x2', '\x2', '\x87', '\x88', '\a', '\x19', '\x2', '\x2', '\x88', 
 		'\x89', '\a', '\x13', '\x2', '\x2', '\x89', '\x8A', '\x5', '\x30', '\x19', 
