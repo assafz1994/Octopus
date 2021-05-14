@@ -56,7 +56,10 @@ namespace OctopusCore.DbHandlers
         public Task<ExecutionResult> ExecuteDeleteQuery(string entityType, IReadOnlyCollection<string> guidCollection)
         {
             var tableNamesToTables = _configurationProvider.TableNamesToTables(entityType);
-            var entities = GetEntities(entityType, guidCollection);
+            var tables = _configurationProvider.GetTables(entityType);
+            var byFields = GetByFields(tables);
+            byFields.Add(StringConstants.Guid);
+            var entities = GetEntities(entityType, guidCollection, byFields);
             foreach (var tableElement in tableNamesToTables)
             foreach (var entity in entities)
             {
@@ -70,21 +73,18 @@ namespace OctopusCore.DbHandlers
             return Task.FromResult(new ExecutionResult(entityType, new Dictionary<string, EntityResult>()));
         }
 
-        private List<Dictionary<string, dynamic>> GetEntities(string entityType, IReadOnlyCollection<string> guidCollection)
+        private List<Dictionary<string, dynamic>> GetEntities(string entityType, IReadOnlyCollection<string> guidCollection, List<string> fields)
         {
             var tableNames = _configurationProvider.GetTableNames(entityType);
             var mainTable = tableNames.First();
-            var tables = _configurationProvider.GetTables(entityType);
-            var byFields = GetByFields(tables);
-            byFields.Add(StringConstants.Guid);
             var guidList = $"({string.Join(",", guidCollection)})";
-            var selectQuery = $"SELECT {string.Join(",", byFields)} FROM {mainTable} WHERE GUID IN {guidList}";
+            var selectQuery = $"SELECT {string.Join(",", fields)} FROM {mainTable} WHERE GUID IN {guidList}";
             var rs = _session.Execute(selectQuery);
             var entities = new List<Dictionary<string, dynamic>>();
 
             foreach (var row in rs)
             {
-                var fieldToValueMap = byFields.ToDictionary(field => field, field => row.GetValue(typeof(object), field));
+                var fieldToValueMap = fields.ToDictionary(field => field, field => row.GetValue(typeof(object), field));
                 entities.Add(fieldToValueMap);
             }
 
@@ -93,17 +93,14 @@ namespace OctopusCore.DbHandlers
 
         public Task<ExecutionResult> ExecuteUpdateQuery(string entityType, string guid, string updateField, dynamic value)
         {
-            var tableNamesToTables = _configurationProvider.TableNamesToTables(entityType);
-            var entity = GetEntities(entityType, new List<string>() {guid}).First();
-            foreach (var tableElement in tableNamesToTables)
-            {
-                var updateQuery = $"UPDATE {tableElement.Key} SET {updateField} = {ValueToString(value)} WHERE guid={entity[StringConstants.Guid]}";
-                foreach (var field in tableElement.Value)
-                {
-                    updateQuery += $" AND {field}={FieldToString(entity[field])}";
-                }
-                _session.Execute(updateQuery);
-            }
+            var fields = _configurationProvider.GetFields(entityType);
+            var guidList = new List<string>() {guid};
+            var entity = GetEntities(entityType, guidList, fields).First();
+            ExecuteDeleteQuery(entityType, guidList);
+            entity[updateField] = value;
+            entity[StringConstants.Guid] = Guid.Parse(guid);
+            entity = entity.ToDictionary(x => x.Key, x => FieldToString(x.Value));
+            ExecuteInsertQuery(entityType, entity);
             return Task.FromResult(new ExecutionResult(entityType, new Dictionary<string, EntityResult>()));
         }
 
