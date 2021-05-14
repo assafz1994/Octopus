@@ -1,5 +1,4 @@
 ﻿using Autofac;
-using Microsoft.AspNetCore.Routing;
 using NUnit.Framework;
 using Octopus.Client;
 using OctopusCore.Configuration;
@@ -8,7 +7,6 @@ using OctopusCore.DbHandlers;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using Tests.DbsConfiguration;
 
 namespace Tests.DBHandlers
@@ -16,7 +14,6 @@ namespace Tests.DBHandlers
     [TestFixture]
     class MongoDBUnitTest
     {
-
         private OctopusClient _client;
         private MongoDbConfigurator _mongoDbConfigurator;
         private MongoDBHandler _mongoDBHandler;
@@ -77,7 +74,7 @@ namespace Tests.DBHandlers
         [Test]
         public void TestSelectMultipleFieldsWithFilterOfAnimalsUT()
         {
-            SetUpTestSelectNamesOfAnimals();
+            SetUpTestOfAnimals();
 
             IReadOnlyCollection<string> fieldsToSelect = new List<string> {
                 "name",
@@ -110,7 +107,7 @@ namespace Tests.DBHandlers
     [Test]
         public void TestSelectMultipleFieldsWithoutFilterOfAnimalsUT()
         {
-            SetUpTestSelectNamesOfAnimals();
+            SetUpTestOfAnimals();
 
             IReadOnlyCollection<string> fieldsToSelect = new List<String> {
                 "name",
@@ -155,12 +152,45 @@ namespace Tests.DBHandlers
             CollectionAssert.AreEqual(fields, expectedResult);
         }
 
+        [Test]
+        public void TestUpdateAgeAnimalUT()
+        {
+            // update age of animal to be 23
+            SetUpTestOfAnimals();
+            var entityType = "animal";
+            var guid = "9264f435-d1c7-4f1c-8b84-cf4bdb935641";
+            var fieldToUpdate = "age";
+            var newValue = 23;
+            var resUpdate = _mongoDBHandler.ExecuteUpdateQuery(entityType, guid, fieldToUpdate, newValue).Result;
 
+            // execute select query of the updated entity to validate that the age changed as expected
+            IReadOnlyCollection<string> fieldsToSelect = new List<String> {
+                "age",
+                "aid"
+            }.AsReadOnly();
+            IReadOnlyCollection<OctopusCore.Parser.Filter> filters = new List<OctopusCore.Parser.Filter> 
+            {
+                new OctopusCore.Parser.Filters.EqFilter(new List<string>() {"aid"}, "1")
+            };
+            List<(string entityType, OctopusCore.Configuration.Field field, List<string> fieldsToSelect)> joinsTuples = new List<(string entityType, OctopusCore.Configuration.Field field, List<string> fieldsToSelect)>();
+            var resSelectQueryToValidateUpdate = _mongoDBHandler.ExecuteQueryWithFiltersAsync(fieldsToSelect, filters, entityType, joinsTuples).Result;
+            var entityResults = resSelectQueryToValidateUpdate.EntityResults.Values.ToList();
+            List<Dictionary<string, dynamic>> fields = entityResults.Select(x => x.Fields).ToList();
+            var expectedResult = new List<Dictionary<string, dynamic>>()
+            {
+                new Dictionary<string, dynamic>()
+                {
+                    { "age", 23 },
+                    { "aid", "1"},
+                }
+            };
+            CollectionAssert.AreEqual(fields, expectedResult);
+        }
 
         [Test]
         public void TestInsertOneAnimalUT()
         {
-            SetUpTestSelectNamesOfAnimals();
+            SetUpTestOfAnimals();
 
             IReadOnlyDictionary<string, dynamic> fields = new Dictionary<string, dynamic> {
              {"name", "Roxi"},
@@ -219,7 +249,7 @@ namespace Tests.DBHandlers
         [Test]
         public void TestDeleteOneAnimalUT()
         {
-            SetUpTestSelectNamesOfAnimals();
+            SetUpTestOfAnimals();
 
             IReadOnlyCollection<string> guidCollection = new List<string> {
              "9264f435-d1c7-4f1c-8b84-cf4bdb935641",
@@ -263,7 +293,7 @@ namespace Tests.DBHandlers
         [Test]
         public void TestDeleteManyAnimalsUT()
         {
-            SetUpTestSelectNamesOfAnimals();
+            SetUpTestOfAnimals();
 
             IReadOnlyCollection<string> guidCollection = new List<string> {
              "9264f435-d1c7-4f1c-8b84-cf4bdb935641",
@@ -297,10 +327,9 @@ namespace Tests.DBHandlers
             CollectionAssert.AreEqual(fieldsAndValues, expectedResult);
         }
 
-        private void SetUpTestSelectNamesOfAnimals()
+        private void SetUpTestOfAnimals()
         {
-            _mongoDbConfigurator.SetUpTestSelectNamesOfAnimals();
+            _mongoDbConfigurator.SetUpTestOfAnimals();
         }
-
     }
 }
