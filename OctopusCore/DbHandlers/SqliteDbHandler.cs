@@ -87,7 +87,7 @@ namespace OctopusCore.DbHandlers
             command.CommandText = query;
 
             var row = await command.ExecuteNonQueryAsync();
-
+            connection.Close();
             return new ExecutionResult(entityType, new Dictionary<string, EntityResult>());
         }
 
@@ -103,7 +103,7 @@ namespace OctopusCore.DbHandlers
             command.CommandText = query;
 
             var row = await command.ExecuteNonQueryAsync();
-
+            connection.Close();
             return new ExecutionResult(entityType, new Dictionary<string, EntityResult>());
         }
 
