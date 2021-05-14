@@ -72,7 +72,7 @@
             },
             {
               "Name": "consumeFrom",
-              "Type": "Object",
+              "Type": "Array",
               "EntityName": "producer",
               "ConnectedToField": "produceTo"
             },

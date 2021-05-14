@@ -36,13 +36,13 @@ namespace OctopusCore.DbHandlers
         {
             if (joinsTuples.Count > 0)
             {
-                return await ExecuteQueryWithComplexFields(fieldsToSelect, filters, entityType, joinsTuples);
+                return await ExecuteQueryWithComplexFieldsAsync(fieldsToSelect, filters, entityType, joinsTuples);
             }
 
-            return await ExecuteQueryWithSimpleFields(fieldsToSelect, filters, entityType);
+            return await ExecuteQueryWithSimpleFieldsAsync(fieldsToSelect, filters, entityType);
         }
 
-        private async Task<ExecutionResult> ExecuteQueryWithSimpleFields(IReadOnlyCollection<string> fieldsToSelect, IReadOnlyCollection<Filter> filters,
+        private async Task<ExecutionResult> ExecuteQueryWithSimpleFieldsAsync(IReadOnlyCollection<string> fieldsToSelect, IReadOnlyCollection<Filter> filters,
             string entityType)
         {
             var session = OpenSession();
@@ -59,7 +59,7 @@ namespace OctopusCore.DbHandlers
             var query = new StringBuilder($"match {GetQueryEntity(entityType)} ");
             if (filters.Any())
             {
-                var where = filters.Select(GetQueryCondition).ToList();
+                var where = filters.Select(filter => GetQueryCondition(filter, -1)).ToList();
                 query.Append($"where {string.Join(" and ", @where)}");
             }
 
@@ -79,11 +79,11 @@ namespace OctopusCore.DbHandlers
             return session;
         }
 
-        private async Task<ExecutionResult> ExecuteQueryWithComplexFields(IReadOnlyCollection<string> fieldsToSelect,
+        private async Task<ExecutionResult> ExecuteQueryWithComplexFieldsAsync(IReadOnlyCollection<string> fieldsToSelect,
             IReadOnlyCollection<Filter> filters, string entityType,
             List<(string entityType, Field field, List<string> fieldsToSelect)> joinsTuples)
         {
-            var session =OpenSession();
+            var session = OpenSession();
 
             var fieldsNames = fieldsToSelect.ToList();
             if (!fieldsNames.Contains(StringConstants.Guid))
@@ -95,7 +95,7 @@ namespace OctopusCore.DbHandlers
             var complexFieldsCount = 0;
             var matchQuery = new StringBuilder();
             foreach (var joinsTuple in joinsTuples)
-            { 
+            {
                 complexFields.Add(joinsTuple.field.Name);
 
                 matchQuery.Append($"match (e:{entityType})");
@@ -105,9 +105,11 @@ namespace OctopusCore.DbHandlers
                 complexFieldsCount++;
             }
 
+
             if (filters.Any())
             {
-                var where = filters.Select(GetQueryCondition).ToList();
+                var complexFieldsList = complexFields.ToList();
+                var where = filters.Select(filter => GetQueryCondition(filter, complexFieldsList.IndexOf(filter.FieldNames.First())));
                 matchQuery.Append($"where {string.Join(" and ", where)} ");
             }
 
@@ -132,7 +134,7 @@ namespace OctopusCore.DbHandlers
             await session.CloseAsync();
 
             var entitiesResult = BuildResultsDictionary(res, fieldsNames, complexFields);
-            return new ExecutionResult(entityType,entitiesResult);
+            return new ExecutionResult(entityType, entitiesResult);
         }
 
         private Dictionary<string, EntityResult> BuildResultsDictionary(List<IRecord> recordsFromDb,
@@ -141,28 +143,73 @@ namespace OctopusCore.DbHandlers
             var numOfComplexFields = complexFields.Count;
             var complexFieldsList = complexFields.ToList();
             var entityResults = new Dictionary<string, EntityResult>();
-            for (int i = 0; i < recordsFromDb.Count; i++)
+            fieldsNames.Remove(StringConstants.Guid);
+            foreach (var record in recordsFromDb)
             {
-                var dict = new Dictionary<string, dynamic>();
-
-                foreach (var field in fieldsNames)
-                    dict.Add(field, recordsFromDb[i][$"e.{field}"]);
-                for (int j = 0; j < complexFields.Count; j++)
+                var currentEntityGuid = record[$"e.{StringConstants.Guid}"].ToString();
+                if (entityResults.ContainsKey(currentEntityGuid) == false)
                 {
-                    var complexField = complexFieldsList[j];
-                    dict[complexField] = new Dictionary<string, EntityResult>()
+                    var dictionary = new Dictionary<string, dynamic>();
+                    //add all primitive fields
+                    foreach (var fieldName in fieldsNames)
                     {
-                        {
-                            (string)recordsFromDb[i][$"p{j}.{StringConstants.Guid}"], new EntityResult(new Dictionary<string, dynamic>())
-                        }
-                    };
-                }
-            
+                        dictionary[fieldName] = record[$"e.{fieldName}"];
+                    }
 
-                var guid = dict[StringConstants.Guid];
-                dict.Remove(StringConstants.Guid);
-                var entityResult = new EntityResult(dict);
-                entityResults.Add(guid, entityResult);
+                    entityResults.Add(currentEntityGuid, new EntityResult(dictionary));
+                }
+
+                var currentEntity = entityResults[currentEntityGuid];
+
+                //
+                for (int i = 0; i < complexFieldsList.Count; i++)
+                {
+                    var complexFieldName = complexFieldsList[i];
+                    if (currentEntity.Fields.ContainsKey(complexFieldName) == false)
+                    {
+                        currentEntity.Fields[complexFieldName] = new Dictionary<string, EntityResult>();
+                    }
+
+                    var complexFieldEntities =
+                        (Dictionary<string, EntityResult>)currentEntity.Fields[complexFieldName];
+
+                    var complexFieldsToFields = new Dictionary<string, dynamic>();
+
+                    var guidOfComplexField = record[$"p{i}.{StringConstants.Guid}"].ToString();
+
+                    if (complexFieldEntities.ContainsKey(guidOfComplexField) == false)
+                    {
+                        complexFieldEntities[guidOfComplexField] = new EntityResult(complexFieldsToFields);
+                    }
+                }
+
+                // //
+                // //     }
+                // // }
+                //
+                // for (int i = 0; i < recordsFromDb.Count; i++)
+                // {
+                //     var dict = new Dictionary<string, dynamic>();
+                //
+                //     foreach (var field in fieldsNames)
+                //         dict.Add(field, recordsFromDb[i][$"e.{field}"]);
+                //     for (int j = 0; j < complexFields.Count; j++)
+                //     {
+                //         var complexField = complexFieldsList[j];
+                //         dict[complexField] = new Dictionary<string, EntityResult>()
+                //         {
+                //             {
+                //                 (string)recordsFromDb[i][$"p{j}.{StringConstants.Guid}"], new EntityResult(new Dictionary<string, dynamic>())
+                //             }
+                //         };
+                //     }
+                //
+                //
+                //     var guid = dict[StringConstants.Guid];
+                //     dict.Remove(StringConstants.Guid);
+                //     var entityResult = new EntityResult(dict);
+                //     entityResults.Add(guid, entityResult);
+                // }
             }
 
             return entityResults;
@@ -224,15 +271,21 @@ namespace OctopusCore.DbHandlers
             return entityResults;
         }
 
-        private string GetQueryCondition(Filter filter)
+        private string GetQueryCondition(Filter filter, int complexIndex)
         {
-            if (filter.Type == FilterType.In)
+            var filterFieldName = $"e.{filter.FieldNames.First()}";
+            if (filter.FieldNames.First() != StringConstants.Guid && complexIndex >= 0)
             {
-                var guids = filter.CalcValue().Select(guid=>$"'{guid}'").ToList();
-                return $"e.{filter.FieldNames.First()} {GetFilterOperator(filter)} [{string.Join(",",guids)}]";
+                filterFieldName = $"p{complexIndex}.{StringConstants.Guid}";
             }
 
-            return $"e.{filter.FieldNames.First()} {GetFilterOperator(filter)} {filter.Expression}";
+            if (filter.Type == FilterType.In)
+            {
+                var guids = filter.CalcValue().Select(guid => $"'{guid}'").ToList();
+                return $"{filterFieldName} {GetFilterOperator(filter)} [{string.Join(",", guids)}]";
+            }
+
+            return $"{filterFieldName} {GetFilterOperator(filter)} {filter.Expression}";
         }
 
         private static string GetQueryEntity(string entityType)
