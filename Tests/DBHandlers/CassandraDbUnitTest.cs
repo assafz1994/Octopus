@@ -108,7 +108,7 @@ namespace Tests.DBHandlers
         }
 
         [Test]
-        public void TestSelect1()
+        public void TestSelectAllAnimals()
         {
             _cassandraDbConfigurator.SetUpTestSelectNamesOfAnimals();
             var actualExecutionResult = _cassandraDbHandler
@@ -147,7 +147,7 @@ namespace Tests.DBHandlers
         }
 
         [Test]
-        public void TestSelect2()
+        public void TestSelectAnimalsWithFilterHeight()
         {
             _cassandraDbConfigurator.SetUpTestSelectNamesOfAnimals();
             var actualExecutionResult = _cassandraDbHandler
@@ -179,7 +179,7 @@ namespace Tests.DBHandlers
         }
 
         [Test]
-        public void TestSelect3()
+        public void TestSelectAnimalsWithFilters()
         {
             _cassandraDbConfigurator.SetUpTestSelectNamesOfAnimals();
             var actualExecutionResult = _cassandraDbHandler
@@ -208,7 +208,7 @@ namespace Tests.DBHandlers
         }
 
         [Test]
-        public void TestSelect4()
+        public void TestSelectAnimalsFilterFood()
         {
             _cassandraDbConfigurator.SetUpTestSelectNamesOfAnimals();
             var actualExecutionResult = _cassandraDbHandler
@@ -240,7 +240,7 @@ namespace Tests.DBHandlers
         }
 
         [Test]
-        public void TestDelete1()
+        public void TestDeleteAnimals()
         {
             _cassandraDbConfigurator.SetUpTestSelectNamesOfAnimals();
             var actualInsertExecutionResult = _cassandraDbHandler
@@ -274,7 +274,7 @@ namespace Tests.DBHandlers
         }
 
         [Test]
-        public void TestInsert1()
+        public void TestInsertAnimal()
         {
             var actualInsertExecutionResult = _cassandraDbHandler
                 .ExecuteInsertQuery(
@@ -309,9 +309,8 @@ namespace Tests.DBHandlers
         }
 
         [Test]
-        public void TestUpdate1()
+        public void TestUpdateAnimalHeight()
         {
-            // update age of animal to be 23
             _cassandraDbConfigurator.SetUpTestSelectNamesOfAnimals();
             var entityType = "animal";
             var guid = "9264f435-d1c7-4f1c-8b84-cf4bdb935641";
@@ -347,9 +346,8 @@ namespace Tests.DBHandlers
         }
 
         [Test]
-        public void TestUpdate2()
+        public void TestUpdateAnimalFood()
         {
-            // update age of animal to be 23
             _cassandraDbConfigurator.SetUpTestSelectNamesOfAnimals();
             var entityType = "animal";
             var guid = "9264f435-d1c7-4f1c-8b84-cf4bdb935641";

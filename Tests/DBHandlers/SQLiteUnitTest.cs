@@ -134,7 +134,7 @@ namespace Tests.DBHandlers
         }
 
         [Test]
-        public void TestSelectMultipleFieldsWithFilterOfStudentUT()
+        public void TestSelectMultipleFieldsWithFilterOfStudent()
         {
             _sqliteDbConfigurator.SetUpTestComplexSelect();
 
@@ -183,7 +183,7 @@ namespace Tests.DBHandlers
         }
 
         [Test]
-        public void TestSelectMultipleFieldsWithFilterAndWithComplexFieldOfStudentUT()
+        public void TestSelectMultipleFieldsWithFilterAndWithComplexFieldOfStudent()
         {
             _sqliteDbConfigurator.SetUpTestComplexSelect();
 

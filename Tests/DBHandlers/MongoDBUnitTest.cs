@@ -72,7 +72,7 @@ namespace Tests.DBHandlers
         }
 
         [Test]
-        public void TestSelectMultipleFieldsWithFilterOfAnimalsUT()
+        public void TestSelectMultipleFieldsWithFilterOfAnimals()
         {
             SetUpTestOfAnimals();
 
@@ -105,7 +105,7 @@ namespace Tests.DBHandlers
         }
 
     [Test]
-        public void TestSelectMultipleFieldsWithoutFilterOfAnimalsUT()
+        public void TestSelectMultipleFieldsWithoutFilterOfAnimals()
         {
             SetUpTestOfAnimals();
 
@@ -153,7 +153,7 @@ namespace Tests.DBHandlers
         }
 
         [Test]
-        public void TestUpdateAgeAnimalUT()
+        public void TestUpdateAgeAnimal()
         {
             // update age of animal to be 23
             SetUpTestOfAnimals();
@@ -188,7 +188,7 @@ namespace Tests.DBHandlers
         }
 
         [Test]
-        public void TestInsertOneAnimalUT()
+        public void TestInsertOneAnimal()
         {
             SetUpTestOfAnimals();
 
@@ -247,7 +247,7 @@ namespace Tests.DBHandlers
         }
 
         [Test]
-        public void TestDeleteOneAnimalUT()
+        public void TestDeleteOneAnimal()
         {
             SetUpTestOfAnimals();
 
@@ -291,7 +291,7 @@ namespace Tests.DBHandlers
         }
 
         [Test]
-        public void TestDeleteManyAnimalsUT()
+        public void TestDeleteManyAnimals()
         {
             SetUpTestOfAnimals();
 
