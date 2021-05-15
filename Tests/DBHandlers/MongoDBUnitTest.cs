@@ -16,16 +16,15 @@ namespace Tests.DBHandlers
     [TestFixture]
     class MongoDBUnitTest
     {
-
         private OctopusClient _client;
-        private DbsConfigurator _dbsConfigurator;
+        private MongoDbConfigurator _mongoDbConfigurator;
         private MongoDBHandler _mongoDBHandler;
 
         [OneTimeSetUp]
         public void OneTimeSetUp()
         {
             _client = new OctopusClient("http://localhost:5000");
-            _dbsConfigurator = new DbsConfigurator();
+            _mongoDbConfigurator = new MongoDbConfigurator();
 
             var schema = new Scheme()
             {
@@ -58,65 +57,57 @@ namespace Tests.DBHandlers
 
             var configuration = new DbConfiguration() { Entities = null, ConnectionString = "mongodb://localhost:27017/mongodbtests_1" };
             var provider = new MongoDBConfigurationProvider(schema, configuration);
-            this._mongoDBHandler = new MongoDBHandler(provider); 
+            _mongoDBHandler = new MongoDBHandler(provider); 
 
         }
 
         [SetUp]
         public void SetUp()
         {
-            _dbsConfigurator.SetUpMongoDB();
+            _mongoDbConfigurator.SetUpDb();
         }
 
         [TearDown]
         public void TearDown()
         {
-            _dbsConfigurator.TearDownMongoDB();
+            _mongoDbConfigurator.TearDownDb();
         }
 
         [Test]
         public void TestSelectMultipleFieldsWithFilterOfAnimalsUT()
         {
-            SetUpTestSelectNamesOfAnimals();
-
+            SetUpTestOfAnimals();
             IReadOnlyCollection<string> fieldsToSelect = new List<string> {
                 "name",
                 "age",
             }.AsReadOnly();
-
             IReadOnlyCollection<OctopusCore.Parser.Filter> filters = new List<OctopusCore.Parser.Filter>
             { 
                 new OctopusCore.Parser.Filters.EqFilter(new List<string>() {"name"}, "Maffin")
             };
 
             var entityType = "animal";
-
             List<(string entityType, OctopusCore.Configuration.Field field, List<string> fieldsToSelect)> joinsTuples = new List<(string entityType, OctopusCore.Configuration.Field field, List<string> fieldsToSelect)>();
-
             var res = _mongoDBHandler.ExecuteQueryWithFiltersAsync(fieldsToSelect, filters, entityType, joinsTuples ).Result;
+            var expectedResult = new List<Dictionary<string, dynamic>>()
+            {
+                new Dictionary<string, dynamic>()
+                {
+                    {"name", "Maffin"},
+                    { "age", 5 },
+                },
+            };
 
-            //var query = "From Animal a | Select a(name)";
-            //var entities = _client.ExecuteQuery(query).Result;
+            var entityResults = res.EntityResults.Values.ToList();
+            List<Dictionary<string, dynamic>> fields = entityResults.Select(x => x.Fields).ToList();
 
-            //var listOfDictionaryEntities = entities.Select(x => new RouteValueDictionary(x));
-
-            //var expectedResult = new List<Dictionary<string, object>>()
-            //{
-            //    new Dictionary<string, object>()
-            //    {
-                      //{ "age", 5 },
-            //        {"name", "Maffin"},
-            //    },
-            //};
-
-            //CollectionAssert.AreEqual(listOfDictionaryEntities, expectedResult);
+           CollectionAssert.AreEqual(fields, expectedResult);            
         }
 
-        [Test]
+    [Test]
         public void TestSelectMultipleFieldsWithoutFilterOfAnimalsUT()
         {
-            SetUpTestSelectNamesOfAnimals();
-
+            SetUpTestOfAnimals();
             IReadOnlyCollection<string> fieldsToSelect = new List<String> {
                 "name",
                 "age",
@@ -130,77 +121,174 @@ namespace Tests.DBHandlers
             List<(string entityType, OctopusCore.Configuration.Field field, List<string> fieldsToSelect)> joinsTuples = new List<(string entityType, OctopusCore.Configuration.Field field, List<string> fieldsToSelect)>();
 
             var res = _mongoDBHandler.ExecuteQueryWithFiltersAsync(fieldsToSelect, filters, entityType, joinsTuples).Result;
+            var expectedResult = new List<Dictionary<string, dynamic>>()
+            {
+                new Dictionary<string, dynamic>()
+                {
+                    { "name", "Maffin"},
+                    { "age", 5 },
+                    { "aid", "1"},
+                },
+                new Dictionary<string, object>()
+                {
+                    { "name", "Woody"},
+                    { "age", 6 },
+                    { "aid", "2"},
 
-            //var query = "From Animal a | Select a(name)";
-            //var entities = _client.ExecuteQuery(query).Result;
+                },
+                new Dictionary<string, object>()
+                {
+                    { "name", "Doggy"},
+                    { "age", 8 },
+                    { "aid", "3"},
+                },
+            };
 
-            //var listOfDictionaryEntities = entities.Select(x => new RouteValueDictionary(x));
+            var entityResults = res.EntityResults.Values.ToList();
+            List<Dictionary<string, dynamic>> fields = entityResults.Select(x => x.Fields).ToList();
 
-            //var expectedResult = new List<Dictionary<string, object>>()
-            //{
-            //  new Dictionary<string, object>()
-            //        {
-            //            {"aid", "1"},
-            //            {"age", 5 },
-            //            {"name", "Maffin"},
-            //        },
-            //        new Dictionary<string, object>()
-            //        {
-            //            {"aid", "2"},
-            //            { "age", 6 },
-            //            { "name", "Woody"},
-            //        },
-            //        new Dictionary<string, object>()
-            //        {
-            //            {"aid", "3"},
-            //            {"age", 8 },
-            //            {"name", "Doggy"},
-            //        },
-            //};
-
-            //CollectionAssert.AreEqual(listOfDictionaryEntities, expectedResult);
+            CollectionAssert.AreEqual(fields, expectedResult);
         }
 
+        [Test]
+        public void TestUpdateAgeAnimalUT()
+        {
+            // update age of animal to be 23
+            SetUpTestOfAnimals();
+            var entityType = "animal";
+            var guid = "9264f435-d1c7-4f1c-8b84-cf4bdb935641";
+            var fieldToUpdate = "age";
+            var newValue = 23;
+            var resUpdate = _mongoDBHandler.ExecuteUpdateQuery(entityType, guid, fieldToUpdate, newValue).Result;
 
+            // execute select query of the updated entity to validate that the age changed as expected
+            IReadOnlyCollection<string> fieldsToSelect = new List<String> {
+                "age",
+                "aid"
+            }.AsReadOnly();
+            IReadOnlyCollection<OctopusCore.Parser.Filter> filters = new List<OctopusCore.Parser.Filter> 
+            {
+                new OctopusCore.Parser.Filters.EqFilter(new List<string>() {"aid"}, "1")
+            };
+            List<(string entityType, OctopusCore.Configuration.Field field, List<string> fieldsToSelect)> joinsTuples = new List<(string entityType, OctopusCore.Configuration.Field field, List<string> fieldsToSelect)>();
+            var resSelectQueryToValidateUpdate = _mongoDBHandler.ExecuteQueryWithFiltersAsync(fieldsToSelect, filters, entityType, joinsTuples).Result;
+            var entityResults = resSelectQueryToValidateUpdate.EntityResults.Values.ToList();
+            List<Dictionary<string, dynamic>> fields = entityResults.Select(x => x.Fields).ToList();
+            var expectedResult = new List<Dictionary<string, dynamic>>()
+            {
+                new Dictionary<string, dynamic>()
+                {
+                    { "age", 23 },
+                    { "aid", "1"},
+                }
+            };
+            CollectionAssert.AreEqual(fields, expectedResult);
+        }
 
         [Test]
         public void TestInsertOneAnimalUT()
         {
-            SetUpTestSelectNamesOfAnimals();
+            SetUpTestOfAnimals();
 
             IReadOnlyDictionary<string, dynamic> fields = new Dictionary<string, dynamic> {
              {"name", "Roxi"},
-             {"guid", new Guid("9264f435-a1c7-4f1c-8b84-cf4bdb935641")},
+             {"age", 16 },
              {"aid","4"},
-             {"age", 16 }
+             {"guid", new Guid("9264f435-a1c7-4f1c-8b84-cf4bdb935641")},
             };
 
             var entityType = "animal"; 
+            _mongoDBHandler.ExecuteInsertQuery(entityType, fields);
 
-            var res = _mongoDBHandler.ExecuteInsertQuery(entityType, fields);
+            IReadOnlyCollection<string> fieldsToSelect = new List<string> {"name","age","aid"}.AsReadOnly();
+
+            IReadOnlyCollection<OctopusCore.Parser.Filter> filters = new List<OctopusCore.Parser.Filter>{};
+
+            List<(string entityType, OctopusCore.Configuration.Field field, List<string> fieldsToSelect)> joinsTuples = new List<(string entityType, OctopusCore.Configuration.Field field, List<string> fieldsToSelect)>();
+            var resSelectAfterInsert = _mongoDBHandler.ExecuteQueryWithFiltersAsync(fieldsToSelect, filters, entityType, joinsTuples).Result;
+
+            var expectedResult = new List<Dictionary<string, dynamic>>()
+            {
+                new Dictionary<string, dynamic>()
+                {
+                    { "name", "Maffin"},
+                    { "age", 5 },
+                    { "aid", "1"},
+                },
+                new Dictionary<string, object>()
+                {
+                    { "name", "Woody"},
+                    { "age", 6 },
+                    { "aid", "2"},
+
+                },
+                new Dictionary<string, object>()
+                {
+                    { "name", "Doggy"},
+                    { "age", 8 },
+                    { "aid", "3"},
+                },
+                new Dictionary<string, dynamic>()
+                {
+                    {"name", "Roxi"},
+                    {"age", 16 },
+                    {"aid","4"},
+                }
+            };
+
+            var entityResults = resSelectAfterInsert.EntityResults.Values.ToList();
+            List<Dictionary<string, dynamic>> fieldsAndValues = entityResults.Select(x => x.Fields).ToList();
+
+            CollectionAssert.AreEqual(fieldsAndValues, expectedResult);
+
         }
-
-        //        Task<ExecutionResult> ExecuteDeleteQuery(string entityType, IReadOnlyCollection<string> guidCollection);
 
         [Test]
         public void TestDeleteOneAnimalUT()
         {
-            SetUpTestSelectNamesOfAnimals();
-
+            SetUpTestOfAnimals();
             IReadOnlyCollection<string> guidCollection = new List<string> {
              "9264f435-d1c7-4f1c-8b84-cf4bdb935641",
             };
 
             var entityType = "animal";
+            _mongoDBHandler.ExecuteDeleteQuery(entityType, guidCollection);
+            
+            IReadOnlyCollection<string> fieldsToSelect = new List<string> { "name", "age", "aid" }.AsReadOnly();
 
-            var res = _mongoDBHandler.ExecuteDeleteQuery(entityType, guidCollection);
+            IReadOnlyCollection<OctopusCore.Parser.Filter> filters = new List<OctopusCore.Parser.Filter>{};
+
+            List<(string entityType, OctopusCore.Configuration.Field field, List<string> fieldsToSelect)> joinsTuples = new List<(string entityType, OctopusCore.Configuration.Field field, List<string> fieldsToSelect)>();
+            var resSelectAfterDelete = _mongoDBHandler.ExecuteQueryWithFiltersAsync(fieldsToSelect, filters, entityType, joinsTuples).Result;
+
+            // select all the entities in the table and ensure no one with this guid exists. 
+            var expectedResult = new List<Dictionary<string, dynamic>>()
+            {
+                new Dictionary<string, object>()
+                {
+                    { "name", "Woody"},
+                    { "age", 6 },
+                    { "aid", "2"},
+
+                },
+                new Dictionary<string, object>()
+                {
+                    { "name", "Doggy"},
+                    { "age", 8 },
+                    { "aid", "3"},
+                },
+            };
+
+            var entityResults = resSelectAfterDelete.EntityResults.Values.ToList();
+            List<Dictionary<string, dynamic>> fieldsAndValues = entityResults.Select(x => x.Fields).ToList();
+
+            CollectionAssert.AreEqual(fieldsAndValues, expectedResult);
         }
 
         [Test]
         public void TestDeleteManyAnimalsUT()
         {
-            SetUpTestSelectNamesOfAnimals();
-
+            SetUpTestOfAnimals();
             IReadOnlyCollection<string> guidCollection = new List<string> {
              "9264f435-d1c7-4f1c-8b84-cf4bdb935641",
              "e8d706f8-92be-429c-89cc-91973fca7a95",
@@ -208,18 +296,34 @@ namespace Tests.DBHandlers
 
             var entityType = "animal";
 
-            var res = _mongoDBHandler.ExecuteDeleteQuery(entityType, guidCollection);
+            _mongoDBHandler.ExecuteDeleteQuery(entityType, guidCollection);
+            
+            IReadOnlyCollection<string> fieldsToSelect = new List<string> { "name", "age", "aid" }.AsReadOnly();
 
-            // only doggy needs to be in the table after the deletion {"guid", "f443f95a-3d8f-4786-b3e6-0db8b790f7e6"},
-            // { "aid", "3"},
-            // { "age", 8 },
-            // { "name", "Doggy" }
+            IReadOnlyCollection<OctopusCore.Parser.Filter> filters = new List<OctopusCore.Parser.Filter> { };
+
+            List<(string entityType, OctopusCore.Configuration.Field field, List<string> fieldsToSelect)> joinsTuples = new List<(string entityType, OctopusCore.Configuration.Field field, List<string> fieldsToSelect)>();
+            var resSelectAfterDelete = _mongoDBHandler.ExecuteQueryWithFiltersAsync(fieldsToSelect, filters, entityType, joinsTuples).Result;
+            // only doggy needs to be in the table after the deletion {"guid", "f443f95a-3d8f-4786-b3e6-0db8b790f7e6"}, so select all the entities from the table and check that only doggy exists.
+            var expectedResult = new List<Dictionary<string, dynamic>>()
+            {
+                new Dictionary<string, object>()
+                {
+                    { "name", "Doggy"},
+                    { "age", 8 },
+                    { "aid", "3"},
+                },
+            };
+
+            var entityResults = resSelectAfterDelete.EntityResults.Values.ToList();
+            List<Dictionary<string, dynamic>> fieldsAndValues = entityResults.Select(x => x.Fields).ToList();
+
+            CollectionAssert.AreEqual(fieldsAndValues, expectedResult);
         }
 
-        private void SetUpTestSelectNamesOfAnimals()
+        private void SetUpTestOfAnimals()
         {
-            _dbsConfigurator.SetUpTestSelectNamesOfAnimals();
+            _mongoDbConfigurator.SetUpTestOfAnimals();
         }
-
     }
 }

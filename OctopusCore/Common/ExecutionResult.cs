@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Neo4jClient.Extensions;
 
 namespace OctopusCore.Contract
 {
@@ -30,6 +31,17 @@ namespace OctopusCore.Contract
             }
 
             return entityStringBuilder.ToString();
+        }
+
+        public override bool Equals(object obj)
+        {
+            if (obj == null) return false;
+            if (obj == this) return true;
+            if (!(obj is ExecutionResult)) return false;
+            var executionResult = (ExecutionResult)obj;
+            var thisEntityResults = EntityResults.ToList();
+            var objEntityResults = executionResult.EntityResults.ToList();
+            return executionResult.Type.Equals(Type) && thisEntityResults.ContentsEqual(objEntityResults);
         }
     }
 }

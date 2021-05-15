@@ -75,7 +75,7 @@
                         {
                             "Name": "address",
                             "Type": "Object",
-                            "EntityName": "Address",
+                            "EntityName": "address",
                             "ConnectedToField": null
                         }
                     ]
@@ -89,7 +89,7 @@
             "KeySpace": "octopustests",
             "Entities": [
                 {
-                    "Name": "Animal",
+                    "Name": "animal",
                     "Fields": [
                         {
                             "Name": "aid",
@@ -121,7 +121,7 @@
             "ConnectionString": "mongodb://localhost:27017/mongodbtests_1",
             "Entities": [
                 {
-                    "Name": "Animal",
+                    "Name": "animal",
                     "Fields": [
                         {
                             "Name": "aid",
@@ -145,12 +145,12 @@
         {
             "Id": "neo4j",
             "DbType": "Neo4j",
-            "ConnectionString": "http://localhost:7474/",
-            "Username": "TestOctopus",
+            "ConnectionString": "bolt://localhost:7687/",
+            "Username": "neo4j",
             "Password": "1234",
             "Entities": [
                 {
-                    "Name": "Address",
+                    "Name": "address",
                     "Fields": [
                         {
                             "Name": "city",

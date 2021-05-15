@@ -24,7 +24,7 @@ namespace OctopusCore.Configuration.Mocks
 
         public bool IsComplexField(string entityType, string fieldName)
         {
-            throw new System.NotImplementedException();
+            return false;
         }
 
         public Field GetField(string entityType, string fieldName)

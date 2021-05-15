@@ -38,9 +38,9 @@ public partial class OctopusQLParser : Parser {
 	public const int
 		T__0=1, T__1=2, T__2=3, T__3=4, T__4=5, T__5=6, T__6=7, T__7=8, T__8=9, 
 		T__9=10, T__10=11, EQUALS=12, COMPARATOR=13, SELECT=14, FROM=15, WHERE=16, 
-		INCLUDE=17, ENTITY=18, INSERT=19, DELETE=20, UPDATE=21, ASSIGN=22, PIPELINE=23, 
-		COLON=24, ISEQUALS=25, GT=26, GTE=27, LT=28, LTE=29, ADD=30, REMOVE=31, 
-		WORD=32, NUMBER=33, ENT=34, ENTREP=35, TEXT=36, WHITESPACE=37;
+		INCLUDE=17, ENTITY=18, INSERT=19, DELETE=20, UPDATE=21, PIPELINE=22, COLON=23, 
+		ISEQUALS=24, GT=25, GTE=26, LT=27, LTE=28, ADD=29, REMOVE=30, WORD=31, 
+		NUMBER=32, ENT=33, ENTREP=34, TEXT=35, WHITESPACE=36;
 	public const int
 		RULE_r = 0, RULE_select = 1, RULE_deleteSelect = 2, RULE_insert = 3, RULE_delete = 4, 
 		RULE_update = 5, RULE_insertClause = 6, RULE_getClause = 7, RULE_assignments = 8, 
@@ -58,15 +58,14 @@ public partial class OctopusQLParser : Parser {
 	private static readonly string[] _LiteralNames = {
 		null, "'('", "')'", "','", "'.'", "'['", "']'", "'AVG'", "'SUM'", "'MIN'", 
 		"'MAX'", "'*'", "'='", null, null, null, null, null, null, null, null, 
-		null, null, "'|'", "':'", "'=='", "'>'", "'>='", "'<'", "'<='", "'+='", 
-		"'-='"
+		null, "'|'", "':'", "'=='", "'>'", "'>='", "'<'", "'<='", "'+='", "'-='"
 	};
 	private static readonly string[] _SymbolicNames = {
 		null, null, null, null, null, null, null, null, null, null, null, null, 
 		"EQUALS", "COMPARATOR", "SELECT", "FROM", "WHERE", "INCLUDE", "ENTITY", 
-		"INSERT", "DELETE", "UPDATE", "ASSIGN", "PIPELINE", "COLON", "ISEQUALS", 
-		"GT", "GTE", "LT", "LTE", "ADD", "REMOVE", "WORD", "NUMBER", "ENT", "ENTREP", 
-		"TEXT", "WHITESPACE"
+		"INSERT", "DELETE", "UPDATE", "PIPELINE", "COLON", "ISEQUALS", "GT", "GTE", 
+		"LT", "LTE", "ADD", "REMOVE", "WORD", "NUMBER", "ENT", "ENTREP", "TEXT", 
+		"WHITESPACE"
 	};
 	public static readonly IVocabulary DefaultVocabulary = new Vocabulary(_LiteralNames, _SymbolicNames);
 
@@ -476,7 +475,7 @@ public partial class OctopusQLParser : Parser {
 		[System.Diagnostics.DebuggerNonUserCode] public EntityRepContext entityRep() {
 			return GetRuleContext<EntityRepContext>(0);
 		}
-		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode ASSIGN() { return GetToken(OctopusQLParser.ASSIGN, 0); }
+		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode EQUALS() { return GetToken(OctopusQLParser.EQUALS, 0); }
 		[System.Diagnostics.DebuggerNonUserCode] public ValueContext value() {
 			return GetRuleContext<ValueContext>(0);
 		}
@@ -544,7 +543,7 @@ public partial class OctopusQLParser : Parser {
 				}
 			}
 
-			State = 99; Match(ASSIGN);
+			State = 99; Match(EQUALS);
 			State = 100; value();
 			}
 		}
@@ -1838,7 +1837,7 @@ public partial class OctopusQLParser : Parser {
 
 	private static char[] _serializedATN = {
 		'\x3', '\x608B', '\xA72A', '\x8133', '\xB9ED', '\x417C', '\x3BE7', '\x7786', 
-		'\x5964', '\x3', '\'', '\xF4', '\x4', '\x2', '\t', '\x2', '\x4', '\x3', 
+		'\x5964', '\x3', '&', '\xF4', '\x4', '\x2', '\t', '\x2', '\x4', '\x3', 
 		'\t', '\x3', '\x4', '\x4', '\t', '\x4', '\x4', '\x5', '\t', '\x5', '\x4', 
 		'\x6', '\t', '\x6', '\x4', '\a', '\t', '\a', '\x4', '\b', '\t', '\b', 
 		'\x4', '\t', '\t', '\t', '\x4', '\n', '\t', '\n', '\x4', '\v', '\t', '\v', 
@@ -1890,24 +1889,24 @@ public partial class OctopusQLParser : Parser {
 		'\x3', '\x1A', '\x3', '\x1A', '\x2', '\x2', '\x1B', '\x2', '\x4', '\x6', 
 		'\b', '\n', '\f', '\xE', '\x10', '\x12', '\x14', '\x16', '\x18', '\x1A', 
 		'\x1C', '\x1E', ' ', '\"', '$', '&', '(', '*', ',', '.', '\x30', '\x32', 
-		'\x2', '\x4', '\x3', '\x2', '\t', '\f', '\x4', '\x2', '\"', '\"', '%', 
-		'%', '\x2', '\xF6', '\x2', '\x38', '\x3', '\x2', '\x2', '\x2', '\x4', 
-		':', '\x3', '\x2', '\x2', '\x2', '\x6', 'G', '\x3', '\x2', '\x2', '\x2', 
-		'\b', 'Q', '\x3', '\x2', '\x2', '\x2', '\n', 'X', '\x3', '\x2', '\x2', 
-		'\x2', '\f', '\\', '\x3', '\x2', '\x2', '\x2', '\xE', 'h', '\x3', '\x2', 
-		'\x2', '\x2', '\x10', 's', '\x3', '\x2', '\x2', '\x2', '\x12', '{', '\x3', 
-		'\x2', '\x2', '\x2', '\x14', '\x83', '\x3', '\x2', '\x2', '\x2', '\x16', 
-		'\x87', '\x3', '\x2', '\x2', '\x2', '\x18', '\x90', '\x3', '\x2', '\x2', 
-		'\x2', '\x1A', '\x94', '\x3', '\x2', '\x2', '\x2', '\x1C', '\x9C', '\x3', 
-		'\x2', '\x2', '\x2', '\x1E', '\xA4', '\x3', '\x2', '\x2', '\x2', ' ', 
-		'\xB6', '\x3', '\x2', '\x2', '\x2', '\"', '\xC7', '\x3', '\x2', '\x2', 
-		'\x2', '$', '\xD0', '\x3', '\x2', '\x2', '\x2', '&', '\xD8', '\x3', '\x2', 
-		'\x2', '\x2', '(', '\xDE', '\x3', '\x2', '\x2', '\x2', '*', '\xE0', '\x3', 
-		'\x2', '\x2', '\x2', ',', '\xEB', '\x3', '\x2', '\x2', '\x2', '.', '\xED', 
-		'\x3', '\x2', '\x2', '\x2', '\x30', '\xEF', '\x3', '\x2', '\x2', '\x2', 
-		'\x32', '\xF1', '\x3', '\x2', '\x2', '\x2', '\x34', '\x39', '\x5', '\x4', 
-		'\x3', '\x2', '\x35', '\x39', '\x5', '\b', '\x5', '\x2', '\x36', '\x39', 
-		'\x5', '\n', '\x6', '\x2', '\x37', '\x39', '\x5', '\f', '\a', '\x2', '\x38', 
+		'\x2', '\x4', '\x3', '\x2', '\t', '\f', '\x4', '\x2', '!', '!', '$', '$', 
+		'\x2', '\xF6', '\x2', '\x38', '\x3', '\x2', '\x2', '\x2', '\x4', ':', 
+		'\x3', '\x2', '\x2', '\x2', '\x6', 'G', '\x3', '\x2', '\x2', '\x2', '\b', 
+		'Q', '\x3', '\x2', '\x2', '\x2', '\n', 'X', '\x3', '\x2', '\x2', '\x2', 
+		'\f', '\\', '\x3', '\x2', '\x2', '\x2', '\xE', 'h', '\x3', '\x2', '\x2', 
+		'\x2', '\x10', 's', '\x3', '\x2', '\x2', '\x2', '\x12', '{', '\x3', '\x2', 
+		'\x2', '\x2', '\x14', '\x83', '\x3', '\x2', '\x2', '\x2', '\x16', '\x87', 
+		'\x3', '\x2', '\x2', '\x2', '\x18', '\x90', '\x3', '\x2', '\x2', '\x2', 
+		'\x1A', '\x94', '\x3', '\x2', '\x2', '\x2', '\x1C', '\x9C', '\x3', '\x2', 
+		'\x2', '\x2', '\x1E', '\xA4', '\x3', '\x2', '\x2', '\x2', ' ', '\xB6', 
+		'\x3', '\x2', '\x2', '\x2', '\"', '\xC7', '\x3', '\x2', '\x2', '\x2', 
+		'$', '\xD0', '\x3', '\x2', '\x2', '\x2', '&', '\xD8', '\x3', '\x2', '\x2', 
+		'\x2', '(', '\xDE', '\x3', '\x2', '\x2', '\x2', '*', '\xE0', '\x3', '\x2', 
+		'\x2', '\x2', ',', '\xEB', '\x3', '\x2', '\x2', '\x2', '.', '\xED', '\x3', 
+		'\x2', '\x2', '\x2', '\x30', '\xEF', '\x3', '\x2', '\x2', '\x2', '\x32', 
+		'\xF1', '\x3', '\x2', '\x2', '\x2', '\x34', '\x39', '\x5', '\x4', '\x3', 
+		'\x2', '\x35', '\x39', '\x5', '\b', '\x5', '\x2', '\x36', '\x39', '\x5', 
+		'\n', '\x6', '\x2', '\x37', '\x39', '\x5', '\f', '\a', '\x2', '\x38', 
 		'\x34', '\x3', '\x2', '\x2', '\x2', '\x38', '\x35', '\x3', '\x2', '\x2', 
 		'\x2', '\x38', '\x36', '\x3', '\x2', '\x2', '\x2', '\x38', '\x37', '\x3', 
 		'\x2', '\x2', '\x2', '\x39', '\x3', '\x3', '\x2', '\x2', '\x2', ':', ';', 
@@ -1937,16 +1936,16 @@ public partial class OctopusQLParser : Parser {
 		'`', '\x61', '\a', '\x17', '\x2', '\x2', '\x61', '\x63', '\x5', '\x30', 
 		'\x19', '\x2', '\x62', '\x64', '\x5', '\x18', '\r', '\x2', '\x63', '\x62', 
 		'\x3', '\x2', '\x2', '\x2', '\x63', '\x64', '\x3', '\x2', '\x2', '\x2', 
-		'\x64', '\x65', '\x3', '\x2', '\x2', '\x2', '\x65', '\x66', '\a', '\x18', 
+		'\x64', '\x65', '\x3', '\x2', '\x2', '\x2', '\x65', '\x66', '\a', '\xE', 
 		'\x2', '\x2', '\x66', 'g', '\x5', ',', '\x17', '\x2', 'g', '\r', '\x3', 
 		'\x2', '\x2', '\x2', 'h', 'i', '\a', '\x14', '\x2', '\x2', 'i', 'j', '\x5', 
-		'.', '\x18', '\x2', 'j', 'k', '\a', '\x1A', '\x2', '\x2', 'k', 'l', '\x5', 
+		'.', '\x18', '\x2', 'j', 'k', '\a', '\x19', '\x2', '\x2', 'k', 'l', '\x5', 
 		'\x30', '\x19', '\x2', 'l', 'o', '\a', '\x3', '\x2', '\x2', 'm', 'p', 
 		'\x5', '\x12', '\n', '\x2', 'n', 'p', '\x5', '\x4', '\x3', '\x2', 'o', 
 		'm', '\x3', '\x2', '\x2', '\x2', 'o', 'n', '\x3', '\x2', '\x2', '\x2', 
 		'p', 'q', '\x3', '\x2', '\x2', '\x2', 'q', 'r', '\a', '\x4', '\x2', '\x2', 
 		'r', '\xF', '\x3', '\x2', '\x2', '\x2', 's', 't', '\a', '\x14', '\x2', 
-		'\x2', 't', 'u', '\x5', '.', '\x18', '\x2', 'u', 'v', '\a', '\x1A', '\x2', 
+		'\x2', 't', 'u', '\x5', '.', '\x18', '\x2', 'u', 'v', '\a', '\x19', '\x2', 
 		'\x2', 'v', 'w', '\x5', '\x30', '\x19', '\x2', 'w', 'x', '\a', '\x3', 
 		'\x2', '\x2', 'x', 'y', '\x5', '\x4', '\x3', '\x2', 'y', 'z', '\a', '\x4', 
 		'\x2', '\x2', 'z', '\x11', '\x3', '\x2', '\x2', '\x2', '{', '\x80', '\x5', 
@@ -1957,7 +1956,7 @@ public partial class OctopusQLParser : Parser {
 		'\x2', '\x2', '\x2', '\x82', '\x80', '\x3', '\x2', '\x2', '\x2', '\x83', 
 		'\x84', '\x5', '*', '\x16', '\x2', '\x84', '\x85', '\a', '\xE', '\x2', 
 		'\x2', '\x85', '\x86', '\x5', ',', '\x17', '\x2', '\x86', '\x15', '\x3', 
-		'\x2', '\x2', '\x2', '\x87', '\x88', '\a', '\x19', '\x2', '\x2', '\x88', 
+		'\x2', '\x2', '\x2', '\x87', '\x88', '\a', '\x18', '\x2', '\x2', '\x88', 
 		'\x89', '\a', '\x12', '\x2', '\x2', '\x89', '\x8A', '\x5', '\x30', '\x19', 
 		'\x2', '\x8A', '\x8B', '\x5', '\x18', '\r', '\x2', '\x8B', '\x8C', '\a', 
 		'\xF', '\x2', '\x2', '\x8C', '\x8D', '\x5', ',', '\x17', '\x2', '\x8D', 
@@ -1976,7 +1975,7 @@ public partial class OctopusQLParser : Parser {
 		'\x9D', '\x3', '\x2', '\x2', '\x2', '\xA0', '\xA3', '\x3', '\x2', '\x2', 
 		'\x2', '\xA1', '\x9F', '\x3', '\x2', '\x2', '\x2', '\xA1', '\xA2', '\x3', 
 		'\x2', '\x2', '\x2', '\xA2', '\x1D', '\x3', '\x2', '\x2', '\x2', '\xA3', 
-		'\xA1', '\x3', '\x2', '\x2', '\x2', '\xA4', '\xA5', '\a', '\x19', '\x2', 
+		'\xA1', '\x3', '\x2', '\x2', '\x2', '\xA4', '\xA5', '\a', '\x18', '\x2', 
 		'\x2', '\xA5', '\xA6', '\a', '\x10', '\x2', '\x2', '\xA6', '\xA8', '\x5', 
 		'\x30', '\x19', '\x2', '\xA7', '\xA9', '\x5', '\x18', '\r', '\x2', '\xA8', 
 		'\xA7', '\x3', '\x2', '\x2', '\x2', '\xA8', '\xA9', '\x3', '\x2', '\x2', 
@@ -2002,7 +2001,7 @@ public partial class OctopusQLParser : Parser {
 		'\x2', '\x2', '\x2', '\xC3', '\xC5', '\x3', '\x2', '\x2', '\x2', '\xC4', 
 		'\xC2', '\x3', '\x2', '\x2', '\x2', '\xC5', '\xC6', '\a', '\x4', '\x2', 
 		'\x2', '\xC6', '!', '\x3', '\x2', '\x2', '\x2', '\xC7', '\xC8', '\a', 
-		'\x19', '\x2', '\x2', '\xC8', '\xC9', '\x5', '(', '\x15', '\x2', '\xC9', 
+		'\x18', '\x2', '\x2', '\xC8', '\xC9', '\x5', '(', '\x15', '\x2', '\xC9', 
 		'\xCA', '\a', '\x3', '\x2', '\x2', '\xCA', '\xCB', '\x5', '\x30', '\x19', 
 		'\x2', '\xCB', '\xCC', '\a', '\x3', '\x2', '\x2', '\xCC', '\xCD', '\x5', 
 		'*', '\x16', '\x2', '\xCD', '\xCE', '\a', '\x4', '\x2', '\x2', '\xCE', 
@@ -2018,17 +2017,17 @@ public partial class OctopusQLParser : Parser {
 		'\x3', '\x2', '\x2', '\x2', '\xDC', '\xDD', '\a', '\b', '\x2', '\x2', 
 		'\xDD', '\'', '\x3', '\x2', '\x2', '\x2', '\xDE', '\xDF', '\t', '\x2', 
 		'\x2', '\x2', '\xDF', ')', '\x3', '\x2', '\x2', '\x2', '\xE0', '\xE1', 
-		'\a', '\"', '\x2', '\x2', '\xE1', '+', '\x3', '\x2', '\x2', '\x2', '\xE2', 
+		'\a', '!', '\x2', '\x2', '\xE1', '+', '\x3', '\x2', '\x2', '\x2', '\xE2', 
 		'\xE3', '\a', '\x3', '\x2', '\x2', '\xE3', '\xE4', '\x5', '\x4', '\x3', 
 		'\x2', '\xE4', '\xE5', '\a', '\x4', '\x2', '\x2', '\xE5', '\xEC', '\x3', 
-		'\x2', '\x2', '\x2', '\xE6', '\xEC', '\a', '\"', '\x2', '\x2', '\xE7', 
-		'\xEC', '\a', '&', '\x2', '\x2', '\xE8', '\xEC', '\a', '#', '\x2', '\x2', 
-		'\xE9', '\xEC', '\a', '%', '\x2', '\x2', '\xEA', '\xEC', '\x5', '&', '\x14', 
+		'\x2', '\x2', '\x2', '\xE6', '\xEC', '\a', '!', '\x2', '\x2', '\xE7', 
+		'\xEC', '\a', '%', '\x2', '\x2', '\xE8', '\xEC', '\a', '\"', '\x2', '\x2', 
+		'\xE9', '\xEC', '\a', '$', '\x2', '\x2', '\xEA', '\xEC', '\x5', '&', '\x14', 
 		'\x2', '\xEB', '\xE2', '\x3', '\x2', '\x2', '\x2', '\xEB', '\xE6', '\x3', 
 		'\x2', '\x2', '\x2', '\xEB', '\xE7', '\x3', '\x2', '\x2', '\x2', '\xEB', 
 		'\xE8', '\x3', '\x2', '\x2', '\x2', '\xEB', '\xE9', '\x3', '\x2', '\x2', 
 		'\x2', '\xEB', '\xEA', '\x3', '\x2', '\x2', '\x2', '\xEC', '-', '\x3', 
-		'\x2', '\x2', '\x2', '\xED', '\xEE', '\a', '\"', '\x2', '\x2', '\xEE', 
+		'\x2', '\x2', '\x2', '\xED', '\xEE', '\a', '!', '\x2', '\x2', '\xEE', 
 		'/', '\x3', '\x2', '\x2', '\x2', '\xEF', '\xF0', '\t', '\x3', '\x2', '\x2', 
 		'\xF0', '\x31', '\x3', '\x2', '\x2', '\x2', '\xF1', '\xF2', '\a', '\r', 
 		'\x2', '\x2', '\xF2', '\x33', '\x3', '\x2', '\x2', '\x2', '\x16', '\x38', 

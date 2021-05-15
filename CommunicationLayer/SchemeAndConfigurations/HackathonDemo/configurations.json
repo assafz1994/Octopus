@@ -10,13 +10,13 @@
                 "Fields": [
                     {
                         "Name": "id",
-                        "Type": "string",
-                        "ConnectedTo": null
+                        "Type": "Primitive",
+                        "PrimitiveType": "String"
                     },
                     {
                         "Name": "age",
-                        "Type": "int",
-                        "ConnectedTo": null
+                        "Type": "Primitive",
+                        "PrimitiveType": "String"
                     }
                 ]
             }
@@ -32,56 +32,56 @@
                 "Fields": [
                     {
                         "Name": "id",
-                        "Type": "string",
-                        "ConnectedTo": null
+                        "Type": "Primitive",
+                        "PrimitiveType": "String"
                     },
                     {
                         "Name": "name",
-                        "Type": "string",
-                        "ConnectedTo": null
+                        "Type": "Primitive",
+                        "PrimitiveType": "String"
                     }
                 ]
             }
         ]
     },
     {
-        "Id": "neo4j",
-        "DbType": "Neo4j",
-        "ConnectionString": "http://localhost:7474/",
-        "Username": "neo4j",
-        "Password": "1234",
-        "Entities": [
+      "Id": "neo4j",
+      "DbType": "Neo4j",
+      "ConnectionString": "bolt://localhost:7687/",
+      "Username": "neo4j",
+      "Password": "1234",
+      "Entities": [
+        {
+          "Name": "person",
+          "Fields": [
             {
-                "Name": "person",
-                "Fields": [
-                    {
-                        "Name": "email",
-                        "Type": "string",
-                        "ConnectedTo": null
-                    },
-                    {
-                        "Name": "hobby",
-                        "Type": "string",
-                        "ConnectedTo": null
-                    }
-                ]
+                "Name": "email",
+                "Type": "Primitive",
+                "PrimitiveType": "String"
             },
             {
-                "Name": "neoperson",
-                "Fields": [
-                    {
-                        "Name": "email",
-                        "Type": "string",
-                        "ConnectedTo": null
-                    },
-                    {
-                        "Name": "hobby",
-                        "Type": "string",
-                        "ConnectedTo": null
-                    }
-                ]
+                "Name": "hobby",
+                "Type": "Primitive",
+                "PrimitiveType": "String"
             }
-        ]
+          ]
+        },
+        {
+          "Name": "neoperson",
+          "Fields": [
+            {
+                "Name": "email",
+                "Type": "Primitive",
+                "PrimitiveType": "String"
+            },
+            {
+                "Name": "hobby",
+                "Type": "Primitive",
+                "PrimitiveType": "String"
+            }
+          ]
+        }
+      ]
     },
     {
         "Id": "c1",
@@ -94,23 +94,23 @@
                 "Fields": [
                     {
                         "Name": "id",
-                        "Type": "string",
-                        "ConnectedTo": null
+                        "Type": "Primitive",
+                        "PrimitiveType": "String"
                     },
                     {
                         "Name": "name",
-                        "Type": "string",
-                        "ConnectedTo": null
+                        "Type": "Primitive",
+                        "PrimitiveType": "String"
                     },
                     {
                         "Name": "hobby",
-                        "Type": "string",
-                        "ConnectedTo": null
+                        "Type": "Primitive",
+                        "PrimitiveType": "String"
                     },
                     {
                         "Name": "age",
-                        "Type": "int",
-                        "ConnectedTo": null
+                        "Type": "Primitive",
+                        "PrimitiveType": "Int"
                     }
                 ],
                 "TablesByFields": [
@@ -132,18 +132,18 @@
                 "Fields": [
                     {
                         "Name": "id",
-                        "Type": "string",
-                        "ConnectedTo": null
+                        "Type": "Primitive",
+                        "PrimitiveType": "String"
                     },
                     {
                         "Name": "age",
-                        "Type": "int",
-                        "ConnectedTo": null
+                        "Type": "Primitive",
+                        "PrimitiveType": "Int"
                     },
                     {
                         "Name": "name",
-                        "Type": "string",
-                        "ConnectedTo": null
+                        "Type": "Primitive",
+                        "PrimitiveType": "String"
                     }
                 ]
             }

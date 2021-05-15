@@ -58,5 +58,11 @@ namespace OctopusCore.Configuration.ConfigurationProviders
             var tables = entity.TablesByFields.ToDictionary(table => TableToString(entityType, table), table => table);
             return tables;
         }
+
+        public List<string> GetFields(string entityType)
+        {
+            var entity = Entities.First(x => x.Name.ToLower() == entityType);
+            return entity.Fields.Select(x => x.Name).ToList();
+        }
     }
 }

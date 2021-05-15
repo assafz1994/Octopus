@@ -38,6 +38,52 @@
           ]
         }
       ]
+    },
+    {
+      "Id": "neo4j",
+      "DbType": "Neo4j",
+      "ConnectionString": "bolt://localhost:7687/",
+      "Username": "neo4j",
+      "Password": "1234",
+      "Entities": [
+        {
+          "Name": "producer",
+          "Fields": [
+            {
+              "Name": "name",
+              "Type": "Primitive",
+              "PrimitiveType": "String"
+            },
+            {
+              "Name": "produceTo",
+              "Type": "Object",
+              "EntityName": "consumer",
+              "ConnectedToField": "consumeFrom"
+            }
+          ]
+        },
+        {
+          "Name": "consumer",
+          "Fields": [
+            {
+              "Name": "name",
+              "Type": "Primitive",
+              "PrimitiveType": "String"
+            },
+            {
+              "Name": "consumeFrom",
+              "Type": "Object",
+              "EntityName": "producer",
+              "ConnectedToField": "produceTo"
+            },
+            {
+              "Name": "complex",
+              "Type": "Object",
+              "EntityName": "producer"
+            }
+          ]
+        }
+      ]
     }
   ]
 }

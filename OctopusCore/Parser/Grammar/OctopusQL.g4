@@ -9,7 +9,7 @@ select              : FROM entity entityRep (whereClause)* (selectClause | aggre
 deleteSelect        : FROM entity entityRep (whereClause)* ;
 insert              : (insertClause)+ INSERT entityReps ;
 delete              : DELETE deleteSelect ;
-update              : (getClause)+ UPDATE entityRep (fieldsWithDot)? ASSIGN value ;
+update              : (getClause)+ UPDATE entityRep (fieldsWithDot)? EQUALS value ;
 insertClause        : ENTITY entity COLON entityRep '(' (assignments | select) ')' ;
 getClause           : ENTITY entity COLON entityRep '(' select ')' ;
 assignments         : assignmentList+=assignment (',' assignmentList+=assignment)* ;
@@ -32,6 +32,7 @@ all                 : '*' ;
 /*
  * Lexer Rules
  */
+
 EQUALS              : '=' ;
 COMPARATOR          : ISEQUALS | GT | GTE | LT | LTE ; 
 SELECT              : 'select' | 'SELECT' | 'Select' ;
@@ -42,7 +43,6 @@ ENTITY              : 'entity' | 'ENTITY' | 'Entity' ;
 INSERT              : 'insert' | 'INSERT' | 'Insert' ;
 DELETE              : 'delete' | 'DELETE' | 'Delete' ;
 UPDATE              : 'update' | 'UPDATE' | 'Update' ;
-ASSIGN              : EQUALS | ADD | REMOVE ;
 PIPELINE            : '|' ;
 COLON               : ':' ;
 ISEQUALS            : '==' ;

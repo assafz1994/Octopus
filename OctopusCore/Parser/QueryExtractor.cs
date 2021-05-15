@@ -32,8 +32,52 @@ namespace OctopusCore.Parser
             {
                 return HandleDelete(context.@delete());
             }
-            
+
+            if (context.@update() != null)
+            {
+                return HandleUpdate(context.@update());
+            }
+
             throw new Exception("Unsupported query");
+        }
+
+        private UpdateQueryInfo HandleUpdate(OctopusQLParser.UpdateContext update)
+        {
+            var entityToSubQuery = new Dictionary<string, string>();
+            var entityRepToEntityType = new Dictionary<string, string>();
+            var subQueries = new Dictionary<string, QueryInfo>();
+
+            if (update.getClause().Length != 1)
+            {
+                throw new Exception("Only one entity is supported");
+            }
+
+            foreach (var getClauseContext in update.getClause())
+            {
+                var curEntityRep = getClauseContext.entityRep().GetText();
+                var curEntityType = getClauseContext.entity().GetText().ToLower();
+                var selectQueryInfo = HandleSelect(getClauseContext.@select());
+                var subQueryGuid = NewGuid().ToString();
+                entityToSubQuery.Add(curEntityRep, subQueryGuid);
+                entityRepToEntityType.Add(curEntityRep, curEntityType);
+                subQueries.Add(subQueryGuid, selectQueryInfo);
+            }
+
+            var entityRep = update.entityRep().GetText();
+            var entityType = entityRepToEntityType[entityRep];
+            var fields = update.fieldsWithDot()._el.Select(field => field.GetText().ToLower()).ToList();
+
+            dynamic value;
+            if (update.value().NUMBER() != null)
+            {
+                value = int.Parse(update.value().GetText());
+            }
+            else
+            {
+                value = update.value().GetText();
+            }
+
+            return new UpdateQueryInfo(entityType, entityRep, entityToSubQuery, entityRepToEntityType, fields, value, subQueries);
         }
 
         private DeleteQueryInfo HandleDelete(OctopusQLParser.DeleteContext delete)

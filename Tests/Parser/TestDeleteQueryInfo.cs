@@ -37,7 +37,7 @@ namespace Tests.Parser
                                     },
                                     Fields = new List<string>()
                                     {
-                                        StringConstants.Guid
+                                        "id"
                                     },
                                     Includes = new List<Include>(),
                                     NestedProperty = new List<string>()

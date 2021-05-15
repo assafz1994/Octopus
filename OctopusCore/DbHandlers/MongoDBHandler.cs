@@ -89,12 +89,26 @@ namespace OctopusCore.DbHandlers
             return Task.FromResult(new ExecutionResult(entityType, new Dictionary<string, EntityResult>()));
         }
 
+        public Task<ExecutionResult> ExecuteUpdateQuery(string entityType, string guid, string field, dynamic value)
+        {
+            var dbClient = new MongoClient(); // no need to insert connection string -> local db is the default
+            var databaseName = MongoUrl.Create(_configurationProvider.ConnectionString).DatabaseName;
+            var db = dbClient.GetDatabase(databaseName);
+            var collectionName = _configurationProvider.GetTableName(entityType);
+            var collection = db.GetCollection<BsonDocument>(collectionName);
+
+            var filter = Builders<BsonDocument>.Filter.Eq("guid", Guid.Parse(guid));
+            var update = Builders<BsonDocument>.Update.Set(field, value);
+            collection.UpdateOne(filter, update);
+            return Task.FromResult(new ExecutionResult(entityType, new Dictionary<string, EntityResult>()));
+        }
+
         private IEnumerable<BsonDocument> GetRelevantDocuments(IMongoCollection<BsonDocument> collection,
             ProjectionDefinition<BsonDocument> project, FilterDefinition<BsonDocument> conditions, bool guidIsRequested)
         {
             return conditions == null
-                ? collection.Find(_ => true).Project(project).ToList()
-                : collection.Find(conditions).Project(project).ToList();
+               ? collection.Find(_ => true).Project(project).ToList()
+               : collection.Find(conditions).Project(project).ToList();
             //Dictionary<string, EntityResult> entityResults = new Dictionary<string, EntityResult>();
             //foreach (var entity in result)
             //{
@@ -107,44 +121,47 @@ namespace OctopusCore.DbHandlers
             //    entityResults.Add(entity["guid"].ToString(), new EntityResult(entityWithOutGuid));
             //}
 
-            //return entityResults;
+            //return entityResults;        
         }
 
         private ExecutionResult ConvertDocumentsToExecutionResult(IEnumerable<BsonDocument> mongoDocuments, string entityType,
-            IReadOnlyCollection<string> fieldsToSelect,
-            List<(string entityType, Field field, List<string> fieldsToSelect)>
-                joinsTuples, bool guidIsRequested)
+        IReadOnlyCollection<string> fieldsToSelect,
+        List<(string entityType, Field field, List<string> fieldsToSelect)>
+            joinsTuples, bool guidIsRequested)
         {
 
-            var entityResults = new Dictionary<string, EntityResult>();
-            foreach (var document in mongoDocuments)
+        var entityResults = new Dictionary<string, EntityResult>();
+        foreach (var document in mongoDocuments)
+        {
+            var currentEntity = new Dictionary<string, dynamic>();
+            foreach (var fieldName in fieldsToSelect)
             {
-                var currentEntity = new Dictionary<string, dynamic>();
-                foreach (var fieldName in fieldsToSelect)
+                if (document[fieldName] is BsonString)
+                    currentEntity[fieldName] = document[fieldName].AsString;
+                else
+                    currentEntity[fieldName] = document[fieldName].AsInt32;
+            }
+            foreach (var joinTuple in joinsTuples)
+            {
+                var complexFieldsToFields = new Dictionary<string, dynamic>(); // todo add support in fields to select of a join tuple (right now we only get the guid)
+                var guidOfComplexField = document[joinTuple.field.Name].ToString();
+                currentEntity[joinTuple.field.Name] = new Dictionary<string, EntityResult>
                 {
-                    currentEntity[fieldName] = document[fieldName]; // todo check about type
-                }
-                foreach (var joinTuple in joinsTuples)
-                {
-                    var complexFieldsToFields = new Dictionary<string, dynamic>(); // todo add support in fields to select of a join tuple (right now we only get the guid)
-                    var guidOfComplexField = document[joinTuple.field.Name].ToString();
-                    currentEntity[joinTuple.field.Name] = new Dictionary<string, EntityResult>
                     {
-                        {
-                            guidOfComplexField,new EntityResult(complexFieldsToFields)
-                        }
-                    };
-                }
-
-                if (guidIsRequested)
-                {
-                    currentEntity.Add("guid", document["guid"].AsGuid.ToString());
-                }
-                entityResults.Add(document["guid"].AsGuid.ToString(), new EntityResult(currentEntity));
+                        guidOfComplexField,new EntityResult(complexFieldsToFields)
+                    }
+                };
             }
 
-            return new ExecutionResult(entityType, entityResults);
+            if (guidIsRequested)
+            {
+                currentEntity.Add("guid", document["guid"].AsGuid.ToString());
+            }
+            entityResults.Add(document["guid"].AsGuid.ToString(), new EntityResult(currentEntity));
         }
+
+        return new ExecutionResult(entityType, entityResults);
+    }
 
         private ProjectionDefinition<BsonDocument> BuildProjection(IReadOnlyCollection<string> fieldsToSelect)
         {

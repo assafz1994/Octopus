@@ -31,8 +31,35 @@ namespace OctopusCore.Analyzer
                 SelectQueryInfo selectQueryInfo => AnalyzeSelectQuery(selectQueryInfo),
                 InsertQueryInfo insertQueryInfo => AnalyzeInsertQuery(insertQueryInfo),
                 DeleteQueryInfo deleteQueryInfo => AnalyzeDeleteQuery(deleteQueryInfo),
+                UpdateQueryInfo updateQueryInfo => AnalyzeUpdateQuery(updateQueryInfo),
                 _ => throw new Exception("Unsupported query type")
             };
+        }
+
+        private WorkPlan AnalyzeUpdateQuery(UpdateQueryInfo updateQueryInfo)
+        {
+            var jobs = new List<Job>();
+            var subQueryWorkPlans = updateQueryInfo.SubQueries.ToDictionary(v => v.Key, v => AnalyzeQuery(v.Value));
+            // Support non-nested field only
+            var field = updateQueryInfo.Fields.First();
+            var dbs = _analyzerConfigurationProvider.GetDbsToFields(updateQueryInfo.Entity)
+                .Where(x => x.Value.Contains(field))
+                .Select(x => x.Key);
+            foreach (var db in dbs)
+            {
+                var dbHandler = _dbHandlersResolver.ResolveDbHandler(db);
+                var updateQueryJob = new UpdateQueryJob(
+                    dbHandler, 
+                    updateQueryInfo.Entity,
+                    updateQueryInfo.EntityRep,
+                    updateQueryInfo.EntityToSubQuery,
+                    updateQueryInfo.EntityRepToEntityType,
+                    subQueryWorkPlans, 
+                    field, 
+                    updateQueryInfo.Value);
+                jobs.Add(updateQueryJob);
+            }
+            return new WorkPlan(jobs, subQueryWorkPlans);
         }
 
         private WorkPlan AnalyzeDeleteQuery(DeleteQueryInfo deleteQueryInfo)

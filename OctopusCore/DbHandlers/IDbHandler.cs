@@ -12,5 +12,6 @@ namespace OctopusCore.DbHandlers
             IReadOnlyCollection<Filter> filters, string entityType, List<(string entityType, Field field, List<string> fieldsToSelect)> joinsTuples);
         Task<ExecutionResult> ExecuteInsertQuery(string entityType, IReadOnlyDictionary<string, dynamic> fields);
         Task<ExecutionResult> ExecuteDeleteQuery(string entityType, IReadOnlyCollection<string> guidCollection);
+        Task<ExecutionResult> ExecuteUpdateQuery(string entityType, string guid, string field, dynamic value);
     }
 }
