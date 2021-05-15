@@ -175,14 +175,60 @@ namespace Tests.AcceptanceTests
             var executeUpdateQuery = _client.ExecuteQuery(query).Result;
 
             // execute select query of the updated entity to validate that the age changed as expected
-            var selectQueryToValidateUpdate = "From Animal a | where a.aid == \"1\" | Select a(age, aid)";
+            var selectQueryToValidateUpdate = "From Animal a | where a.aid == \"1\" | Select a(aid, age)";
             var resSelectQueryToValidateUpdate = _client.ExecuteQuery(selectQueryToValidateUpdate).Result;
             var updatedEntity = resSelectQueryToValidateUpdate.Select(x => new RouteValueDictionary(x)).ToList();
             var expectedResult = new List<Dictionary<string, object>>()
             {
                 new Dictionary<string, object>()
                 {
+                    {"aid", "1"},
                     {"age", 23 },
+                },
+            };
+            CollectionAssert.AreEquivalent(updatedEntity, expectedResult);
+        }
+
+        [Test]
+        public void TestUpdateAnimalHeight()
+        {
+            SetUpTestOfAnimals();
+            var query = @"Entity Animal : an1(From Animal a | where a.aid == ""1"" | select a(aid, height))
+                          Update an1.height = 345";
+            var executeUpdateQuery = _client.ExecuteQuery(query).Result;
+
+            // execute select query of the updated entity to validate that the age changed as expected
+            var selectQueryToValidateUpdate = "From Animal a | where a.aid == \"1\" | Select a(height, aid)";
+            var resSelectQueryToValidateUpdate = _client.ExecuteQuery(selectQueryToValidateUpdate).Result;
+            var updatedEntity = resSelectQueryToValidateUpdate.Select(x => new RouteValueDictionary(x)).ToList();
+            var expectedResult = new List<Dictionary<string, object>>()
+            {
+                new Dictionary<string, object>()
+                {
+                    {"height", 345 },
+                    {"aid", "1"},
+                },
+            };
+            CollectionAssert.AreEquivalent(updatedEntity, expectedResult);
+        }
+
+        [Test]
+        public void TestUpdateAnimalFood()
+        {
+            SetUpTestOfAnimals();
+            var query = @"Entity Animal : an1(From Animal a | where a.aid == ""1"" | select a(aid, food))
+                          Update an1.food = ""newfood""";
+            var executeUpdateQuery = _client.ExecuteQuery(query).Result;
+
+            // execute select query of the updated entity to validate that the age changed as expected
+            var selectQueryToValidateUpdate = "From Animal a | where a.aid == \"1\" | Select a(food, aid)";
+            var resSelectQueryToValidateUpdate = _client.ExecuteQuery(selectQueryToValidateUpdate).Result;
+            var updatedEntity = resSelectQueryToValidateUpdate.Select(x => new RouteValueDictionary(x)).ToList();
+            var expectedResult = new List<Dictionary<string, object>>()
+            {
+                new Dictionary<string, object>()
+                {
+                    {"food", "newfood" },
                     {"aid", "1"},
                 },
             };
