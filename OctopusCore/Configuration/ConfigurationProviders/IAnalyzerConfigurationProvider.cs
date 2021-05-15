@@ -10,6 +10,6 @@ namespace OctopusCore.Configuration.ConfigurationProviders
         Field GetField(string entityType, string fieldName);
 
         string GetEntityFirstField(string entityType);
-        List<string> GetEntityFields(string entityType);
+        List<Field> GetEntityFields(string entityType);
     }
 }

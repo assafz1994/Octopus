@@ -12,7 +12,6 @@ namespace OctopusCore.Configuration.ConfigurationProviders
         private readonly Dictionary<string, Dictionary<string,Field>> _entityTypeToFieldNameToField;
 
         private readonly Dictionary<string, Dictionary<string, List<string>>> _entityTypeToDatabaseToFields;
-        private readonly Dictionary<string, List<string>> _entityTypeToFields;
         public AnalyzerConfigurationProvider(Scheme scheme, DbConfigurations dbConfigurations)
         {
             Scheme = scheme;
@@ -113,9 +112,9 @@ namespace OctopusCore.Configuration.ConfigurationProviders
             return null;
         }
 
-        public List<string> GetEntityFields(string entityType)
+        public List<Field> GetEntityFields(string entityType)
         {
-            return _entityTypeToFields[entityType];
+            return _entityTypeToFieldNameToField[entityType].Values.ToList();
         }
     }
 }
