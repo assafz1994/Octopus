@@ -354,7 +354,7 @@ namespace Tests.DBHandlers
             var entityType = "animal";
             var guid = "9264f435-d1c7-4f1c-8b84-cf4bdb935641";
             var fieldToUpdate = "food";
-            var newValue = "345newFood";
+            var newValue = "\"345newFood\"";
             var resUpdate = _cassandraDbHandler.ExecuteUpdateQuery(entityType, guid, fieldToUpdate, newValue).Result;
 
             var expectedUpdateExecutionResult = new ExecutionResult("animal", new Dictionary<string, EntityResult>());
@@ -377,7 +377,7 @@ namespace Tests.DBHandlers
             {
                 new Dictionary<string, dynamic>()
                 {
-                    { "food", newValue },
+                    { "food", "345newFood" },
                     { "aid", "1"},
                 }
             };
