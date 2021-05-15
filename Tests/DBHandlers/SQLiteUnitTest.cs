@@ -8,6 +8,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using OctopusCore.Contract;
 using OctopusCore.Parser;
 using OctopusCore.Parser.Filters;
@@ -15,6 +16,7 @@ using Tests.DbsConfiguration;
 
 namespace Tests.DBHandlers
 {
+    [TestFixture, Apartment(ApartmentState.STA)]
     class SQLiteUnitTest
     {
         private OctopusClient _client;
@@ -276,42 +278,6 @@ namespace Tests.DBHandlers
         }
 
         [Test]
-        public void TestInsertAnimal()
-        {
-            var actualInsertExecutionResult = _sqliteDBHandler
-                .ExecuteInsertQuery(
-                    "animal",
-                    new Dictionary<string, dynamic>()
-                    {
-                        {"guid", Guid.NewGuid()},
-                        {"aid", "\"1\""},
-                        {"food", "\"f1\"" },
-                        {"height", 23 }
-                    }).Result;
-            var expectedInsertExecutionResult = new ExecutionResult("animal", new Dictionary<string, EntityResult>());
-
-            Assert.AreEqual(expectedInsertExecutionResult, actualInsertExecutionResult);
-
-            var actualSelectExecutionResult = _sqliteDBHandler.ExecuteQueryWithFiltersAsync(
-                new List<string>()
-                {
-                    "aid", "food", "height"
-                },
-                new List<Filter>(),
-                "animal",
-                new List<(string entityType, Field field, List<string> fieldsToSelect)>()).Result;
-            Assert.AreEqual(1, actualSelectExecutionResult.EntityResults.Count);
-            var actualSelectEntityResult = actualSelectExecutionResult.EntityResults.Values.First();
-            var expectedSelectEntityResult =  new EntityResult(new Dictionary<string, dynamic>()
-                {
-                    {"aid", "1"},
-                    {"food", "f1"},
-                    {"height", 23}
-                });
-            Assert.AreEqual(expectedSelectEntityResult, actualSelectEntityResult);
-        }
-
-        [Test]
         public void TestDeleteAnimals()
         {
             _sqliteDbConfigurator.SetUpTestAnimals();
@@ -347,6 +313,45 @@ namespace Tests.DBHandlers
         }
 
         [Test]
+        public void TestInsertAnimal()
+        {
+            var actualInsertExecutionResult = _sqliteDBHandler
+                .ExecuteInsertQuery(
+                    "animal",
+                    new Dictionary<string, dynamic>()
+                    {
+                        {"guid", Guid.NewGuid()},
+                        {"aid", "\"1\""},
+                        {"food", "\"f1\"" },
+                        {"height", 23 }
+                    }).Result;
+            var expectedInsertExecutionResult = new ExecutionResult("animal", new Dictionary<string, EntityResult>());
+
+            Assert.AreEqual(expectedInsertExecutionResult, actualInsertExecutionResult);
+
+            var actualSelectExecutionResult = _sqliteDBHandler.ExecuteQueryWithFiltersAsync(
+                new List<string>()
+                {
+                    "aid", "food", "height"
+                },
+                new List<Filter>
+                {
+                    new EqFilter(new List<string>() {"aid"}, "\"1\"")
+                },
+                "animal",
+                new List<(string entityType, Field field, List<string> fieldsToSelect)>()).Result;
+            Assert.AreEqual(1, actualSelectExecutionResult.EntityResults.Count);
+            var actualSelectEntityResult = actualSelectExecutionResult.EntityResults.Values.First();
+            var expectedSelectEntityResult = new EntityResult(new Dictionary<string, dynamic>()
+            {
+                {"aid", "1"},
+                {"food", "f1"},
+                {"height", 23}
+            });
+            Assert.AreEqual(expectedSelectEntityResult, actualSelectEntityResult);
+        }
+
+        [Test]
         public void TestUpdateAnimalHeight()
         {
             _sqliteDbConfigurator.SetUpTestAnimals();
@@ -364,9 +369,9 @@ namespace Tests.DBHandlers
                 "height",
                 "aid"
             }.AsReadOnly();
-            IReadOnlyCollection<Filter> filters = new List<OctopusCore.Parser.Filter>
+            IReadOnlyCollection<Filter> filters = new List<Filter>
             {
-                new EqFilter(new List<string>() {"aid"}, "\"1\"")
+                new EqFilter(new List<string>() {"height"}, newValue)
             };
             var joinsTuples = new List<(string entityType, OctopusCore.Configuration.Field field, List<string> fieldsToSelect)>();
             var resSelectQueryToValidateUpdate = _sqliteDBHandler.ExecuteQueryWithFiltersAsync(fieldsToSelect, filters, entityType, joinsTuples).Result;
@@ -403,7 +408,7 @@ namespace Tests.DBHandlers
             }.AsReadOnly();
             IReadOnlyCollection<Filter> filters = new List<OctopusCore.Parser.Filter>
             {
-                new EqFilter(new List<string>() {"aid"}, "\"1\"")
+                new EqFilter(new List<string>() {"food"}, "\"345newFood\"")
             };
             var joinsTuples = new List<(string entityType, OctopusCore.Configuration.Field field, List<string> fieldsToSelect)>();
             var resSelectQueryToValidateUpdate = _sqliteDBHandler.ExecuteQueryWithFiltersAsync(fieldsToSelect, filters, entityType, joinsTuples).Result;
