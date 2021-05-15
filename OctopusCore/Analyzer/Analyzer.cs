@@ -98,7 +98,8 @@ namespace OctopusCore.Analyzer
                 }
             }
 
-            foreach (var fieldName in selectQueryInfo.Fields ?? Enumerable.Empty<string>())
+            var fields = UpdateQueryFields(selectQueryInfo);
+            foreach (var fieldName in fields ?? Enumerable.Empty<string>())
             {
                 if (_analyzerConfigurationProvider.IsComplexField(selectQueryInfo.Entity, fieldName))
                 {
@@ -114,6 +115,26 @@ namespace OctopusCore.Analyzer
 
             var workPlan = workPlanBuilder.Build(subQueryWorkPlans);
             return workPlan;
+        }
+
+        private List<string> UpdateQueryFields(SelectQueryInfo selectQueryInfo)
+        {
+            if (!(selectQueryInfo.Fields.Count == 1 && selectQueryInfo.Fields.Single().Equals(StringConstants.All)))
+            {
+                return selectQueryInfo.Fields;
+            }
+
+            var fields = _analyzerConfigurationProvider.GetEntityFields(selectQueryInfo.Entity)
+                .Where(x => x.Type == DbFieldType.Primitive)
+                .Select(x => x.Name)
+                .ToList();
+
+            if (selectQueryInfo.Includes != null)
+            {
+                fields.AddRange(selectQueryInfo.Includes.Select(x => x.Name));
+            }
+
+            return fields;
         }
 
         private WorkPlan AnalyzeInsertQuery(InsertQueryInfo insertQueryInfo)

@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading;
+using OctopusCore.Common;
 using OctopusCore.Contract;
 using OctopusCore.Parser;
 using OctopusCore.Parser.Filters;

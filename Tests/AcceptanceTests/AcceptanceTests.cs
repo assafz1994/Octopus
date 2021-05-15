@@ -146,7 +146,49 @@ namespace Tests.AcceptanceTests
 
             CollectionAssert.AreEqual(result, expectedResult);
         }
-      
+
+        [Test]
+        public void TestSelectAllFieldsOfAnimalsFromMultipleTablesCassandraAndMongo()
+        {
+            SetUpTestOfAnimals();
+            var query = "From Animal a | Select a(*)";
+            var entities = _client.ExecuteQuery(query).Result;
+            var result = entities.Select(x => new RouteValueDictionary(x)).ToList();
+
+            var expectedResult = new List<Dictionary<string, object>>()
+            {
+                new Dictionary<string, object>()
+                {
+                    {"aid", "1"},
+                    {"food", "f1" },
+                    {"height", 23 },
+                    {"name", "Maffin"},
+                    {"age", 5 },
+                    
+
+
+                },
+                new Dictionary<string, object>()
+                {
+                    {"aid", "2"},
+                    {"food", "f23" },
+                    {"height", 23 },
+                    { "name", "Woody"},
+                    { "age", 6 },
+                },
+                new Dictionary<string, object>()
+                {
+                    {"aid", "3"},
+                    {"food", "f23" },
+                    {"height", 45 },
+                    {"name", "Doggy"},
+                    {"age", 8 },
+                },
+            };
+
+            CollectionAssert.AreEqual(result, expectedResult);
+        }
+
         [Test]
         public void TestSelectAnimalWithFilter()
         {
@@ -367,6 +409,39 @@ namespace Tests.AcceptanceTests
         }
 
         [Test]
+        public void TestComplexSelectWithAllFromManyTablesWithRelationOfOneToOneWithSimpleFilter()
+        {
+            SetUpTestComplexSelect();
+            var query = "from student s | where s.age == 10 | select s(*) include(taughtBy(name))";
+            var entities = _client.ExecuteQuery(query).Result;
+            var result = entities.Select(x => new RouteValueDictionary(x));
+            var expectedResult = new List<Dictionary<string, object>>()
+            {
+                new Dictionary<string, object>()
+                {
+                    {"sid", "1"},
+                    {"age", 10},
+                    {"name", "sn1"},
+                    {"taughtBy", new JObject
+                    {
+                        {"name", "tn1"}
+                    }}
+                },
+                new Dictionary<string, object>()
+                {
+                    {"sid", "2"},
+                    {"age", 10},
+                    {"name", "sn2"},
+                    {"taughtBy", new JObject
+                    {
+                        {"name", "tn2"}
+                    }}
+                }
+            };
+            CollectionAssert.AreEqual(result, expectedResult);
+        }
+
+        [Test]
         public void TestComplexSelectOfStudentFromManyTablesWithRelationOfOneToOneWithFilterOnTeacherName()
         {
             SetUpTestComplexSelect();
@@ -484,6 +559,51 @@ namespace Tests.AcceptanceTests
         {
             SetUpTestComplexSelect();
             var query = "from student s | where s.address.city == \"Beer Sheva\" | select s(sid,age,name,address, taughtBy) include(address(city, street,number)) include(taughtBy(name))";
+            var entities = _client.ExecuteQuery(query).Result;
+            var result = entities.Select(x => new RouteValueDictionary(x)).ToList();
+            var expectedResult = new List<Dictionary<string, object>>()
+            {
+                new Dictionary<string, object>()
+                {
+                    {"sid", "2"},
+                    {"age", 10},
+                    {"name", "sn2"},
+                    {"taughtBy", new JObject
+                    {
+                        {"name", "tn2"}
+                    }},
+                    {"address", new JObject
+                    {
+                        {"city", "Beer Sheva"},
+                        {"street", "Rager"},
+                        {"number", 1}
+                    }}
+                },
+                new Dictionary<string, object>()
+                {
+                    {"sid", "3"},
+                    {"age", 30},
+                    {"name", "sn3"},
+                    {"taughtBy", new JObject
+                    {
+                        {"name", "tn3"}
+                    }},
+                    {"address", new JObject
+                    {
+                        {"city", "Beer Sheva"},
+                        {"street", "Rager"},
+                        {"number", 2}
+                    }}
+                }
+            };
+            CollectionAssert.AreEqual(result, expectedResult);
+        }
+
+        [Test]
+        public void TestComplexSelectWithAllOfStudentFromManyTablesAndDbsWithRelationOfOneToOneWithFilterOnAddress()
+        {
+            SetUpTestComplexSelect();
+            var query = "from student s | where s.address.city == \"Beer Sheva\" | select s(*) include(address(city, street,number)) include(taughtBy(name))";
             var entities = _client.ExecuteQuery(query).Result;
             var result = entities.Select(x => new RouteValueDictionary(x)).ToList();
             var expectedResult = new List<Dictionary<string, object>>()
