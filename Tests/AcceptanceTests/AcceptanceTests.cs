@@ -88,18 +88,18 @@ namespace Tests.AcceptanceTests
             {
                 new Dictionary<string, object>()
                 {
-                    {"age", 5 },
                     {"name", "Maffin"},
+                    {"age", 5 },
                 },
                 new Dictionary<string, object>()
                 {
-                    { "age", 6 },
                     { "name", "Woody"},
+                    { "age", 6 },
                 },
                 new Dictionary<string, object>()
                 {
-                    {"age", 8 },
                     {"name", "Doggy"},
+                    {"age", 8 },
                 },
             };
 
@@ -123,6 +123,7 @@ namespace Tests.AcceptanceTests
                     {"height", 23 },
                     {"age", 5 },
                     {"name", "Maffin"},
+
 
                 },
                 new Dictionary<string, object>()
@@ -196,7 +197,6 @@ namespace Tests.AcceptanceTests
             var query = @"Entity Animal : an1(From Animal a | where a.aid == ""1"" | select a(aid, height))
                           Update an1.height = 345";
             var executeUpdateQuery = _client.ExecuteQuery(query).Result;
-
             // execute select query of the updated entity to validate that the age changed as expected
             var selectQueryToValidateUpdate = "From Animal a | where a.aid == \"1\" | Select a(height, aid)";
             var resSelectQueryToValidateUpdate = _client.ExecuteQuery(selectQueryToValidateUpdate).Result;
