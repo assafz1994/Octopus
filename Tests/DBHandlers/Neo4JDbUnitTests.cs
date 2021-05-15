@@ -11,6 +11,7 @@ using OctopusCore.Configuration.ConfigurationProviders;
 using OctopusCore.Contract;
 using OctopusCore.DbHandlers;
 using OctopusCore.Parser;
+using OctopusCore.Parser.Filters;
 using Tests.DbsConfiguration;
 
 namespace Tests.DBHandlers
@@ -107,7 +108,7 @@ namespace Tests.DBHandlers
         }
 
         [Test]
-        public void TestSelect1()
+        public void TestSelectAllAddresses()
         {
             _neo4jDbConfigurator.SetUpAddresses();
             var actualExecutionResult = _neo4jDbHandler
@@ -149,7 +150,7 @@ namespace Tests.DBHandlers
         }
 
         [Test]
-        public void TestInsert1()
+        public void TestInsertAddress()
         {
             var actualInsertExecutionResult = _neo4jDbHandler
                 .ExecuteInsertQuery(
@@ -197,7 +198,7 @@ namespace Tests.DBHandlers
         }
 
         [Test]
-        public void TestDelete1()
+        public void TestDeleteAddresses()
         {
             _neo4jDbConfigurator.SetUpAddresses();
             var actualDeleteExecutionResult = _neo4jDbHandler
@@ -224,6 +225,80 @@ namespace Tests.DBHandlers
                 {"number", 2}
             });
             Assert.AreEqual(actualEntityResult, expectedEntityResult);
+        }
+
+        [Test]
+        public void TestUpdateStreet()
+        {
+            _neo4jDbConfigurator.SetUpAddresses();
+            var entityType = "address";
+            var guid = "6828e47d-fd3f-42d4-8e59-39621d09d373";
+            var fieldToUpdate = "street";
+            var newValue = "\"S1\"";
+            var resUpdate = _neo4jDbHandler.ExecuteUpdateQuery(entityType, guid, fieldToUpdate, newValue).Result;
+
+            var expectedUpdateExecutionResult = new ExecutionResult("address", new Dictionary<string, EntityResult>());
+
+            Assert.AreEqual(expectedUpdateExecutionResult, resUpdate);
+            // execute select query of the updated entity to validate that the age changed as expected
+            IReadOnlyCollection<string> fieldsToSelect = new List<string> {
+                "city",
+                "street"
+            }.AsReadOnly();
+            IReadOnlyCollection<Filter> filters = new List<OctopusCore.Parser.Filter>
+            {
+                new EqFilter(new List<string>() {"city"}, "\"Tel-Aviv\"")
+            };
+            var joinsTuples = new List<(string entityType, Field field, List<string> fieldsToSelect)>();
+            var resSelectQueryToValidateUpdate = _neo4jDbHandler.ExecuteQueryWithFiltersAsync(fieldsToSelect, filters, entityType, joinsTuples).Result;
+            var entityResults = resSelectQueryToValidateUpdate.EntityResults.Values.ToList();
+            var fields = entityResults.Select(x => x.Fields).ToList();
+            var expectedResult = new List<Dictionary<string, dynamic>>()
+            {
+                new Dictionary<string, dynamic>()
+                {
+                    { "city", "Tel-Aviv" },
+                    { "street", "S1"},
+                }
+            };
+            CollectionAssert.AreEqual(fields, expectedResult);
+        }
+
+        [Test]
+        public void TestUpdateNumber()
+        {
+            _neo4jDbConfigurator.SetUpAddresses();
+            var entityType = "address";
+            var guid = "6828e47d-fd3f-42d4-8e59-39621d09d373";
+            var fieldToUpdate = "number";
+            var newValue = 3456;
+            var resUpdate = _neo4jDbHandler.ExecuteUpdateQuery(entityType, guid, fieldToUpdate, newValue).Result;
+
+            var expectedUpdateExecutionResult = new ExecutionResult("address", new Dictionary<string, EntityResult>());
+
+            Assert.AreEqual(expectedUpdateExecutionResult, resUpdate);
+            // execute select query of the updated entity to validate that the age changed as expected
+            IReadOnlyCollection<string> fieldsToSelect = new List<string> {
+                "city",
+                "number"
+            }.AsReadOnly();
+            IReadOnlyCollection<Filter> filters = new List<OctopusCore.Parser.Filter>
+            {
+                new EqFilter(new List<string>() {"city"}, "\"Tel-Aviv\"")
+            };
+            var joinsTuples = new List<(string entityType, Field field, List<string> fieldsToSelect)>();
+            var resSelectQueryToValidateUpdate = _neo4jDbHandler.ExecuteQueryWithFiltersAsync(fieldsToSelect, filters, entityType, joinsTuples).Result;
+            var entityResults = resSelectQueryToValidateUpdate.EntityResults.Values.ToList();
+            var fields = entityResults.Select(x => x.Fields).ToList();
+            var expectedResult = new List<Dictionary<string, dynamic>>()
+            {
+                new Dictionary<string, dynamic>()
+                {
+                    { "city", "Tel-Aviv" },
+                    { "number", newValue},
+                }
+            };
+            CollectionAssert.AreEqual(fields, expectedResult);
         }
     }
 }
