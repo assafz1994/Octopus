@@ -80,7 +80,7 @@ namespace Tests.AcceptanceTests
         public void TestSelectMultipleFieldsOfAnimals()
         {
             SetUpTestOfAnimals();
-            var query = "From Animal a | Select a(age, name)";
+            var query = "From Animal a | Select a(name, age)";
             var entities = _client.ExecuteQuery(query).Result;
             var result = entities.Select(x => new RouteValueDictionary(x)).ToList();
 
