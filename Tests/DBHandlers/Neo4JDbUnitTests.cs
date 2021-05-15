@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using Neo4j.Driver;
 using Newtonsoft.Json;
 using NUnit.Framework;
@@ -16,6 +17,7 @@ using Tests.DbsConfiguration;
 
 namespace Tests.DBHandlers
 {
+    [TestFixture, Apartment(ApartmentState.STA)]
     class Neo4JDbUnitTests
     {
         private Neo4jDbConfigurator _neo4jDbConfigurator;

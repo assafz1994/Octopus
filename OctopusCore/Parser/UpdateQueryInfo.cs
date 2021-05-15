@@ -5,7 +5,7 @@ using System.Text;
 
 namespace OctopusCore.Parser
 {
-    class UpdateQueryInfo : QueryInfo
+    public class UpdateQueryInfo : QueryInfo
     {
         public string Entity { get; set; }
         public string EntityRep { get; set; }
@@ -13,11 +13,6 @@ namespace OctopusCore.Parser
         public Dictionary<string, string> EntityRepToEntityType;
         public List<string> Fields;
         public dynamic Value;
-        public UpdateQueryInfo()
-        {
-            SubQueries = new Dictionary<string, QueryInfo>();
-            EntityToSubQuery = new Dictionary<string, string>();
-        }
 
         public UpdateQueryInfo(string entity,
             string entityRep,
@@ -35,12 +30,24 @@ namespace OctopusCore.Parser
             Fields = fields;
             Value = value;
         }
+
+        public UpdateQueryInfo()
+        {
+
+        }
+
         public override bool Equals(object obj)
         {
             if (obj == null) return false;
             if (obj == this) return true;
             if (!(obj is UpdateQueryInfo updateQueryInfo)) return false;
-            return SubQueries.Values.SequenceEqual(updateQueryInfo.SubQueries.Values);
+            return Entity.Equals(updateQueryInfo.Entity) &&
+                   EntityRep.Equals(updateQueryInfo.EntityRep) &&
+                   Fields.SequenceEqual(updateQueryInfo.Fields) &&
+                   EntityToSubQuery.Keys.SequenceEqual(updateQueryInfo.EntityToSubQuery.Keys) &&
+                   EntityRepToEntityType.OrderBy(kv => kv.Key).ToList()
+                       .SequenceEqual(updateQueryInfo.EntityRepToEntityType.OrderBy(kv => kv.Key).ToList()) &&
+                   SubQueries.Values.SequenceEqual(updateQueryInfo.SubQueries.Values);
 
         }
     }

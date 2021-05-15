@@ -18,6 +18,7 @@ namespace Tests.DbsConfiguration
         private string _init1;
         private string _init2;
         private string _insert1;
+        private string _insertAnimals;
 
         public SqliteDbConfigurator()
         {
@@ -47,6 +48,15 @@ namespace Tests.DbsConfiguration
 	                ""student""	TEXT,
 	                ""teacher""	TEXT,
 	                PRIMARY KEY(""student"",""teacher"")
+                );
+
+                Create table IF NOT EXISTS ""Animal_table""
+                (
+                    ""guid""	TEXT,
+                    ""aid""	TEXT,
+                    ""food"" TEXT,
+   	                ""height"" INT,
+		            PRIMARY KEY(""guid"")
                 );";
             _init2 = _sql2DropTables +
                 @"CREATE TABLE IF NOT EXISTS ""student_table"" (
@@ -73,6 +83,9 @@ namespace Tests.DbsConfiguration
                 VALUES(""0433b07f-1d77-4f58-a58d-91daae887502"",""7bed1d94-41a2-4681-894c-6c6dcc41a45b"");
                 INSERT INTO student_teacher_taughtBy_teach (student,teacher) 
                 VALUES(""8f147986-8658-4561-860c-d1b23a134660"",""f7b97e2a-e885-49e3-811d-201e72b27406"");";
+            _insertAnimals = @"INSERT INTO ""animal_table"" (guid,aid,food,height) VALUES(""9264f435-d1c7-4f1c-8b84-cf4bdb935641"",""1"",""f1"",23);
+                INSERT INTO ""animal_table"" (guid,aid,food,height) VALUES(""e8d706f8-92be-429c-89cc-91973fca7a95"",""2"",""f23"",23);
+                INSERT INTO ""animal_table"" (guid,aid,food,height) VALUES(""f443f95a-3d8f-4786-b3e6-0db8b790f7e6"",""3"",""f23"",45);";
         }
         public void SetUpDb()
         {
@@ -98,6 +111,11 @@ namespace Tests.DbsConfiguration
         public void SetUpTestComplexSelect()
         {
             SendCommand(Sql1ConnectionString, _insert1);
+        }
+
+        public void SetUpTestAnimals()
+        {
+            SendCommand(Sql1ConnectionString, _insertAnimals);
         }
     }
 }

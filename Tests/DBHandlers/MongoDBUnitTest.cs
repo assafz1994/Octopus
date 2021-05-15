@@ -1,4 +1,5 @@
 ﻿using Autofac;
+using Microsoft.AspNetCore.Routing;
 using NUnit.Framework;
 using Octopus.Client;
 using OctopusCore.Configuration;
@@ -7,6 +8,7 @@ using OctopusCore.DbHandlers;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using Tests.DbsConfiguration;
 
 namespace Tests.DBHandlers
@@ -72,15 +74,13 @@ namespace Tests.DBHandlers
         }
 
         [Test]
-        public void TestSelectMultipleFieldsWithFilterOfAnimalsUT()
+        public void TestSelectMultipleFieldsWithFilterOfAnimals()
         {
             SetUpTestOfAnimals();
-
             IReadOnlyCollection<string> fieldsToSelect = new List<string> {
                 "name",
                 "age",
             }.AsReadOnly();
-            
             IReadOnlyCollection<OctopusCore.Parser.Filter> filters = new List<OctopusCore.Parser.Filter>
             { 
                 new OctopusCore.Parser.Filters.EqFilter(new List<string>() {"name"}, "Maffin")
@@ -105,10 +105,9 @@ namespace Tests.DBHandlers
         }
 
     [Test]
-        public void TestSelectMultipleFieldsWithoutFilterOfAnimalsUT()
+        public void TestSelectMultipleFieldsWithoutFilterOfAnimals()
         {
             SetUpTestOfAnimals();
-
             IReadOnlyCollection<string> fieldsToSelect = new List<String> {
                 "name",
                 "age",
@@ -122,7 +121,6 @@ namespace Tests.DBHandlers
             List<(string entityType, OctopusCore.Configuration.Field field, List<string> fieldsToSelect)> joinsTuples = new List<(string entityType, OctopusCore.Configuration.Field field, List<string> fieldsToSelect)>();
 
             var res = _mongoDBHandler.ExecuteQueryWithFiltersAsync(fieldsToSelect, filters, entityType, joinsTuples).Result;
-
             var expectedResult = new List<Dictionary<string, dynamic>>()
             {
                 new Dictionary<string, dynamic>()
@@ -153,7 +151,7 @@ namespace Tests.DBHandlers
         }
 
         [Test]
-        public void TestUpdateAgeAnimalUT()
+        public void TestUpdateAgeAnimal()
         {
             // update age of animal to be 23
             SetUpTestOfAnimals();
@@ -188,7 +186,7 @@ namespace Tests.DBHandlers
         }
 
         [Test]
-        public void TestInsertOneAnimalUT()
+        public void TestInsertOneAnimal()
         {
             SetUpTestOfAnimals();
 
@@ -200,7 +198,6 @@ namespace Tests.DBHandlers
             };
 
             var entityType = "animal"; 
-
             _mongoDBHandler.ExecuteInsertQuery(entityType, fields);
 
             IReadOnlyCollection<string> fieldsToSelect = new List<string> {"name","age","aid"}.AsReadOnly();
@@ -247,16 +244,14 @@ namespace Tests.DBHandlers
         }
 
         [Test]
-        public void TestDeleteOneAnimalUT()
+        public void TestDeleteOneAnimal()
         {
             SetUpTestOfAnimals();
-
             IReadOnlyCollection<string> guidCollection = new List<string> {
              "9264f435-d1c7-4f1c-8b84-cf4bdb935641",
             };
 
             var entityType = "animal";
-
             _mongoDBHandler.ExecuteDeleteQuery(entityType, guidCollection);
             
             IReadOnlyCollection<string> fieldsToSelect = new List<string> { "name", "age", "aid" }.AsReadOnly();
@@ -291,10 +286,9 @@ namespace Tests.DBHandlers
         }
 
         [Test]
-        public void TestDeleteManyAnimalsUT()
+        public void TestDeleteManyAnimals()
         {
             SetUpTestOfAnimals();
-
             IReadOnlyCollection<string> guidCollection = new List<string> {
              "9264f435-d1c7-4f1c-8b84-cf4bdb935641",
              "e8d706f8-92be-429c-89cc-91973fca7a95",
