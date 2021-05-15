@@ -190,9 +190,15 @@ namespace OctopusCore.DbHandlers
             return new ExecutionResult(entityType, new Dictionary<string, EntityResult>());
         }
 
-        public Task<ExecutionResult> ExecuteUpdateQuery(string entityType, string guid, string field, dynamic value)
+        public async Task<ExecutionResult> ExecuteUpdateQuery(string entityType, string guid, string field, dynamic value)
         {
-            throw new NotImplementedException();
+            var session = OpenSession();
+            var guidString = $"'{guid}'";
+            await session.RunAsync(
+                $"match (e:{entityType}) where e.{StringConstants.Guid} = {guidString}" +
+                $"set e.{field} = {value}" +
+                $"return e");
+            return new ExecutionResult(entityType, new Dictionary<string, EntityResult>());
         }
 
         private string BuildInsertQuery(string entityType, IReadOnlyDictionary<string, dynamic> fields)
