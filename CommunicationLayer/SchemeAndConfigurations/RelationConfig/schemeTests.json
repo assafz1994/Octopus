@@ -1,112 +1,508 @@
 {
-    "Entities": [
+  "Entities": [
+    {
+      "Name": "student",
+      "Fields": [
         {
-            "Name": "student",
-            "Fields": [
-                {
-                    "Name": "sid",
-                    "Type": "Primitive",
-                    "PrimitiveType": "String"
-                },
-                {
-                    "Name": "age",
-                    "Type": "Primitive",
-                    "PrimitiveType": "Int"
-                },
-                {
-                    "Name": "name",
-                    "Type": "Primitive",
-                    "PrimitiveType": "String"
-                },
-                {
-                    "Name": "address",
-                    "Type": "Object",
-                    "EntityName": "address",
-                    "ConnectedToField": null
-                },
-                {
-                    "Name": "taughtBy",
-                    "Type": "Object",
-                    "EntityName": "teacher",
-                    "ConnectedToField": "teach"
-                }
-            ]
+          "Name": "sid",
+          "Type": "Primitive",
+          "PrimitiveType": "String"
         },
         {
-            "Name": "teacher",
-            "Fields": [
-                {
-                    "Name": "tid",
-                    "Type": "Primitive",
-                    "PrimitiveType": "String"
-                },
-                {
-                    "Name": "age",
-                    "Type": "Primitive",
-                    "PrimitiveType": "Int"
-                },
-                {
-                    "Name": "name",
-                    "Type": "Primitive",
-                    "PrimitiveType": "String"
-                },
-                {
-                    "Name": "teach",
-                    "Type": "Object",
-                    "EntityName": "student",
-                    "ConnectedToField": "taughtBy"
-                }
-            ]
+          "Name": "age",
+          "Type": "Primitive",
+          "PrimitiveType": "Int"
         },
         {
-            "Name": "address",
-            "Fields": [
-                {
-                    "Name": "city",
-                    "Type": "Primitive",
-                    "PrimitiveType": "String"
-                },
-                {
-                    "Name": "street",
-                    "Type": "Primitive",
-                    "PrimitiveType": "String"
-                },
-                {
-                    "Name": "number",
-                    "Type": "Primitive",
-                    "PrimitiveType": "Int"
-                }
-            ]
+          "Name": "name",
+          "Type": "Primitive",
+          "PrimitiveType": "String"
         },
         {
-            "Name": "animal",
-            "Fields": [
-                {
-                    "Name": "aid",
-                    "Type": "Primitive",
-                    "PrimitiveType": "String"
-                },
-                {
-                    "Name": "name",
-                    "Type": "Primitive",
-                    "PrimitiveType": "String"
-                },
-                {
-                    "Name": "age",
-                    "Type": "Primitive",
-                    "PrimitiveType": "Int"
-                },
-                {
-                    "Name": "food",
-                    "Type": "Primitive",
-                    "PrimitiveType": "String"
-                },
-                {
-                    "Name": "height",
-                    "Type": "Primitive",
-                    "PrimitiveType": "Int"
-                }
-            ]
+          "Name": "address",
+          "Type": "Object",
+          "EntityName": "address",
+          "ConnectedToField": null
+        },
+        {
+          "Name": "taughtBy",
+          "Type": "Object",
+          "EntityName": "teacher",
+          "ConnectedToField": "teach"
         }
-    ]
+      ]
+    },
+    {
+      "Name": "teacher",
+      "Fields": [
+        {
+          "Name": "tid",
+          "Type": "Primitive",
+          "PrimitiveType": "String"
+        },
+        {
+          "Name": "age",
+          "Type": "Primitive",
+          "PrimitiveType": "Int"
+        },
+        {
+          "Name": "name",
+          "Type": "Primitive",
+          "PrimitiveType": "String"
+        },
+        {
+          "Name": "teach",
+          "Type": "Object",
+          "EntityName": "student",
+          "ConnectedToField": "taughtBy"
+        }
+      ]
+    },
+    {
+      "Name": "address",
+      "Fields": [
+        {
+          "Name": "city",
+          "Type": "Primitive",
+          "PrimitiveType": "String"
+        },
+        {
+          "Name": "street",
+          "Type": "Primitive",
+          "PrimitiveType": "String"
+        },
+        {
+          "Name": "number",
+          "Type": "Primitive",
+          "PrimitiveType": "Int"
+        }
+      ]
+    },
+    {
+      "Name": "animal",
+      "Fields": [
+        {
+          "Name": "aid",
+          "Type": "Primitive",
+          "PrimitiveType": "String"
+        },
+        {
+          "Name": "name",
+          "Type": "Primitive",
+          "PrimitiveType": "String"
+        },
+        {
+          "Name": "age",
+          "Type": "Primitive",
+          "PrimitiveType": "Int"
+        },
+        {
+          "Name": "food",
+          "Type": "Primitive",
+          "PrimitiveType": "String"
+        },
+        {
+          "Name": "height",
+          "Type": "Primitive",
+          "PrimitiveType": "Int"
+        }
+      ]
+    },
+    {
+      "Name": "buyerSqlSql",
+      "Fields": [
+        {
+          "Name": "name",
+          "Type": "Primitive",
+          "PrimitiveType": "String"
+        },
+        {
+          "Name": "buyFrom",
+          "Type": "Object",
+          "EntityName": "sellerSqlSql",
+          "ConnectedToField": "sellTo"
+
+        },
+        {
+          "Name": "buyFromMany",
+          "Type": "Array",
+          "EntityName": "sellerSqlSql",
+          "ConnectedToField": "sellToMany"
+        },
+        {
+          "Name": "favoriteSeller",
+          "Type": "Object",
+          "EntityName": "sellerSqlSql"
+        },
+        {
+          "Name": "favoriteSellerMany",
+          "Type": "Array",
+          "EntityName": "sellerSqlSql"
+        }
+      ]
+    },
+    {
+      "Name": "sellerSqlSql",
+      "Fields": [
+        {
+          "Name": "name",
+          "Type": "Primitive",
+          "PrimitiveType": "String"
+        },
+        {
+          "Name": "sellTo",
+          "Type": "Object",
+          "EntityName": "buyerSqlSql",
+          "ConnectedToField": "buyFrom"
+
+        },
+        {
+          "Name": "sellToMany",
+          "Type": "Array",
+          "EntityName": "buyerSqlSql",
+          "ConnectedToField": "buyFromMany"
+        },
+        {
+          "Name": "favoriteBuyer",
+          "Type": "Object",
+          "EntityName": "buyerSqlSql"
+        },
+        {
+          "Name": "favoriteBuyerMany",
+          "Type": "Array",
+          "EntityName": "buyerSqlSql"
+        }
+      ]
+    },
+    {
+      "Name": "buyerSqlMongo",
+      "Fields": [
+        {
+          "Name": "name",
+          "Type": "Primitive",
+          "PrimitiveType": "String"
+        },
+        {
+          "Name": "buyFrom",
+          "Type": "Object",
+          "EntityName": "sellerMongoSql",
+          "ConnectedToField": "sellTo"
+
+        },
+        {
+          "Name": "buyFromMany",
+          "Type": "Array",
+          "EntityName": "sellerMongoSql",
+          "ConnectedToField": "sellToMany"
+        },
+        {
+          "Name": "favoriteSeller",
+          "Type": "Object",
+          "EntityName": "sellerMongoSql"
+        },
+        {
+          "Name": "favoriteSellerMany",
+          "Type": "Array",
+          "EntityName": "sellerMongoSql"
+        }
+      ]
+    },
+    {
+      "Name": "sellerMongoSql",
+      "Fields": [
+        {
+          "Name": "name",
+          "Type": "Primitive",
+          "PrimitiveType": "String"
+        },
+        {
+          "Name": "sellTo",
+          "Type": "Object",
+          "EntityName": "buyerSqlMongo",
+          "ConnectedToField": "buyFrom"
+
+        },
+        {
+          "Name": "sellToMany",
+          "Type": "Array",
+          "EntityName": "buyerSqlMongo",
+          "ConnectedToField": "buyFromMany"
+        },
+        {
+          "Name": "favoriteBuyer",
+          "Type": "Object",
+          "EntityName": "buyerSqlMongo"
+        },
+        {
+          "Name": "favoriteBuyerMany",
+          "Type": "Array",
+          "EntityName": "buyerSqlMongo"
+        }
+      ]
+    },
+    {
+      "Name": "buyerSqlNeo",
+      "Fields": [
+        {
+          "Name": "name",
+          "Type": "Primitive",
+          "PrimitiveType": "String"
+        },
+        {
+          "Name": "buyFrom",
+          "Type": "Object",
+          "EntityName": "sellerNeoSql",
+          "ConnectedToField": "sellTo"
+
+        },
+        {
+          "Name": "buyFromMany",
+          "Type": "Array",
+          "EntityName": "sellerNeoSql",
+          "ConnectedToField": "sellToMany"
+        },
+        {
+          "Name": "favoriteSeller",
+          "Type": "Object",
+          "EntityName": "sellerNeoSql"
+        },
+        {
+          "Name": "favoriteSellerMany",
+          "Type": "Array",
+          "EntityName": "sellerNeoSql"
+        }
+      ]
+    },
+    {
+      "Name": "sellerNeoSql",
+      "Fields": [
+        {
+          "Name": "name",
+          "Type": "Primitive",
+          "PrimitiveType": "String"
+        },
+        {
+          "Name": "sellTo",
+          "Type": "Object",
+          "EntityName": "buyerSqlNeo",
+          "ConnectedToField": "buyFrom"
+
+        },
+        {
+          "Name": "sellToMany",
+          "Type": "Array",
+          "EntityName": "buyerSqlNeo",
+          "ConnectedToField": "buyFromMany"
+        },
+        {
+          "Name": "favoriteBuyer",
+          "Type": "Object",
+          "EntityName": "buyerSqlNeo"
+        },
+        {
+          "Name": "favoriteBuyerMany",
+          "Type": "Array",
+          "EntityName": "buyerSqlNeo"
+        }
+      ]
+    },
+    {
+      "Name": "buyerMongoNeo",
+      "Fields": [
+        {
+          "Name": "name",
+          "Type": "Primitive",
+          "PrimitiveType": "String"
+        },
+        {
+          "Name": "buyFrom",
+          "Type": "Object",
+          "EntityName": "sellerNeoMongo",
+          "ConnectedToField": "sellTo"
+
+        },
+        {
+          "Name": "buyFromMany",
+          "Type": "Array",
+          "EntityName": "sellerNeoMongo",
+          "ConnectedToField": "sellToMany"
+        },
+        {
+          "Name": "favoriteSeller",
+          "Type": "Object",
+          "EntityName": "sellerNeoMongo"
+        },
+        {
+          "Name": "favoriteSellerMany",
+          "Type": "Array",
+          "EntityName": "sellerNeoMongo"
+        }
+      ]
+    },
+    {
+      "Name": "sellerNeoMongo",
+      "Fields": [
+        {
+          "Name": "name",
+          "Type": "Primitive",
+          "PrimitiveType": "String"
+        },
+        {
+          "Name": "sellTo",
+          "Type": "Object",
+          "EntityName": "buyerMongoNeo",
+          "ConnectedToField": "buyFrom"
+
+        },
+        {
+          "Name": "sellToMany",
+          "Type": "Array",
+          "EntityName": "buyerMongoNeo",
+          "ConnectedToField": "buyFromMany"
+        },
+        {
+          "Name": "favoriteBuyer",
+          "Type": "Object",
+          "EntityName": "buyerMongoNeo"
+        },
+        {
+          "Name": "favoriteBuyerMany",
+          "Type": "Array",
+          "EntityName": "buyerMongoNeo"
+        }
+      ]
+    },
+    {
+      "Name": "buyerNeoNeo",
+      "Fields": [
+        {
+          "Name": "name",
+          "Type": "Primitive",
+          "PrimitiveType": "String"
+        },
+        {
+          "Name": "buyFrom",
+          "Type": "Object",
+          "EntityName": "sellerNeoNeo",
+          "ConnectedToField": "sellTo"
+
+        },
+        {
+          "Name": "buyFromMany",
+          "Type": "Array",
+          "EntityName": "sellerNeoNeo",
+          "ConnectedToField": "sellToMany"
+        },
+        {
+          "Name": "favoriteSeller",
+          "Type": "Object",
+          "EntityName": "sellerNeoNeo"
+        },
+        {
+          "Name": "favoriteSellerMany",
+          "Type": "Array",
+          "EntityName": "sellerNeoNeo"
+        }
+      ]
+    },
+    {
+      "Name": "sellerNeoNeo",
+      "Fields": [
+        {
+          "Name": "name",
+          "Type": "Primitive",
+          "PrimitiveType": "String"
+        },
+        {
+          "Name": "sellTo",
+          "Type": "Object",
+          "EntityName": "buyerNeoNeo",
+          "ConnectedToField": "buyFrom"
+
+        },
+        {
+          "Name": "sellToMany",
+          "Type": "Array",
+          "EntityName": "buyerNeoNeo",
+          "ConnectedToField": "buyFromMany"
+        },
+        {
+          "Name": "favoriteBuyer",
+          "Type": "Object",
+          "EntityName": "buyerNeoNeo"
+        },
+        {
+          "Name": "favoriteBuyerMany",
+          "Type": "Array",
+          "EntityName": "buyerNeoNeo"
+        }
+      ]
+    },
+    {
+      "Name": "buyerMongoMongo",
+      "Fields": [
+        {
+          "Name": "name",
+          "Type": "Primitive",
+          "PrimitiveType": "String"
+        },
+        {
+          "Name": "buyFrom",
+          "Type": "Object",
+          "EntityName": "sellerMongoMongo",
+          "ConnectedToField": "sellTo"
+
+        },
+        {
+          "Name": "buyFromMany",
+          "Type": "Array",
+          "EntityName": "sellerMongoMongo",
+          "ConnectedToField": "sellToMany"
+        },
+        {
+          "Name": "favoriteSeller",
+          "Type": "Object",
+          "EntityName": "sellerMongoMongo"
+        },
+        {
+          "Name": "favoriteSellerMany",
+          "Type": "Array",
+          "EntityName": "sellerMongoMongo"
+        }
+      ]
+    },
+    {
+      "Name": "sellerMongoMongo",
+      "Fields": [
+        {
+          "Name": "name",
+          "Type": "Primitive",
+          "PrimitiveType": "String"
+        },
+        {
+          "Name": "sellTo",
+          "Type": "Object",
+          "EntityName": "buyerMongoMongo",
+          "ConnectedToField": "buyFrom"
+
+        },
+        {
+          "Name": "sellToMany",
+          "Type": "Array",
+          "EntityName": "buyerMongoMongo",
+          "ConnectedToField": "buyFromMany"
+        },
+        {
+          "Name": "favoriteBuyer",
+          "Type": "Object",
+          "EntityName": "buyerMongoMongo"
+        },
+        {
+          "Name": "favoriteBuyerMany",
+          "Type": "Array",
+          "EntityName": "buyerMongoMongo"
+        }
+      ]
+    }
+  ]
 }
