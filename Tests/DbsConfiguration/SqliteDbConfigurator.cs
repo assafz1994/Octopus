@@ -9,8 +9,8 @@ namespace Tests.DbsConfiguration
     class SqliteDbConfigurator
     {
         // private string _initFilePath = "somepath";
-        private string _sql1ConnectionString = "Data Source=DataBases\\sqlite1_test_db.db";
-        private string _sql2ConnectionString = "Data Source=DataBases\\sqlite2_test_db.db";
+        public string Sql1ConnectionString = "Data Source=DataBases\\sqlite1_test_db.db";
+        public string Sql2ConnectionString = "Data Source=DataBases\\sqlite2_test_db.db";
         private string _sql1CreateTableFile = "CreateTableSqlite1.txt";
         private string _sql2CreateTableFile = "CreateTableSqlite2.txt";
         private string _sql1DropTables;
@@ -18,6 +18,7 @@ namespace Tests.DbsConfiguration
         private string _init1;
         private string _init2;
         private string _insert1;
+        private string _insertAnimals;
 
         public SqliteDbConfigurator()
         {
@@ -47,6 +48,15 @@ namespace Tests.DbsConfiguration
 	                ""student""	TEXT,
 	                ""teacher""	TEXT,
 	                PRIMARY KEY(""student"",""teacher"")
+                );
+
+                Create table IF NOT EXISTS ""Animal_table""
+                (
+                    ""guid""	TEXT,
+                    ""aid""	TEXT,
+                    ""food"" TEXT,
+   	                ""height"" INT,
+		            PRIMARY KEY(""guid"")
                 );";
             _init2 = _sql2DropTables +
                 @"CREATE TABLE IF NOT EXISTS ""student_table"" (
@@ -73,20 +83,23 @@ namespace Tests.DbsConfiguration
                 VALUES(""0433b07f-1d77-4f58-a58d-91daae887502"",""7bed1d94-41a2-4681-894c-6c6dcc41a45b"");
                 INSERT INTO student_teacher_taughtBy_teach (student,teacher) 
                 VALUES(""8f147986-8658-4561-860c-d1b23a134660"",""f7b97e2a-e885-49e3-811d-201e72b27406"");";
+            _insertAnimals = @"INSERT INTO ""animal_table"" (guid,aid,food,height) VALUES(""9264f435-d1c7-4f1c-8b84-cf4bdb935641"",""1"",""f1"",23);
+                INSERT INTO ""animal_table"" (guid,aid,food,height) VALUES(""e8d706f8-92be-429c-89cc-91973fca7a95"",""2"",""f23"",23);
+                INSERT INTO ""animal_table"" (guid,aid,food,height) VALUES(""f443f95a-3d8f-4786-b3e6-0db8b790f7e6"",""3"",""f23"",45);";
         }
         public void SetUpDb()
         {
-            SendCommand(_sql1ConnectionString, _init1);
-            SendCommand(_sql2ConnectionString, _init2);
+            SendCommand(Sql1ConnectionString, _init1);
+            SendCommand(Sql2ConnectionString, _init2);
         }
 
         public void TearDownDb()
         {
-            SendCommand(_sql1ConnectionString, _sql1DropTables);
-            SendCommand(_sql2ConnectionString, _sql2DropTables);
+            SendCommand(Sql1ConnectionString, _sql1DropTables);
+            SendCommand(Sql2ConnectionString, _sql2DropTables);
         }
 
-        private void SendCommand(string connectionString, string commandText)
+        public void SendCommand(string connectionString, string commandText)
         {
             using var connection = new SqliteConnection(connectionString);
             connection.Open();
@@ -97,7 +110,12 @@ namespace Tests.DbsConfiguration
 
         public void SetUpTestComplexSelect()
         {
-            SendCommand(_sql1ConnectionString, _insert1);
+            SendCommand(Sql1ConnectionString, _insert1);
+        }
+
+        public void SetUpTestAnimals()
+        {
+            SendCommand(Sql1ConnectionString, _insertAnimals);
         }
     }
 }

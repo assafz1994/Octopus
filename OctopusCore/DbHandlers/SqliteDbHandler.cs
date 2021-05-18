@@ -107,6 +107,20 @@ namespace OctopusCore.DbHandlers
             return new ExecutionResult(entityType, new Dictionary<string, EntityResult>());
         }
 
+        public async Task<ExecutionResult> ExecuteUpdateQuery(string entityType, string guid, string field, dynamic value)
+        {
+            using var connection = new SqliteConnection(_configurationProvider.ConnectionString);
+            connection.Open();
+            var table = _configurationProvider.GetTableName(entityType);
+            var query = $"UPDATE {table} SET {field} = {ValueToString(value)} WHERE GUID = '{guid}'";
+
+            var command = connection.CreateCommand();
+            command.CommandText = query;
+
+            var row = await command.ExecuteNonQueryAsync();
+            return new ExecutionResult(entityType, new Dictionary<string, EntityResult>());
+        }
+
         //todo reuse this logic for all handlers
         private static string ValueToString(object argValue)
         {

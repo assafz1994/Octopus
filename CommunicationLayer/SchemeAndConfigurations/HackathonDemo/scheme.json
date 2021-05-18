@@ -1,49 +1,25 @@
 {
     "Entities": [
-      {
-        "Name": "person",
-        "Fields": [
-          {
-            "Name": "id",
-            "Type": "string",
-            "ConnectedTo": null
-          },
-          {
-            "Name": "age",
-            "Type": "string",
-            "ConnectedTo": null
-          },
-          {
-            "Name": "name",
-            "Type": "string",
-            "ConnectedTo": null
-          },
-          {
-            "Name": "email",
-            "Type": "string",
-            "ConnectedTo": null
-          },
-          {
-            "Name": "hobby",
-            "Type": "string",
-            "ConnectedTo": null
-          }
-        ]
-      },
-      {
-        "Name": "neoperson",
-        "Fields": [
-          {
-            "Name": "email",
-            "Type": "string",
-            "ConnectedTo": null
-          },
-          {
-            "Name": "hobby",
-            "Type": "string",
-            "ConnectedTo": null
-          }
-        ]
-      }
+
+        {
+            "Name": "person",
+            "Fields": [
+                {
+                    "Name": "id",
+                    "Type": "Primitive",
+                    "PrimitiveType": "String"
+                },
+                {
+                    "Name": "age",
+                    "Type": "Primitive",
+                    "PrimitiveType": "Int"
+                },
+                {
+                    "Name": "name",
+                    "Type": "Primitive",
+                    "PrimitiveType": "String"
+                }
+            ]
+        }
     ]
 }

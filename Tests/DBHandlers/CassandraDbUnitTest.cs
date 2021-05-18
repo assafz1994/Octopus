@@ -108,7 +108,7 @@ namespace Tests.DBHandlers
         }
 
         [Test]
-        public void TestSelect1()
+        public void TestSelectAllAnimals()
         {
             _cassandraDbConfigurator.SetUpTestSelectNamesOfAnimals();
             var actualExecutionResult = _cassandraDbHandler
@@ -147,7 +147,7 @@ namespace Tests.DBHandlers
         }
 
         [Test]
-        public void TestSelect2()
+        public void TestSelectAnimalsWithFilterHeight()
         {
             _cassandraDbConfigurator.SetUpTestSelectNamesOfAnimals();
             var actualExecutionResult = _cassandraDbHandler
@@ -179,7 +179,7 @@ namespace Tests.DBHandlers
         }
 
         [Test]
-        public void TestSelect3()
+        public void TestSelectAnimalsWithFilters()
         {
             _cassandraDbConfigurator.SetUpTestSelectNamesOfAnimals();
             var actualExecutionResult = _cassandraDbHandler
@@ -208,7 +208,7 @@ namespace Tests.DBHandlers
         }
 
         [Test]
-        public void TestSelect4()
+        public void TestSelectAnimalsFilterFood()
         {
             _cassandraDbConfigurator.SetUpTestSelectNamesOfAnimals();
             var actualExecutionResult = _cassandraDbHandler
@@ -240,7 +240,7 @@ namespace Tests.DBHandlers
         }
 
         [Test]
-        public void TestDelete1()
+        public void TestDeleteAnimals()
         {
             _cassandraDbConfigurator.SetUpTestSelectNamesOfAnimals();
             var actualInsertExecutionResult = _cassandraDbHandler
@@ -274,7 +274,7 @@ namespace Tests.DBHandlers
         }
 
         [Test]
-        public void TestInsert1()
+        public void TestInsertAnimal()
         {
             var actualInsertExecutionResult = _cassandraDbHandler
                 .ExecuteInsertQuery(
@@ -306,6 +306,80 @@ namespace Tests.DBHandlers
                 Assert.AreEqual(expectedEntityResult, actualEntityResult);
             }
 
+        }
+
+        [Test]
+        public void TestUpdateAnimalHeight()
+        {
+            _cassandraDbConfigurator.SetUpTestSelectNamesOfAnimals();
+            var entityType = "animal";
+            var guid = "9264f435-d1c7-4f1c-8b84-cf4bdb935641";
+            var fieldToUpdate = "height";
+            var newValue = 345;
+            var resUpdate = _cassandraDbHandler.ExecuteUpdateQuery(entityType, guid, fieldToUpdate, newValue).Result;
+
+            var expectedUpdateExecutionResult = new ExecutionResult("animal", new Dictionary<string, EntityResult>());
+
+            Assert.AreEqual(expectedUpdateExecutionResult, resUpdate);
+            // execute select query of the updated entity to validate that the age changed as expected
+            IReadOnlyCollection<string> fieldsToSelect = new List<string> {
+                "height",
+                "aid"
+            }.AsReadOnly();
+            IReadOnlyCollection<Filter> filters = new List<OctopusCore.Parser.Filter>
+            {
+                new EqFilter(new List<string>() {"aid"}, "\"1\"")
+            };
+            var joinsTuples = new List<(string entityType, OctopusCore.Configuration.Field field, List<string> fieldsToSelect)>();
+            var resSelectQueryToValidateUpdate = _cassandraDbHandler.ExecuteQueryWithFiltersAsync(fieldsToSelect, filters, entityType, joinsTuples).Result;
+            var entityResults = resSelectQueryToValidateUpdate.EntityResults.Values.ToList();
+            var fields = entityResults.Select(x => x.Fields).ToList();
+            var expectedResult = new List<Dictionary<string, dynamic>>()
+            {
+                new Dictionary<string, dynamic>()
+                {
+                    { "height", newValue },
+                    { "aid", "1"},
+                }
+            };
+            CollectionAssert.AreEqual(fields, expectedResult);
+        }
+
+        [Test]
+        public void TestUpdateAnimalFood()
+        {
+            _cassandraDbConfigurator.SetUpTestSelectNamesOfAnimals();
+            var entityType = "animal";
+            var guid = "9264f435-d1c7-4f1c-8b84-cf4bdb935641";
+            var fieldToUpdate = "food";
+            var newValue = "\"345newFood\"";
+            var resUpdate = _cassandraDbHandler.ExecuteUpdateQuery(entityType, guid, fieldToUpdate, newValue).Result;
+
+            var expectedUpdateExecutionResult = new ExecutionResult("animal", new Dictionary<string, EntityResult>());
+
+            Assert.AreEqual(expectedUpdateExecutionResult, resUpdate);
+            // execute select query of the updated entity to validate that the age changed as expected
+            IReadOnlyCollection<string> fieldsToSelect = new List<string> {
+                "food",
+                "aid"
+            }.AsReadOnly();
+            IReadOnlyCollection<Filter> filters = new List<OctopusCore.Parser.Filter>
+            {
+                new EqFilter(new List<string>() {"aid"}, "\"1\"")
+            };
+            var joinsTuples = new List<(string entityType, OctopusCore.Configuration.Field field, List<string> fieldsToSelect)>();
+            var resSelectQueryToValidateUpdate = _cassandraDbHandler.ExecuteQueryWithFiltersAsync(fieldsToSelect, filters, entityType, joinsTuples).Result;
+            var entityResults = resSelectQueryToValidateUpdate.EntityResults.Values.ToList();
+            var fields = entityResults.Select(x => x.Fields).ToList();
+            var expectedResult = new List<Dictionary<string, dynamic>>()
+            {
+                new Dictionary<string, dynamic>()
+                {
+                    { "food", "345newFood" },
+                    { "aid", "1"},
+                }
+            };
+            CollectionAssert.AreEqual(fields, expectedResult);
         }
     }
 }

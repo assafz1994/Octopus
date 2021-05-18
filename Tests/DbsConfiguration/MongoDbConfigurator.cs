@@ -27,7 +27,7 @@ namespace Tests.DbsConfiguration
             db.CreateCollection(collectionName);
         }
 
-        public void SetUpTestSelectNamesOfAnimals()
+        public void SetUpTestOfAnimals()
         {
             var db = _dbClient.GetDatabase("mongodbtests_1");
             var collectionName = "animal_table";

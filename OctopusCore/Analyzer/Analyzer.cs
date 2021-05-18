@@ -31,8 +31,35 @@ namespace OctopusCore.Analyzer
                 SelectQueryInfo selectQueryInfo => AnalyzeSelectQuery(selectQueryInfo),
                 InsertQueryInfo insertQueryInfo => AnalyzeInsertQuery(insertQueryInfo),
                 DeleteQueryInfo deleteQueryInfo => AnalyzeDeleteQuery(deleteQueryInfo),
+                UpdateQueryInfo updateQueryInfo => AnalyzeUpdateQuery(updateQueryInfo),
                 _ => throw new Exception("Unsupported query type")
             };
+        }
+
+        private WorkPlan AnalyzeUpdateQuery(UpdateQueryInfo updateQueryInfo)
+        {
+            var jobs = new List<Job>();
+            var subQueryWorkPlans = updateQueryInfo.SubQueries.ToDictionary(v => v.Key, v => AnalyzeQuery(v.Value));
+            // Support non-nested field only
+            var field = updateQueryInfo.Fields.First();
+            var dbs = _analyzerConfigurationProvider.GetDbsToFields(updateQueryInfo.Entity)
+                .Where(x => x.Value.Contains(field))
+                .Select(x => x.Key);
+            foreach (var db in dbs)
+            {
+                var dbHandler = _dbHandlersResolver.ResolveDbHandler(db);
+                var updateQueryJob = new UpdateQueryJob(
+                    dbHandler, 
+                    updateQueryInfo.Entity,
+                    updateQueryInfo.EntityRep,
+                    updateQueryInfo.EntityToSubQuery,
+                    updateQueryInfo.EntityRepToEntityType,
+                    subQueryWorkPlans, 
+                    field, 
+                    updateQueryInfo.Value);
+                jobs.Add(updateQueryJob);
+            }
+            return new WorkPlan(jobs, subQueryWorkPlans);
         }
 
         private WorkPlan AnalyzeDeleteQuery(DeleteQueryInfo deleteQueryInfo)
@@ -71,7 +98,8 @@ namespace OctopusCore.Analyzer
                 }
             }
 
-            foreach (var fieldName in selectQueryInfo.Fields ?? Enumerable.Empty<string>())
+            var fields = UpdateQueryFields(selectQueryInfo);
+            foreach (var fieldName in fields ?? Enumerable.Empty<string>())
             {
                 if (_analyzerConfigurationProvider.IsComplexField(selectQueryInfo.Entity, fieldName))
                 {
@@ -87,6 +115,26 @@ namespace OctopusCore.Analyzer
 
             var workPlan = workPlanBuilder.Build(subQueryWorkPlans);
             return workPlan;
+        }
+
+        private List<string> UpdateQueryFields(SelectQueryInfo selectQueryInfo)
+        {
+            if (!(selectQueryInfo.Fields.Count == 1 && selectQueryInfo.Fields.Single().Equals(StringConstants.All)))
+            {
+                return selectQueryInfo.Fields;
+            }
+
+            var fields = _analyzerConfigurationProvider.GetEntityFields(selectQueryInfo.Entity)
+                .Where(x => x.Type == DbFieldType.Primitive)
+                .Select(x => x.Name)
+                .ToList();
+
+            if (selectQueryInfo.Includes != null)
+            {
+                fields.AddRange(selectQueryInfo.Includes.Select(x => x.Name));
+            }
+
+            return fields;
         }
 
         private WorkPlan AnalyzeInsertQuery(InsertQueryInfo insertQueryInfo)

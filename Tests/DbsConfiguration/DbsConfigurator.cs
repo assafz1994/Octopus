@@ -13,18 +13,18 @@ namespace Tests.DbsConfiguration
 
         public DbsConfigurator()
         {
-            _cassandraDbConfigurator = new CassandraDbConfigurator();
-            _mongoDbConfigurator = new MongoDbConfigurator();
-            _neo4JDbConfigurator = new Neo4jDbConfigurator();
-            _sqliteDbConfigurator = new SqliteDbConfigurator();
+           _cassandraDbConfigurator = new CassandraDbConfigurator();
+           _mongoDbConfigurator = new MongoDbConfigurator();
+           _neo4JDbConfigurator = new Neo4jDbConfigurator();
+           _sqliteDbConfigurator = new SqliteDbConfigurator();
         }
 
         public void SetUpDbs()
         {
            _cassandraDbConfigurator.SetUpDb();
-            _mongoDbConfigurator.SetUpDb();
+           _mongoDbConfigurator.SetUpDb();
            _neo4JDbConfigurator.SetUpDb();
-            _sqliteDbConfigurator.SetUpDb();
+           _sqliteDbConfigurator.SetUpDb();
         }
 
         public void TearDownDbs()
@@ -32,19 +32,27 @@ namespace Tests.DbsConfiguration
            _cassandraDbConfigurator.TearDownDb();
             _mongoDbConfigurator.TearDownDb();
            _neo4JDbConfigurator.TearDownDb();
-            _sqliteDbConfigurator.TearDownDb();
+           _sqliteDbConfigurator.TearDownDb();
         }
        
-        public void SetUpTestSelectNamesOfAnimals()
+        public void SetUpTestOfAnimals()
         {
-            _mongoDbConfigurator.SetUpTestSelectNamesOfAnimals();
-           _cassandraDbConfigurator.SetUpTestSelectNamesOfAnimals();
+            _mongoDbConfigurator.SetUpTestOfAnimals();
+            _cassandraDbConfigurator.SetUpTestSelectNamesOfAnimals();
         }
-
         public void SetUpTestComplexSelect()
         {
-            _sqliteDbConfigurator.SetUpTestComplexSelect();
-            _neo4JDbConfigurator.SetUpTestComplexSelect();
+           _sqliteDbConfigurator.SetUpTestComplexSelect();
+           _neo4JDbConfigurator.SetUpTestComplexSelect();
+        }
+
+        public void SetUpMongoDB()
+        {
+            _mongoDbConfigurator.SetUpDb();
+        }
+        public void TearDownMongoDB()
+        {
+            _mongoDbConfigurator.TearDownDb();
         }
     }
 }
