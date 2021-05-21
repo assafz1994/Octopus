@@ -42,17 +42,15 @@ namespace Tests.DbsConfiguration
         }
         public void SetUpTestComplexSelect()
         {
-           _sqliteDbConfigurator.SetUpTestComplexSelect();
-           _neo4JDbConfigurator.SetUpTestComplexSelect();
+            _sqliteDbConfigurator.SetUpTestComplexSelect();
+            _neo4JDbConfigurator.SetUpTestComplexSelect();
         }
 
-        public void SetUpMongoDB()
+        public void SetUpTestRelations()
         {
-            _mongoDbConfigurator.SetUpDb();
-        }
-        public void TearDownMongoDB()
-        {
-            _mongoDbConfigurator.TearDownDb();
+            _sqliteDbConfigurator.SetUpTestRelations();
+            _neo4JDbConfigurator.SetUpRelations();
+            _mongoDbConfigurator.SetUpTestOfRelations();
         }
     }
 }

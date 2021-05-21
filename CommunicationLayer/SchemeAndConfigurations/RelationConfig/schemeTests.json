@@ -109,7 +109,7 @@
       ]
     },
     {
-      "Name": "buyerSqlSql",
+      "Name": "buyersqlsql",
       "Fields": [
         {
           "Name": "name",
@@ -119,30 +119,30 @@
         {
           "Name": "buyFrom",
           "Type": "Object",
-          "EntityName": "sellerSqlSql",
+          "EntityName": "sellersqlsql",
           "ConnectedToField": "sellTo"
 
         },
         {
           "Name": "buyFromMany",
           "Type": "Array",
-          "EntityName": "sellerSqlSql",
+          "EntityName": "sellersqlsql",
           "ConnectedToField": "sellToMany"
         },
         {
           "Name": "favoriteSeller",
           "Type": "Object",
-          "EntityName": "sellerSqlSql"
+          "EntityName": "sellersqlsql"
         },
         {
           "Name": "favoriteSellerMany",
           "Type": "Array",
-          "EntityName": "sellerSqlSql"
+          "EntityName": "sellersqlsql"
         }
       ]
     },
     {
-      "Name": "sellerSqlSql",
+      "Name": "sellersqlsql",
       "Fields": [
         {
           "Name": "name",
@@ -152,30 +152,30 @@
         {
           "Name": "sellTo",
           "Type": "Object",
-          "EntityName": "buyerSqlSql",
+          "EntityName": "buyersqlsql",
           "ConnectedToField": "buyFrom"
 
         },
         {
           "Name": "sellToMany",
           "Type": "Array",
-          "EntityName": "buyerSqlSql",
+          "EntityName": "buyersqlsql",
           "ConnectedToField": "buyFromMany"
         },
         {
           "Name": "favoriteBuyer",
           "Type": "Object",
-          "EntityName": "buyerSqlSql"
+          "EntityName": "buyersqlsql"
         },
         {
           "Name": "favoriteBuyerMany",
           "Type": "Array",
-          "EntityName": "buyerSqlSql"
+          "EntityName": "buyersqlsql"
         }
       ]
     },
     {
-      "Name": "buyerSqlMongo",
+      "Name": "buyersqlmongo",
       "Fields": [
         {
           "Name": "name",
@@ -185,30 +185,30 @@
         {
           "Name": "buyFrom",
           "Type": "Object",
-          "EntityName": "sellerMongoSql",
+          "EntityName": "sellermongosql",
           "ConnectedToField": "sellTo"
 
         },
         {
           "Name": "buyFromMany",
           "Type": "Array",
-          "EntityName": "sellerMongoSql",
+          "EntityName": "sellermongosql",
           "ConnectedToField": "sellToMany"
         },
         {
           "Name": "favoriteSeller",
           "Type": "Object",
-          "EntityName": "sellerMongoSql"
+          "EntityName": "sellermongosql"
         },
         {
           "Name": "favoriteSellerMany",
           "Type": "Array",
-          "EntityName": "sellerMongoSql"
+          "EntityName": "sellermongosql"
         }
       ]
     },
     {
-      "Name": "sellerMongoSql",
+      "Name": "sellermongosql",
       "Fields": [
         {
           "Name": "name",
@@ -218,30 +218,30 @@
         {
           "Name": "sellTo",
           "Type": "Object",
-          "EntityName": "buyerSqlMongo",
+          "EntityName": "buyersqlmongo",
           "ConnectedToField": "buyFrom"
 
         },
         {
           "Name": "sellToMany",
           "Type": "Array",
-          "EntityName": "buyerSqlMongo",
+          "EntityName": "buyersqlmongo",
           "ConnectedToField": "buyFromMany"
         },
         {
           "Name": "favoriteBuyer",
           "Type": "Object",
-          "EntityName": "buyerSqlMongo"
+          "EntityName": "buyersqlmongo"
         },
         {
           "Name": "favoriteBuyerMany",
           "Type": "Array",
-          "EntityName": "buyerSqlMongo"
+          "EntityName": "buyersqlmongo"
         }
       ]
     },
     {
-      "Name": "buyerSqlNeo",
+      "Name": "buyersqlneo",
       "Fields": [
         {
           "Name": "name",
@@ -251,30 +251,30 @@
         {
           "Name": "buyFrom",
           "Type": "Object",
-          "EntityName": "sellerNeoSql",
+          "EntityName": "sellerneosql",
           "ConnectedToField": "sellTo"
 
         },
         {
           "Name": "buyFromMany",
           "Type": "Array",
-          "EntityName": "sellerNeoSql",
+          "EntityName": "sellerneosql",
           "ConnectedToField": "sellToMany"
         },
         {
           "Name": "favoriteSeller",
           "Type": "Object",
-          "EntityName": "sellerNeoSql"
+          "EntityName": "sellerneosql"
         },
         {
           "Name": "favoriteSellerMany",
           "Type": "Array",
-          "EntityName": "sellerNeoSql"
+          "EntityName": "sellerneosql"
         }
       ]
     },
     {
-      "Name": "sellerNeoSql",
+      "Name": "sellerneosql",
       "Fields": [
         {
           "Name": "name",
@@ -284,30 +284,30 @@
         {
           "Name": "sellTo",
           "Type": "Object",
-          "EntityName": "buyerSqlNeo",
+          "EntityName": "buyersqlneo",
           "ConnectedToField": "buyFrom"
 
         },
         {
           "Name": "sellToMany",
           "Type": "Array",
-          "EntityName": "buyerSqlNeo",
+          "EntityName": "buyersqlneo",
           "ConnectedToField": "buyFromMany"
         },
         {
           "Name": "favoriteBuyer",
           "Type": "Object",
-          "EntityName": "buyerSqlNeo"
+          "EntityName": "buyersqlneo"
         },
         {
           "Name": "favoriteBuyerMany",
           "Type": "Array",
-          "EntityName": "buyerSqlNeo"
+          "EntityName": "buyersqlneo"
         }
       ]
     },
     {
-      "Name": "buyerMongoNeo",
+      "Name": "buyermongoneo",
       "Fields": [
         {
           "Name": "name",
@@ -317,30 +317,30 @@
         {
           "Name": "buyFrom",
           "Type": "Object",
-          "EntityName": "sellerNeoMongo",
+          "EntityName": "sellerneomongo",
           "ConnectedToField": "sellTo"
 
         },
         {
           "Name": "buyFromMany",
           "Type": "Array",
-          "EntityName": "sellerNeoMongo",
+          "EntityName": "sellerneomongo",
           "ConnectedToField": "sellToMany"
         },
         {
           "Name": "favoriteSeller",
           "Type": "Object",
-          "EntityName": "sellerNeoMongo"
+          "EntityName": "sellerneomongo"
         },
         {
           "Name": "favoriteSellerMany",
           "Type": "Array",
-          "EntityName": "sellerNeoMongo"
+          "EntityName": "sellerneomongo"
         }
       ]
     },
     {
-      "Name": "sellerNeoMongo",
+      "Name": "sellerneomongo",
       "Fields": [
         {
           "Name": "name",
@@ -350,30 +350,30 @@
         {
           "Name": "sellTo",
           "Type": "Object",
-          "EntityName": "buyerMongoNeo",
+          "EntityName": "buyermongoneo",
           "ConnectedToField": "buyFrom"
 
         },
         {
           "Name": "sellToMany",
           "Type": "Array",
-          "EntityName": "buyerMongoNeo",
+          "EntityName": "buyermongoneo",
           "ConnectedToField": "buyFromMany"
         },
         {
           "Name": "favoriteBuyer",
           "Type": "Object",
-          "EntityName": "buyerMongoNeo"
+          "EntityName": "buyermongoneo"
         },
         {
           "Name": "favoriteBuyerMany",
           "Type": "Array",
-          "EntityName": "buyerMongoNeo"
+          "EntityName": "buyermongoneo"
         }
       ]
     },
     {
-      "Name": "buyerNeoNeo",
+      "Name": "buyerneoneo",
       "Fields": [
         {
           "Name": "name",
@@ -383,30 +383,30 @@
         {
           "Name": "buyFrom",
           "Type": "Object",
-          "EntityName": "sellerNeoNeo",
+          "EntityName": "sellerneoneo",
           "ConnectedToField": "sellTo"
 
         },
         {
           "Name": "buyFromMany",
           "Type": "Array",
-          "EntityName": "sellerNeoNeo",
+          "EntityName": "sellerneoneo",
           "ConnectedToField": "sellToMany"
         },
         {
           "Name": "favoriteSeller",
           "Type": "Object",
-          "EntityName": "sellerNeoNeo"
+          "EntityName": "sellerneoneo"
         },
         {
           "Name": "favoriteSellerMany",
           "Type": "Array",
-          "EntityName": "sellerNeoNeo"
+          "EntityName": "sellerneoneo"
         }
       ]
     },
     {
-      "Name": "sellerNeoNeo",
+      "Name": "sellerneoneo",
       "Fields": [
         {
           "Name": "name",
@@ -416,30 +416,30 @@
         {
           "Name": "sellTo",
           "Type": "Object",
-          "EntityName": "buyerNeoNeo",
+          "EntityName": "buyerneoneo",
           "ConnectedToField": "buyFrom"
 
         },
         {
           "Name": "sellToMany",
           "Type": "Array",
-          "EntityName": "buyerNeoNeo",
+          "EntityName": "buyerneoneo",
           "ConnectedToField": "buyFromMany"
         },
         {
           "Name": "favoriteBuyer",
           "Type": "Object",
-          "EntityName": "buyerNeoNeo"
+          "EntityName": "buyerneoneo"
         },
         {
           "Name": "favoriteBuyerMany",
           "Type": "Array",
-          "EntityName": "buyerNeoNeo"
+          "EntityName": "buyerneoneo"
         }
       ]
     },
     {
-      "Name": "buyerMongoMongo",
+      "Name": "buyermongomongo",
       "Fields": [
         {
           "Name": "name",
@@ -449,30 +449,30 @@
         {
           "Name": "buyFrom",
           "Type": "Object",
-          "EntityName": "sellerMongoMongo",
+          "EntityName": "sellermongomongo",
           "ConnectedToField": "sellTo"
 
         },
         {
           "Name": "buyFromMany",
           "Type": "Array",
-          "EntityName": "sellerMongoMongo",
+          "EntityName": "sellermongomongo",
           "ConnectedToField": "sellToMany"
         },
         {
           "Name": "favoriteSeller",
           "Type": "Object",
-          "EntityName": "sellerMongoMongo"
+          "EntityName": "sellermongomongo"
         },
         {
           "Name": "favoriteSellerMany",
           "Type": "Array",
-          "EntityName": "sellerMongoMongo"
+          "EntityName": "sellermongomongo"
         }
       ]
     },
     {
-      "Name": "sellerMongoMongo",
+      "Name": "sellermongomongo",
       "Fields": [
         {
           "Name": "name",
@@ -482,25 +482,25 @@
         {
           "Name": "sellTo",
           "Type": "Object",
-          "EntityName": "buyerMongoMongo",
+          "EntityName": "buyermongomongo",
           "ConnectedToField": "buyFrom"
 
         },
         {
           "Name": "sellToMany",
           "Type": "Array",
-          "EntityName": "buyerMongoMongo",
+          "EntityName": "buyermongomongo",
           "ConnectedToField": "buyFromMany"
         },
         {
           "Name": "favoriteBuyer",
           "Type": "Object",
-          "EntityName": "buyerMongoMongo"
+          "EntityName": "buyermongomongo"
         },
         {
           "Name": "favoriteBuyerMany",
           "Type": "Array",
-          "EntityName": "buyerMongoMongo"
+          "EntityName": "buyermongomongo"
         }
       ]
     }
