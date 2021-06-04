@@ -43,9 +43,9 @@ namespace Tests.AcceptanceTests
             SetUpTestOfAnimals();
             var query = "From Animal a | Select a(name)";
             var entities = _client.ExecuteQuery(query).Result;
-            
+
             var listOfDictionaryEntities = entities.Select(x => new RouteValueDictionary(x));
-            
+
             var expectedResult = new List<Dictionary<string, object>>()
             {
                 new Dictionary<string, object>()
@@ -61,7 +61,7 @@ namespace Tests.AcceptanceTests
                     {"name", "Doggy"},
                 },
             };
-            
+
             CollectionAssert.AreEqual(listOfDictionaryEntities, expectedResult);
         }
 
@@ -70,9 +70,9 @@ namespace Tests.AcceptanceTests
         {
             var query = "From Animal a | Select a(name)";
             var entities = _client.ExecuteQuery(query).Result;
-            
+
             var listOfDictionaryEntities = entities.Select(x => new RouteValueDictionary(x));
-            var expectedResult = new List<Dictionary<string, object>>(){};
+            var expectedResult = new List<Dictionary<string, object>>() { };
             CollectionAssert.AreEqual(listOfDictionaryEntities, expectedResult);
         }
 
@@ -164,7 +164,7 @@ namespace Tests.AcceptanceTests
                     {"height", 23 },
                     {"name", "Maffin"},
                     {"age", 5 },
-                    
+
 
 
                 },
@@ -643,6 +643,148 @@ namespace Tests.AcceptanceTests
             };
             CollectionAssert.AreEqual(result, expectedResult);
         }
+
+        [TestCase("buyersqlsql")]
+        [TestCase("buyersqlmongo")]
+        [TestCase("buyersqlneo")]
+        [TestCase("buyermongoneo")]
+        [TestCase("buyerneoneo")]
+        [TestCase("buyermongomongo")]
+        public void TestBuyersBuyFromRelations(string entityName)
+        {
+            _dbsConfigurator.SetUpTestRelations();
+            var query = $"from {entityName} s | select s(name,buyFrom) include(buyFrom(name))";
+            var entities = _client.ExecuteQuery(query).Result;
+            Assert.AreEqual(entities.Length, 1);
+            Assert.AreEqual("buyer1", entities[0].name);
+            Assert.AreEqual("seller1", entities[0].buyFrom.name.ToString());
+        }
+
+        [TestCase("buyersqlsql")]
+        [TestCase("buyersqlmongo")]
+        [TestCase("buyersqlneo")]
+        [TestCase("buyermongoneo")]
+        [TestCase("buyerneoneo")]
+        [TestCase("buyermongomongo")]
+        public void TestBuyersBuyFromManyRelations(string entityName)
+        {
+            _dbsConfigurator.SetUpTestRelations();
+            var query = $"from {entityName} s | select s(name,buyFromMany) include(buyFromMany(name))";
+            var entities = _client.ExecuteQuery(query).Result;
+            Assert.AreEqual(entities.Length, 1);
+            Assert.AreEqual("buyer1", entities[0].name);
+            var seller1 = (entities[0].buyFromMany as IEnumerable<dynamic>)?.FirstOrDefault(x => x.name == "seller1");
+            var seller2 = (entities[0].buyFromMany as IEnumerable<dynamic>)?.FirstOrDefault(x => x.name == "seller2");
+            Assert.AreEqual("seller1", seller1?.name.ToString());
+            Assert.AreEqual("seller2", seller2?.name.ToString());
+        }
+
+        [TestCase("buyersqlsql")]
+        [TestCase("buyersqlmongo")]
+        [TestCase("buyersqlneo")]
+        [TestCase("buyermongoneo")]
+        [TestCase("buyerneoneo")]
+        [TestCase("buyermongomongo")]
+        public void TestBuyersFavoriteSellerRelations(string entityName)
+        {
+            _dbsConfigurator.SetUpTestRelations();
+            var query = $"from {entityName} s | select s(name,favoriteSeller) include(favoriteSeller(name))";
+            var entities = _client.ExecuteQuery(query).Result;
+            Assert.AreEqual(entities.Length, 1);
+            Assert.AreEqual("buyer3", entities[0].name);
+            Assert.AreEqual("seller3", entities[0].favoriteSeller.name.ToString());
+        }
+
+        [TestCase("buyersqlsql")]
+        [TestCase("buyersqlmongo")]
+        [TestCase("buyersqlneo")]
+        [TestCase("buyermongoneo")]
+        [TestCase("buyerneoneo")]
+        [TestCase("buyermongomongo")]
+        public void TestBuyersFavoriteSellerManyRelations(string entityName)
+        {
+            _dbsConfigurator.SetUpTestRelations();
+            var query = $"from {entityName} s | select s(name,favoriteSellerMany) include(favoriteSellerMany(name))";
+            var entities = _client.ExecuteQuery(query).Result;
+            Assert.AreEqual(entities.Length, 1);
+            Assert.AreEqual("buyer3", entities[0].name);
+            var seller2 = (entities[0].favoriteSellerMany as IEnumerable<dynamic>)?.FirstOrDefault(x => x.name == "seller2");
+            var seller3 = (entities[0].favoriteSellerMany as IEnumerable<dynamic>)?.FirstOrDefault(x => x.name == "seller3");
+            Assert.AreEqual("seller2", seller2?.name.ToString());
+            Assert.AreEqual("seller3", seller3?.name.ToString());
+        }
+
+
+        [TestCase("sellersqlsql")]
+        [TestCase("sellermongosql")]
+        [TestCase("sellerneosql")]
+        [TestCase("sellerneomongo")]
+        [TestCase("sellerneoneo")]
+        [TestCase("sellermongomongo")]
+        public void TestSellersSellToRelations(string entityName)
+        {
+            _dbsConfigurator.SetUpTestRelations();
+            var query = $"from {entityName} s | select s(name,sellTo) include(sellTo(name))";
+            var entities = _client.ExecuteQuery(query).Result;
+            Assert.AreEqual(entities.Length, 1);
+            Assert.AreEqual("seller1", entities[0].name);
+            Assert.AreEqual("buyer1", entities[0].sellTo.name.ToString());
+        }
+
+        [TestCase("sellersqlsql")]
+        [TestCase("sellermongosql")]
+        [TestCase("sellerneosql")]
+        [TestCase("sellerneomongo")]
+        [TestCase("sellerneoneo")]
+        [TestCase("sellermongomongo")]
+        public void TestSellersSellToManyRelations(string entityName)
+        {
+            _dbsConfigurator.SetUpTestRelations();
+            var query = $"from {entityName} s | select s(name,sellToMany) include(sellToMany(name))";
+            var entities = _client.ExecuteQuery(query).Result;
+            Assert.AreEqual(entities.Length, 2);
+            var seller1 = entities.FirstOrDefault(x => x.name == "seller1");
+            var seller2 = entities.FirstOrDefault(x => x.name == "seller2");
+            Assert.AreEqual("buyer1", seller1?.sellToMany[0].name.ToString());
+            Assert.AreEqual("buyer1", seller2?.sellToMany[0].name.ToString());
+        }
+
+        [TestCase("sellersqlsql")]
+        [TestCase("sellermongosql")]
+        [TestCase("sellerneosql")]
+        [TestCase("sellerneomongo")]
+        [TestCase("sellerneoneo")]
+        [TestCase("sellermongomongo")]
+        public void TestSellersFavoriteBuyerRelations(string entityName)
+        {
+            _dbsConfigurator.SetUpTestRelations();
+            var query = $"from {entityName} s | select s(name,favoriteBuyer) include(favoriteBuyer(name))";
+            var entities = _client.ExecuteQuery(query).Result;
+            Assert.AreEqual(entities.Length, 1);
+            Assert.AreEqual("seller1", entities[0].name);
+            Assert.AreEqual("buyer1", entities[0].favoriteBuyer.name.ToString());
+        }
+
+        [TestCase("sellersqlsql")]
+        [TestCase("sellermongosql")]
+        [TestCase("sellerneosql")]
+        [TestCase("sellerneomongo")]
+        [TestCase("sellerneoneo")]
+        [TestCase("sellermongomongo")]
+        public void TestSellersFavoriteBuyerManyRelations(string entityName)
+        {
+            _dbsConfigurator.SetUpTestRelations();
+            var query = $"from {entityName} s | select s(name,favoriteBuyerMany) include(favoriteBuyerMany(name))";
+            var entities = _client.ExecuteQuery(query).Result;
+            Assert.AreEqual(entities.Length, 1);
+            Assert.AreEqual("seller3", entities[0].name);
+            var buyer1 = (entities[0].favoriteBuyerMany as IEnumerable<dynamic>)?.FirstOrDefault(x => x.name == "buyer1");
+            var buyer3 = (entities[0].favoriteBuyerMany as IEnumerable<dynamic>)?.FirstOrDefault(x => x.name == "buyer3");
+            Assert.AreEqual("buyer1", buyer1?.name.ToString());
+            Assert.AreEqual("buyer3", buyer3?.name.ToString());
+        }
+
+
         private void SetUpTestOfAnimals()
         {
             _dbsConfigurator.SetUpTestOfAnimals();

@@ -194,7 +194,7 @@ namespace Tests.DBHandlers
              {"name", "Roxi"},
              {"age", 16 },
              {"aid","4"},
-             {"guid", new Guid("9264f435-a1c7-4f1c-8b84-cf4bdb935641")},
+             {"guid", "9264f435-a1c7-4f1c-8b84-cf4bdb935641"},
             };
 
             var entityType = "animal"; 

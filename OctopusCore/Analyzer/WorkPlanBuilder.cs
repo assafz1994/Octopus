@@ -17,16 +17,18 @@ namespace OctopusCore.Analyzer
         private readonly Dictionary<string, WorkPlanBuilder> _complexFieldNameToWorkPlanBuilderMappings;
         private readonly IAnalyzerConfigurationProvider _analyzerConfigurationProvider;
         private readonly IDbHandlersResolver _dbHandlersResolver;
-
         private (string fieldFrom, string fieldTo, string transformedEntityName)? _transformInfo;
+        public string EntityType { get; }
 
         public WorkPlanBuilder(IDbHandlersResolver dbHandlersResolver,
-            IAnalyzerConfigurationProvider analyzerConfigurationProvider)
+            IAnalyzerConfigurationProvider analyzerConfigurationProvider,
+            string entityType)
         {
             _dbHandlersResolver = dbHandlersResolver;
             _analyzerConfigurationProvider = analyzerConfigurationProvider;
             _databaseKeyToQueryJobBuilderMappings = new Dictionary<string, SelectQueryJobBuilder>();
             _complexFieldNameToWorkPlanBuilderMappings = new Dictionary<string, WorkPlanBuilder>(StringComparer.OrdinalIgnoreCase);
+            EntityType = entityType;
         }
 
         public void AddFilter(string entityType, Filter filter)
@@ -34,16 +36,17 @@ namespace OctopusCore.Analyzer
             if (filter.FieldNames.Count > 1)
             {
                 var currentFieldName = filter.FieldNames.First();
+                var currentFieldEntityType =
+                    _analyzerConfigurationProvider.GetField(entityType, currentFieldName).EntityName;
 
                 if (_complexFieldNameToWorkPlanBuilderMappings.ContainsKey(currentFieldName) == false)
                 {
-                    _complexFieldNameToWorkPlanBuilderMappings[currentFieldName] = new WorkPlanBuilder(_dbHandlersResolver, _analyzerConfigurationProvider);
+                    _complexFieldNameToWorkPlanBuilderMappings[currentFieldName] = new WorkPlanBuilder(_dbHandlersResolver, _analyzerConfigurationProvider, currentFieldEntityType);
                 }
 
                 var workPlanBuilder = _complexFieldNameToWorkPlanBuilderMappings[currentFieldName];
 
-                var currentFieldEntityType =
-                    _analyzerConfigurationProvider.GetField(entityType, currentFieldName).EntityName;
+
                 workPlanBuilder.AddFilter(currentFieldEntityType, filter.GetNextFilter());
                 return;
             }
@@ -101,7 +104,7 @@ namespace OctopusCore.Analyzer
 
             if (primitiveFieldsJobs.Count > 1 || complexFieldsToWorkPlan.Any())
             {
-                var unionQueryJob = new UnionQueryJob(primitiveFieldsJobs, complexFieldsToWorkPlan);
+                var unionQueryJob = new UnionQueryJob(_analyzerConfigurationProvider, EntityType, primitiveFieldsJobs, complexFieldsToWorkPlan);
                 allJobs.Add(unionQueryJob);
             }
 
@@ -131,7 +134,7 @@ namespace OctopusCore.Analyzer
         {
             if (_complexFieldNameToWorkPlanBuilderMappings.ContainsKey(field.Name) == false)
             {
-                _complexFieldNameToWorkPlanBuilderMappings[field.Name] = new WorkPlanBuilder(_dbHandlersResolver, _analyzerConfigurationProvider);
+                _complexFieldNameToWorkPlanBuilderMappings[field.Name] = new WorkPlanBuilder(_dbHandlersResolver, _analyzerConfigurationProvider, field.EntityName);
             }
 
             var workPlanBuilder = _complexFieldNameToWorkPlanBuilderMappings[field.Name];
@@ -187,7 +190,7 @@ namespace OctopusCore.Analyzer
                     var jobResult = queryJob.Result;
 
 
-                    return jobResult.EntityResults.Values.Select(x => x.Fields[field.Name]).Cast<Dictionary<string, EntityResult>>().SelectMany(x => x.Keys);
+                    return jobResult.EntityResults.Values.Select(x => x.Fields[field.Name]).Cast<Dictionary<string, EntityResult>>().SelectMany(x => x.Keys).Distinct(StringComparer.OrdinalIgnoreCase);
                 }
             }
             else
@@ -242,7 +245,7 @@ namespace OctopusCore.Analyzer
                     return true;
                 }
 
-                return string.Compare(entityType, field.EntityName, StringComparison.OrdinalIgnoreCase)<= 0;
+                return string.Compare(entityType, field.EntityName, StringComparison.OrdinalIgnoreCase) <= 0;
             }
 
 

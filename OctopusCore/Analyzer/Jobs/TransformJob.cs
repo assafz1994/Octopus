@@ -32,11 +32,23 @@ namespace OctopusCore.Analyzer.Jobs
             foreach (var entityGuid in entities.Keys)
             {
                 var entity = entities[entityGuid];
-                var transformedEntityGuid =
-                    ((Dictionary<string, EntityResult>) entity.Fields[_fieldFrom]).Keys
-                    .Single(); //not supporting arrays yet. oops
+                foreach (var transformedEntityGuid in ((Dictionary<string, EntityResult>)entity.Fields[_fieldFrom]).Keys)
+                {
+                    if (transformedEntities.ContainsKey(transformedEntityGuid) == false)
+                    {
+                        transformedEntities[transformedEntityGuid] = TransformEntity(entityGuid, entity);
+                    }
+                    else
+                    {
+                        var currentTransformedEntity = transformedEntities[transformedEntityGuid];//todo check
+                        var otherTransformedEntity = TransformEntity(entityGuid, entity);
 
-                transformedEntities[transformedEntityGuid] = TransformEntity(entityGuid, entity);
+                        ((Dictionary<string, EntityResult>) currentTransformedEntity.Fields[_fieldTo])[entityGuid] =
+                            otherTransformedEntity.Fields[_fieldTo][entityGuid];
+                    }
+
+                }
+
             }
 
             return Task.FromResult(new ExecutionResult(_transformedEntityType, transformedEntities));

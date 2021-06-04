@@ -187,34 +187,45 @@ namespace OctopusCore.DbHandlers
 
             while (await reader.ReadAsync())
             {
-                var dictionary = new Dictionary<string, dynamic>();
-                foreach (var fieldName in fieldsToSelect)
+                var currentEntityGuid = reader[StringConstants.Guid].ToString();
+                if (output.ContainsKey(currentEntityGuid) == false)
                 {
-                    dictionary[fieldName] = reader[fieldName];
+                    var dictionary = new Dictionary<string, dynamic>();
+                    //add all primitive fields
+                    foreach (var fieldName in fieldsToSelect)
+                    {
+                        dictionary[fieldName] = reader[fieldName];
+                    }
+                    output.Add(currentEntityGuid, new EntityResult(dictionary));
                 }
+
+                var currentEntity = output[currentEntityGuid];
 
                 foreach (var joinsTuple in joinsTuples)
                 {
-                    var complexFieldsToFields = new Dictionary<string, dynamic>();
-                    var tableName = _configurationProvider.GetTableName(joinsTuple.field.EntityName);
-                    foreach (var fieldNameOfComplexField in joinsTuple.fieldsToSelect)
+                    if (currentEntity.Fields.ContainsKey(joinsTuple.field.Name) == false)
                     {
-                        complexFieldsToFields[fieldNameOfComplexField] =
-                            reader[$"{tableName}_{joinsTuple.field.Name}_{fieldNameOfComplexField}"];
+                        currentEntity.Fields[joinsTuple.field.Name] = new Dictionary<string, EntityResult>();
                     }
 
+                    var complexFieldEntities = (Dictionary<string, EntityResult>)currentEntity.Fields[joinsTuple.field.Name];
+
+                    var complexFieldsToFields = new Dictionary<string, dynamic>();
+                    //todo this code is for future optimization when we can select many fields that are stored in the same database
+                    //var tableName = _configurationProvider.GetTableName(joinsTuple.field.EntityName);
+                    //foreach (var fieldNameOfComplexField in joinsTuple.fieldsToSelect)
+                    //{
+                    //    complexFieldsToFields[fieldNameOfComplexField] =
+                    //        reader[$"{tableName}_{joinsTuple.field.Name}_{fieldNameOfComplexField}"];
+                    //}
+
                     var guidOfComplexField = reader[$"{rootTable}_{joinsTuple.field.Name}"].ToString();
-                    dictionary[joinsTuple.field.Name] = new Dictionary<string, EntityResult>()
+                    if (complexFieldEntities.ContainsKey(guidOfComplexField) == false)
                     {
-                        {
-                            guidOfComplexField,new EntityResult(complexFieldsToFields)
-                        }
-                    };
+                        complexFieldEntities[guidOfComplexField] = new EntityResult(complexFieldsToFields);
+                    }
+
                 }
-
-                var fieldToValueMap = new EntityResult(dictionary);
-
-                output.Add(reader[StringConstants.Guid].ToString(), fieldToValueMap);
             }
 
             return output;
@@ -232,7 +243,7 @@ namespace OctopusCore.DbHandlers
                 if (filter.FieldNames.Count > 1) throw new ArgumentException("Fields with Include are not supported");
 
                 var filteredFieldName = $"{rootTableName}.{filter.FieldNames[0]}";
-                if (filter.FieldNames[0]!="guid" && _analyzerConfigurationProvider.IsComplexField(entityType, filter.FieldNames[0]))
+                if (filter.FieldNames[0] != "guid" && _analyzerConfigurationProvider.IsComplexField(entityType, filter.FieldNames[0]))
                 {
                     var field = _analyzerConfigurationProvider.GetField(entityType, filter.FieldNames[0]);
                     var connectionTableName = _configurationProvider.GetConnectionTable(entityType, field);

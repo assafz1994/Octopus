@@ -16,6 +16,48 @@ namespace Tests.DbsConfiguration
             TearDownDb();
         }
 
+        private readonly string[] _buyersEntities =
+        {
+            "buyerneoneo",
+        };
+
+        private readonly string[] _sellersEntities =
+        {
+            "sellerneosql",
+            "sellerneomongo",
+            "sellerneoneo"
+        };
+
+        private readonly string[] _buyersEntitiesWithJustGuids =
+        {
+            "buyersqlneo",
+            "buyermongoneo"
+        };
+
+        private readonly (string Entity1, string Entity2, string Field1, string Field2)[] _relationsTestRelationsTuples
+            =
+            {
+                ("buyerneoneo", "sellerneoneo", "buyFrom", "sellTo"),
+                ("buyerneoneo", "sellerneoneo", "buyFromMany", "sellToMany"),
+                ("buyerneoneo", "sellerneoneo", "favoriteSeller", ""),
+                ("buyerneoneo", "sellerneoneo", "favoriteSellerMany", ""),
+                ("buyerneoneo", "sellerneoneo", "", "favoriteBuyer"),
+                ("buyerneoneo", "sellerneoneo", "", "favoriteBuyerMany"),
+                ("buyersqlneo", "sellerneosql", "", "favoriteBuyer"),
+                ("buyersqlneo", "sellerneosql", "", "favoriteBuyerMany"),
+                ("buyermongoneo", "sellerneomongo", "", "favoriteBuyer"),
+                ("buyermongoneo", "sellerneomongo", "", "favoriteBuyerMany")
+            };
+
+        private const string CreateNodeTemplate =
+            @"CREATE (n:{0} {{name: '{1}', guid: '{2}'}})";
+        private const string CreateNodeJustGuidTemplate =
+            @"CREATE (n:{0} {{guid: '{1}'}})";
+
+        private const string CreateEdgeTemplate =
+            @"MATCH  (a:{0}),  (b:{1}) WHERE a.guid = '{2}' AND b.guid = '{3}' CREATE (a)-[r:{4}]->(b)";
+
+
         public void TearDownDb()
         {
             var tearDownStrings = new List<string>()
@@ -37,7 +79,7 @@ namespace Tests.DbsConfiguration
             var result = cursor.ToListAsync().Result;
             session.CloseAsync();
             return result;
-        }
+        } 
 
         public void SetUpAddresses()
         {
@@ -50,6 +92,59 @@ namespace Tests.DbsConfiguration
             foreach (var insertString in insertStrings)
             {
                 Execute(insertString);
+            }
+        }
+
+        public void SetUpRelations()
+        {
+            var commands = new List<string>();
+            
+
+            foreach (var entity in _buyersEntitiesWithJustGuids)
+            {
+                foreach (var (guid, name) in RelationsConsts.Buyers)
+                {
+                    commands.Add(string.Format(CreateNodeJustGuidTemplate, entity, guid));
+                }
+            }
+
+            foreach (var entity in _buyersEntities)
+            {
+                foreach (var (guid, name) in RelationsConsts.Buyers)
+                {
+                    commands.Add(string.Format(CreateNodeTemplate, entity, name, guid));
+                }
+            }
+
+            foreach (var entity in _sellersEntities)
+            {
+                foreach (var (guid, name) in RelationsConsts.Sellers)
+                {
+                    commands.Add(string.Format(CreateNodeTemplate, entity, name, guid));
+                }
+            }
+
+            foreach (var (entity1, entity2, field1, field2) in _relationsTestRelationsTuples)
+            {
+                foreach (var (guid1, guid2) in RelationsConsts.FieldsValuesMappings[(field1, field2)])
+                {
+                    if (string.IsNullOrEmpty(field1) == false)
+                    {
+                        commands.Add(string.Format(CreateEdgeTemplate, entity1, entity2, guid1, guid2, field1));
+                    }
+                    if (string.IsNullOrEmpty(field2) == false)
+                    {
+                        commands.Add(string.Format(CreateEdgeTemplate, entity2, entity1, guid2, guid1, field2));
+                    }
+
+                }
+            }
+
+
+
+            foreach (var command in commands)
+            {
+                Execute(command);
             }
         }
 

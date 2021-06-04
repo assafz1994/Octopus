@@ -66,7 +66,7 @@ namespace OctopusCore.Analyzer
         {
             var jobs = new List<Job>();
             var queryInfo = deleteQueryInfo.SubQueries.Values.ToList().First();
-            
+
             if (!(queryInfo is SelectQueryInfo selectQueryInfo))
             {
                 throw new Exception("No select");
@@ -87,7 +87,7 @@ namespace OctopusCore.Analyzer
 
         private WorkPlan AnalyzeSelectQuery(SelectQueryInfo selectQueryInfo)
         {
-            var workPlanBuilder = new WorkPlanBuilder(_dbHandlersResolver, _analyzerConfigurationProvider);
+            var workPlanBuilder = new WorkPlanBuilder(_dbHandlersResolver, _analyzerConfigurationProvider, selectQueryInfo.Entity);
             var subQueryWorkPlans = selectQueryInfo.SubQueries.ToDictionary(v => v.Key, v => AnalyzeQuery(v.Value));
             foreach (var queryFilter in selectQueryInfo.Filters ?? Enumerable.Empty<Filter>())
             {
