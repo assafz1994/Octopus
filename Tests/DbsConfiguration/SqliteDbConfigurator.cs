@@ -239,5 +239,10 @@ namespace Tests.DbsConfiguration
 
             return sb.ToString();
         }
+
+        public void InitPerformanceTests()
+        {
+            
+        }
     }
 }

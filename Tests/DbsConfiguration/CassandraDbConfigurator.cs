@@ -130,5 +130,10 @@ namespace Tests.DbsConfiguration
         {
             return _tables;
         }
+
+        public void InitPerformanceTests()
+        {
+            
+        }
     }
 }

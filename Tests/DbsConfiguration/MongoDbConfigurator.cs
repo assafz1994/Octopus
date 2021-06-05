@@ -175,5 +175,10 @@ namespace Tests.DbsConfiguration
                 db.DropCollection(collectionName);
             }
         }
+
+        public void InitPerformanceTests()
+        {
+            throw new NotImplementedException();
+        }
     }
 }

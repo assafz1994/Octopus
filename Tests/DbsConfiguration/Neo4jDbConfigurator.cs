@@ -159,5 +159,10 @@ namespace Tests.DbsConfiguration
         {
             SetUpAddresses();
         }
+
+        public void InitPerformanceTests()
+        {
+            throw new NotImplementedException();
+        }
     }
 }

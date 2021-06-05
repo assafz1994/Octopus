@@ -52,5 +52,13 @@ namespace Tests.DbsConfiguration
             _neo4JDbConfigurator.SetUpRelations();
             _mongoDbConfigurator.SetUpTestOfRelations();
         }
+
+        public void InitPerformanceTests()
+        {
+            _cassandraDbConfigurator.InitPerformanceTests();
+            _mongoDbConfigurator.InitPerformanceTests();
+            _neo4JDbConfigurator.InitPerformanceTests();
+            _sqliteDbConfigurator.InitPerformanceTests();
+        }
     }
 }
