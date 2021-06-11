@@ -16,7 +16,7 @@ namespace OctopusCore.Analyzer
         private readonly List<Filter> _filters;
         private readonly string _entityType;
         private Dictionary<string, WorkPlan> _subQueriesWorkPlans;
-        private List<(string entityType, Field field, List<string> fieldsToSelect)> _joinsTuples;//todo assaf will rename it
+        private List<(string entityType, Field field, List<string> fieldsToSelect)> _joinsTuples;
         private TaskCompletionSource<SelectQueryJob> _tcs;
 
         public SelectQueryJobBuilder(string entityType,IDbHandler dbHandler)

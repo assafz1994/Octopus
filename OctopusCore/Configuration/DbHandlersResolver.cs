@@ -9,7 +9,7 @@ namespace OctopusCore.Configuration
     public class DbHandlersResolver : IDbHandlersResolver
     {
         private readonly ConcurrentDictionary<string, IDbHandler> _databaseKeyToDbHandlerMapping;
-        private AnalyzerConfigurationProvider _analyzerConfigurationProvider; // todo remove it and move the get field into the SqlIteProvider how? IDK Yonatan will fix it
+        private AnalyzerConfigurationProvider _analyzerConfigurationProvider; 
 
 
         public DbHandlersResolver(Scheme scheme, DbConfigurations dbConfigurations)
@@ -35,7 +35,6 @@ namespace OctopusCore.Configuration
 
         private IDbHandler CreateDbHandler(DbConfiguration dbConfiguration, Scheme scheme)
         {
-            //todo change to dictionary for Ohad
             switch (dbConfiguration.DbType)
             {
                 case DbType.Sqlite:
