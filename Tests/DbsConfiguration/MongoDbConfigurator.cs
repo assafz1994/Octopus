@@ -178,7 +178,45 @@ namespace Tests.DbsConfiguration
 
         public void InitPerformanceTests()
         {
-            throw new NotImplementedException();
+            const int numOfRows = DbsConfigurator.NumOfRows;
+            var db = _dbClient.GetDatabase("mongodbtests_1");
+            foreach (var collectionName in _collectionsSellers)
+            {
+                var collection = db.GetCollection<BsonDocument>(collectionName);
+                var listToInsert = new List<BsonDocument>();
+                
+                for (var i = 0; i < numOfRows; i++)
+                {
+                    var guid = $"10000000-0000-0000-0000-000000{i:D6}";
+                    var name = $"seller{i}";
+                    listToInsert.Add(new BsonDocument
+                {
+                    {"guid", guid},
+                    {"name", name},
+                });
+                }
+                collection.InsertMany(listToInsert);
+            }
+
+            foreach (var collectionName in _collectionsBuyers)
+            {
+                var collection = db.GetCollection<BsonDocument>(collectionName);
+                var listToInsert = new List<BsonDocument>();
+
+                for (var i = 0; i < numOfRows; i++)
+                {
+                    var guid = $"00000000-0000-0000-0000-000000{i:D6}";
+                    var name = $"buyer{i}";
+                    var seller = $"10000000-0000-0000-0000-000000{i:D6}";
+                    listToInsert.Add(new BsonDocument
+                    {
+                        {"guid", guid},
+                        {"name", name},
+                        {"buyFrom",seller}
+                    });
+                }
+                collection.InsertMany(listToInsert);
+            }
         }
     }
 }

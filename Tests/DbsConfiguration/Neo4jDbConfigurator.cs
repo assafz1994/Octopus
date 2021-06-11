@@ -79,7 +79,7 @@ namespace Tests.DbsConfiguration
             var result = cursor.ToListAsync().Result;
             session.CloseAsync();
             return result;
-        } 
+        }
 
         public void SetUpAddresses()
         {
@@ -98,11 +98,11 @@ namespace Tests.DbsConfiguration
         public void SetUpRelations()
         {
             var commands = new List<string>();
-            
+
 
             foreach (var entity in _buyersEntitiesWithJustGuids)
             {
-                foreach (var (guid, name) in RelationsConsts.Buyers)
+                foreach (var (guid, _) in RelationsConsts.Buyers)
                 {
                     commands.Add(string.Format(CreateNodeJustGuidTemplate, entity, guid));
                 }
@@ -162,7 +162,52 @@ namespace Tests.DbsConfiguration
 
         public void InitPerformanceTests()
         {
-            throw new NotImplementedException();
+            var commands = new List<string>();
+
+            const int numOfRows = DbsConfigurator.NumOfRows;
+
+            foreach (var entity in _buyersEntitiesWithJustGuids)
+            {
+                for (var i = 0; i < numOfRows; i++)
+                {
+                    var guid = $"00000000-0000-0000-0000-000000{i:D6}";
+                    commands.Add(string.Format(CreateNodeJustGuidTemplate, entity, guid));
+                }
+            }
+
+            foreach (var entity in _buyersEntities)
+            {
+                for (var i = 0; i < numOfRows; i++)
+                {
+                    var guid = $"0000000-0000-0000-0000-000000{i:D6}";
+                    var name = $"buyer{i}";
+                    commands.Add(string.Format(CreateNodeTemplate, entity, name, guid));
+                }
+            }
+
+            foreach (var entity in _sellersEntities)
+            {
+                for (var i = 0; i < numOfRows; i++)
+                {
+                    var guid = $"1000000-0000-0000-0000-000000{i:D6}";
+                    var name = $"seller{i}";
+                    commands.Add(string.Format(CreateNodeTemplate, entity, name, guid));
+                }
+            }
+
+            for (var i = 0; i < numOfRows; i++)
+            {
+                var guidBuyer = $"0000000-0000-0000-0000-000000{i:D6}";
+                var guidSeller = $"1000000-0000-0000-0000-000000{i:D6}";
+                commands.Add(string.Format(CreateEdgeTemplate, "buyerneoneo", "sellerneoneo", guidBuyer, guidSeller, "buyFrom"));
+                commands.Add(string.Format(CreateEdgeTemplate, "sellerneoneo", "buyerneoneo", guidSeller, guidBuyer, "sellTo"));
+
+            }
+
+            foreach (var command in commands)
+            {
+                Execute(command);
+            }
         }
     }
 }

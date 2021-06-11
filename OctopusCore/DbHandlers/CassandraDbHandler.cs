@@ -26,7 +26,7 @@ namespace OctopusCore.DbHandlers
             _cluster = Cluster.Builder()
                 .AddContactPoint(_configurationProvider.ConnectionString)
                 .Build();
-            _session = _cluster.Connect(_configurationProvider.KeySpace);
+            // _session = _cluster.Connect(_configurationProvider.KeySpace);
         }
         public Task<ExecutionResult> ExecuteQueryWithFiltersAsync(IReadOnlyCollection<string> fieldsToSelect, IReadOnlyCollection<Filter> filters, string entityType,
             List<(string entityType, Field field, List<string> fieldsToSelect)> joinsTuples)

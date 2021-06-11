@@ -1,4 +1,6 @@
-﻿using System.Linq;
+﻿using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using Microsoft.Data.Sqlite;
 
@@ -57,6 +59,14 @@ namespace Tests.DbsConfiguration
                 ("buyersqlneo", "sellerneosql", "favoriteSeller", ""),
                 ("buyersqlneo", "sellerneosql", "favoriteSellerMany", "")
             };
+        
+        private readonly (string Entity1, string Entity2, string Field1, string Field2)[] _relationsPerformanceTestRelationsTuples
+            =
+            {
+                ("buyersqlsql", "sellersqlsql", "buyFrom", "sellTo"),
+                ("buyersqlmongo", "sellermongosql", "buyFrom", "sellTo"),
+                ("buyersqlneo", "sellerneosql", "buyFrom", "sellTo"),
+            };
 
         private readonly string[] _relationsTestSellersEntitiesTablesNames =
         {
@@ -67,8 +77,8 @@ namespace Tests.DbsConfiguration
         private readonly string _sql1DropTables;
         private readonly string _sql2DropTables;
         
-        public readonly string Sql1ConnectionString = "Data Source=C:\\Users\\Assaf\\source\\repos\\Octopus\\CommunicationLayer\\bin\\Debug\\netcoreapp3.1\\DataBases\\sqlite1_test_db.db";
-        //public readonly string Sql1ConnectionString = "Data Source=DataBases\\sqlite1_test_db.db";
+        // public readonly string Sql1ConnectionString = "Data Source=C:\\Users\\Assaf\\source\\repos\\Octopus\\CommunicationLayer\\bin\\Debug\\netcoreapp3.1\\DataBases\\sqlite1_test_db.db";
+        public readonly string Sql1ConnectionString = "Data Source=DataBases\\sqlite1_test_db.db";
         public readonly string Sql2ConnectionString = "Data Source=DataBases\\sqlite2_test_db.db";
 
         public SqliteDbConfigurator()
@@ -179,6 +189,14 @@ namespace Tests.DbsConfiguration
             SendCommand(Sql1ConnectionString, GetInsertRelationsQuery());
         }
 
+        public void InitPerformanceTests()
+        {
+            foreach (var query in GetBatch(GetPerformanceTestInitQuery()))
+            {
+                SendCommand(Sql1ConnectionString,query);
+            }
+        }
+
 
         private string GetInitRelationsQuery()
         {
@@ -240,9 +258,52 @@ namespace Tests.DbsConfiguration
             return sb.ToString();
         }
 
-        public void InitPerformanceTests()
+        private IEnumerable<string> GetBatch(IEnumerable<string> queries)
         {
-            
+            var sb = new StringBuilder();
+            int counter = 0;
+            foreach (var query in queries)
+            {
+                sb.AppendFormat(query);
+                counter++;
+                if (counter % 1000 == 0)
+                {
+                    yield return sb.ToString();
+                    sb = new StringBuilder();
+                }
+            }
+        }
+
+        private IEnumerable<string> GetPerformanceTestInitQuery()
+        {
+            const int numOfRows = DbsConfigurator.NumOfRows;
+            //entities tables 
+            foreach (var entityTableName in _relationsTestBuyersEntitiesTablesNames)
+                for (var i = 0; i < numOfRows; i++)
+                {
+                    var guid = $"00000000-0000-0000-0000-000000{i:D6}";
+                    var name = $"buyer{i}";
+                    yield return string.Format(InsertTemplate, entityTableName, "guid", "name", guid, name);
+                }
+
+            foreach (var entityTableName in _relationsTestSellersEntitiesTablesNames)
+                for (var i = 0; i < numOfRows; i++)
+                {
+                    var guid = $"10000000-0000-0000-0000-000000{i:D6}";
+                    var name = $"seller{i}";
+                    yield return string.Format(InsertTemplate, entityTableName, "guid", "name", guid, name);
+                }
+
+            foreach (var (entity1, entity2, field1, field2) in _relationsPerformanceTestRelationsTuples)
+            {
+                var tableName = string.Format(RelationTableTemplate, entity1, entity2, field1, field2);
+                for (var i = 0; i < numOfRows; i++)
+                {
+                    var guidBuyer = $"00000000-0000-0000-0000-000000{i:D6}";
+                    var guidSeller = $"10000000-0000-0000-0000-000000{i:D6}";
+                    yield return string.Format(InsertTemplate, tableName, entity1, entity2, guidBuyer, guidSeller);
+                }
+            }
         }
     }
 }
