@@ -8,13 +8,13 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CommunicationLayer", "Commu
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tests", "Tests\Tests.csproj", "{2E3C7ED0-A529-4CA0-BC78-7B9F9DA2AFA1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OctopusClient", "OctopusClient\OctopusClient.csproj", "{010A37A1-430E-4538-98F0-56774A799EA7}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OctopusClient", "OctopusClient\OctopusClient.csproj", "{010A37A1-430E-4538-98F0-56774A799EA7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Octopus.Common", "Octopus.Common\Octopus.Common.csproj", "{AC349FF5-FF33-48F4-BAFC-1DA24171D925}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Octopus.Common", "Octopus.Common\Octopus.Common.csproj", "{AC349FF5-FF33-48F4-BAFC-1DA24171D925}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Demos", "Demos", "{83A5387D-F1C9-4A68-86BD-6DC110DB26FF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OctopusDemo", "OctopusDemo\OctopusDemo.csproj", "{F47CCC4F-7F8E-4518-A097-0C98DE7AE829}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OctopusDemo", "OctopusDemo\OctopusDemo.csproj", "{F47CCC4F-7F8E-4518-A097-0C98DE7AE829}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

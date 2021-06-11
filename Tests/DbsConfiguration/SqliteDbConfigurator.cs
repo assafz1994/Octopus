@@ -66,7 +66,6 @@ namespace Tests.DbsConfiguration
 
         private readonly string _sql1DropTables;
         private readonly string _sql2DropTables;
-        
         public readonly string Sql1ConnectionString = "Data Source=DataBases\\sqlite1_test_db.db";
         public readonly string Sql2ConnectionString = "Data Source=DataBases\\sqlite2_test_db.db";
 
