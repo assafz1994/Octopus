@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Tests.DbsConfiguration
 {
-    class DbsConfigurator
+    public class DbsConfigurator
     {
         private CassandraDbConfigurator _cassandraDbConfigurator;
         private MongoDbConfigurator _mongoDbConfigurator;
