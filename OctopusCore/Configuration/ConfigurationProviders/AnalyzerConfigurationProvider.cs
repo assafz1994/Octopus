@@ -7,7 +7,6 @@ namespace OctopusCore.Configuration.ConfigurationProviders
 {
     public class AnalyzerConfigurationProvider : IAnalyzerConfigurationProvider
     {
-        //todo refactor dictionaries. create object for fields and database keys(entity -> fieldName -> object)
         private readonly Dictionary<string, Dictionary<string, List<string>>> _entityTypeToFieldNameToDatabaseKeys;
         private readonly Dictionary<string, Dictionary<string,Field>> _entityTypeToFieldNameToField;
 

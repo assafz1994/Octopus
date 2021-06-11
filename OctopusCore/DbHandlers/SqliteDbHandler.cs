@@ -121,7 +121,6 @@ namespace OctopusCore.DbHandlers
             return new ExecutionResult(entityType, new Dictionary<string, EntityResult>());
         }
 
-        //todo reuse this logic for all handlers
         private static string ValueToString(object argValue)
         {
             return argValue switch
@@ -252,7 +251,7 @@ namespace OctopusCore.DbHandlers
 
                 if (filter.Type == FilterType.In)
                 {
-                    var values = filter.CalcValue().Select(x => $"\"{x}\"");//todo just do something
+                    var values = filter.CalcValue().Select(x => $"\"{x}\"");
                     filtersAsString.Add($"{filteredFieldName} {GetFilterOperator(filter)} ({string.Join(",", values)})");
                 }
                 else

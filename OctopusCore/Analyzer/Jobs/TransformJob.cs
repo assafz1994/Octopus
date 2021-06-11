@@ -40,7 +40,7 @@ namespace OctopusCore.Analyzer.Jobs
                     }
                     else
                     {
-                        var currentTransformedEntity = transformedEntities[transformedEntityGuid];//todo check
+                        var currentTransformedEntity = transformedEntities[transformedEntityGuid];
                         var otherTransformedEntity = TransformEntity(entityGuid, entity);
 
                         ((Dictionary<string, EntityResult>) currentTransformedEntity.Fields[_fieldTo])[entityGuid] =

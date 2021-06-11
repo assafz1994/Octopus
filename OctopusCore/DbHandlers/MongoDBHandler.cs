@@ -36,7 +36,7 @@ namespace OctopusCore.DbHandlers
 
             var fieldsToSelectWithGuid = new List<string>(fieldsToSelect);
             fieldsToSelectWithGuid.AddRange(joinsTuples.Select(x =>
-                x.field.Name)); //todo we assume for now all fields in join tuple are complex fields of the same entity
+                x.field.Name)); // we assume for now all fields in join tuple are complex fields of the same entity
             var guidIsRequested = false;
 
             if (!fieldsToSelect.Contains("guid"))
@@ -132,7 +132,7 @@ namespace OctopusCore.DbHandlers
                 foreach (var joinTuple in joinsTuples)
                 {
                     var complexFieldsToFields =
-                        new Dictionary<string, dynamic>(); // todo add support in fields to select of a join tuple (right now we only get the guid)
+                        new Dictionary<string, dynamic>(); 
                     if (document[joinTuple.field.Name].IsBsonArray)
                     {
                         var array = new Dictionary<string, EntityResult>();

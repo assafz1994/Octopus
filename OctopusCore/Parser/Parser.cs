@@ -17,7 +17,6 @@ namespace OctopusCore.Parser
             {
                 BuildParseTree = true
             };
-            //todo: add error handling
             var tree = parser.r();
             var queryExtractor = new QueryExtractor();
             var output = queryExtractor.Visit(tree);

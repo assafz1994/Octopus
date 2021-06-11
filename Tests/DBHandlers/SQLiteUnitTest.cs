@@ -246,9 +246,6 @@ namespace Tests.DBHandlers
                 };
             var entityRes = new EntityResult(
                 new Dictionary<string, dynamic>()
-                {
-                    {"name", "tn3"}
-                }
             );
 
             var actualExecutionResult = _sqliteDBHandler

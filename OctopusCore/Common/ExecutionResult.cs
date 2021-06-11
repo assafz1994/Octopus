@@ -9,7 +9,6 @@ namespace OctopusCore.Contract
     public class ExecutionResult
     {
         public string Type { get; set; }
-        //todo change type to Guid instead of string (important for case sensitivity)
         public Dictionary<string, EntityResult> EntityResults { get; set; } // guid -> entity 
         public ExecutionResult(string type, Dictionary<string, EntityResult> entityResults)
         {
