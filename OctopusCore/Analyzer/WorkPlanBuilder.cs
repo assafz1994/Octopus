@@ -51,7 +51,6 @@ namespace OctopusCore.Analyzer
                 return;
             }
 
-            //todo please delete me
             //we assume that the guid is entered last
             if (filter.FieldNames.First() == StringConstants.Guid)
             {
@@ -63,7 +62,6 @@ namespace OctopusCore.Analyzer
                 return;
             }
 
-            //todo add to all fields
             var queryJobBuilder = GetOrCreateQueryJobBuilder(entityType, filter.FieldNames.Single());
             queryJobBuilder.AddFilter(filter);
         }
@@ -93,7 +91,7 @@ namespace OctopusCore.Analyzer
             var complexFieldsToWorkPlan = new Dictionary<string, WorkPlan>();
             foreach (var complexFieldName in _complexFieldNameToWorkPlanBuilderMappings.Keys)
             {
-                var workPlan = _complexFieldNameToWorkPlanBuilderMappings[complexFieldName].Build(subQueryWorkPlans);//todo check//todo solve problem with subqueries
+                var workPlan = _complexFieldNameToWorkPlanBuilderMappings[complexFieldName].Build(subQueryWorkPlans);
                 if (workPlan.Jobs.Any() == false)
                 {
                     continue;
@@ -140,10 +138,9 @@ namespace OctopusCore.Analyzer
             var workPlanBuilder = _complexFieldNameToWorkPlanBuilderMappings[field.Name];
 
 
-            //todo remove duplicate code pattern
             foreach (var includedFieldsField in includedFields.Fields ?? Enumerable.Empty<string>())
             {
-                if (_analyzerConfigurationProvider.IsComplexField(field.EntityName, includedFieldsField))//todo please don't commit me please!!!!
+                if (_analyzerConfigurationProvider.IsComplexField(field.EntityName, includedFieldsField))
                 {
                     var fieldDetails = _analyzerConfigurationProvider.GetField(field.EntityName, includedFieldsField);
                     workPlanBuilder.AddProjectionComplexField(fieldDetails.EntityName, fieldDetails, includedFields.Includes.Single(x => x.Name.Equals(includedFieldsField, StringComparison.OrdinalIgnoreCase)));
@@ -159,7 +156,7 @@ namespace OctopusCore.Analyzer
             {
                 var queryJobBuilder = GetOrCreateQueryJobBuilder(entityType, field.Name);
                 //fieldToSelect is empty because we want to query only the Guids
-                queryJobBuilder.AddProjectionComplexField(entityType, field, new List<string>());//todo consider removing the list
+                queryJobBuilder.AddProjectionComplexField(entityType, field, new List<string>());
 
                 var futureJob = queryJobBuilder.GetFutureJob();
 
@@ -253,9 +250,7 @@ namespace OctopusCore.Analyzer
 
             //same DB optimization
             //var queryJobBuilder = GetOrCreateQueryJobBuilder(entityType, field.Name);
-            //queryJobBuilder.AddProjectionComplexField(entityType, field,
-            //    includedFields); //todo yonatan will make sure included fields are exists and simple
-            ////todo yonatan will make sure entities are in the same db
+            //queryJobBuilder.AddProjectionComplexField(entityType, field,includedFields);
         }
     }
 }

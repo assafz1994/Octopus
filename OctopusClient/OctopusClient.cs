@@ -35,7 +35,7 @@ namespace Octopus.Client
 
             if (octopusResponse.IsSuccess == false)
             {
-                throw new Exception(octopusResponse.ErrorMessage);//todo make custom exception
+                throw new Exception(octopusResponse.ErrorMessage);
             }
         }
 
@@ -48,7 +48,7 @@ namespace Octopus.Client
 
             if (octopusResponse.IsSuccess == false)
             {
-                throw new Exception(octopusResponse.ErrorMessage);//todo make custom exception
+                throw new Exception(octopusResponse.ErrorMessage);
             }
 
             return octopusResponse.Content.Select(fields =>

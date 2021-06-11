@@ -103,7 +103,6 @@ namespace OctopusCore.Analyzer
             {
                 if (_analyzerConfigurationProvider.IsComplexField(selectQueryInfo.Entity, fieldName))
                 {
-                    //todo yonatan will validate that query includes fields!
                     var field = _analyzerConfigurationProvider.GetField(selectQueryInfo.Entity, fieldName);
                     workPlanBuilder.AddProjectionComplexField(selectQueryInfo.Entity, field, selectQueryInfo.Includes.Single(x => x.Name.Equals(fieldName, StringComparison.OrdinalIgnoreCase)));
                 }
