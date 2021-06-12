@@ -27,8 +27,9 @@ namespace Tests.DBHandlers
         [OneTimeSetUp]
         public void OneTimeSetUp()
         {
+            const string connectionString = "Data Source=DataBases\\sqlite1_test_db.db";
             _client = new OctopusClient("http://localhost:5000");
-            _sqliteDbConfigurator = new SqliteDbConfigurator();
+            _sqliteDbConfigurator = new SqliteDbConfigurator(connectionString);
             var entities = new List<Entity>()
             {
                 new Entity()
@@ -135,7 +136,11 @@ namespace Tests.DBHandlers
             };
 
             var configuration = new DbConfiguration()
-                {Entities = entities, Id = "sql1", ConnectionString = "Data Source=DataBases\\sqlite1_test_db.db"};
+                {
+                    Entities = entities, 
+                    Id = "sql1", 
+                    ConnectionString = connectionString
+            };
             var provider = new SqliteConfigurationProvider(schema, configuration);
             var configurations = new DbConfigurations()
             {
