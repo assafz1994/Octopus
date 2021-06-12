@@ -66,11 +66,12 @@ namespace Tests.DbsConfiguration
 
         private readonly string _sql1DropTables;
         private readonly string _sql2DropTables;
-        public readonly string Sql1ConnectionString = "Data Source=DataBases\\sqlite1_test_db.db";
+        public readonly string Sql1ConnectionString;
         public readonly string Sql2ConnectionString = "Data Source=DataBases\\sqlite2_test_db.db";
 
-        public SqliteDbConfigurator()
+        public SqliteDbConfigurator(string sql1ConnectionString)
         {
+            Sql1ConnectionString = sql1ConnectionString;
             _sql1DropTables = @"DROP TABLE IF EXISTS ""student_table"";
                               DROP TABLE IF EXISTS ""teacher_table"";
                               DROP TABLE IF EXISTS ""student_teacher_taughtBy_teach""; ";
@@ -99,7 +100,7 @@ namespace Tests.DbsConfiguration
 	                PRIMARY KEY(""student"",""teacher"")
                 );
 
-                Create table IF NOT EXISTS ""Animal_table""
+                Create table IF NOT EXISTS ""animal_table""
                 (
                     ""guid""	TEXT,
                     ""aid""	TEXT,
