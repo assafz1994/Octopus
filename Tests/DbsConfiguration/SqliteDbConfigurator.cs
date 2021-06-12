@@ -1,8 +1,6 @@
 ﻿using System.Linq;
 using System.Text;
 using Microsoft.Data.Sqlite;
-using System;
-using System.IO;
 
 namespace Tests.DbsConfiguration
 {
