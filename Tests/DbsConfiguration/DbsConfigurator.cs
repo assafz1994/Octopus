@@ -10,7 +10,7 @@ namespace Tests.DbsConfiguration
         private MongoDbConfigurator _mongoDbConfigurator;
         private Neo4jDbConfigurator _neo4JDbConfigurator;
         private SqliteDbConfigurator _sqliteDbConfigurator;
-        public const int NumOfRows = 10_000;
+        public const int NumOfRows = 100_000;
 
         public DbsConfigurator()
         {
@@ -23,17 +23,17 @@ namespace Tests.DbsConfiguration
         public void SetUpDbs()
         {
            // _cassandraDbConfigurator.SetUpDb();
-           // _mongoDbConfigurator.SetUpDb();
+            _mongoDbConfigurator.SetUpDb();
            _neo4JDbConfigurator.SetUpDb();
-           // _sqliteDbConfigurator.SetUpDb();
+            _sqliteDbConfigurator.SetUpDb();
         }
 
         public void TearDownDbs()
         {
            // _cassandraDbConfigurator.TearDownDb();
-            // _mongoDbConfigurator.TearDownDb();
+             _mongoDbConfigurator.TearDownDb();
            _neo4JDbConfigurator.TearDownDb();
-           // _sqliteDbConfigurator.TearDownDb();
+            _sqliteDbConfigurator.TearDownDb();
         }
        
         public void SetUpTestOfAnimals()
@@ -57,9 +57,9 @@ namespace Tests.DbsConfiguration
         public void InitPerformanceTests()
         {
             // _cassandraDbConfigurator.InitPerformanceTests();
-            // _mongoDbConfigurator.InitPerformanceTests();
-            _neo4JDbConfigurator.InitPerformanceTests();
-            // _sqliteDbConfigurator.InitPerformanceTests();
+             _mongoDbConfigurator.InitPerformanceTests();
+             _neo4JDbConfigurator.InitPerformanceTests();
+             _sqliteDbConfigurator.InitPerformanceTests();
         }
     }
 }

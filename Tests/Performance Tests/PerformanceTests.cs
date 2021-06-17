@@ -13,7 +13,6 @@ namespace Tests.Performance_Tests
     {
         private OctopusClient _client;
         private DbsConfigurator _dbsConfigurator;
-        private const int NumOfEntries = 10000;
         private List<string> _queriesTemplates;
 
         [OneTimeSetUp]
@@ -25,8 +24,9 @@ namespace Tests.Performance_Tests
             _dbsConfigurator.InitPerformanceTests();
             _queriesTemplates = new List<string>()
             {
-                "from {0} s | select s(name,buyFrom) include(buyFrom(name))",
-                "from {0} s | select s(name)"
+                "from {0} s | select s(name)",
+                "from {0} s | select s(name,buyFrom) include(buyFrom(name))"
+
                 // "from {0} s | select s(name,buyFromMany) include(buyFromMany(name))",
                 // "from {0} s | select s(name,favoriteSeller) include(favoriteSeller(name))",
                 // "from {0} s | select s(name,favoriteSellerMany) include(favoriteSellerMany(name))",
@@ -37,12 +37,12 @@ namespace Tests.Performance_Tests
             };
         }
 
-        // [TestCase("buyersqlsql")]
-        // [TestCase("buyersqlmongo")]
-        // [TestCase("buyersqlneo")]
-        // [TestCase("buyermongoneo")]
+        [TestCase("buyersqlsql")]
+        [TestCase("buyersqlmongo")]
+        [TestCase("buyersqlneo")]
+        [TestCase("buyermongoneo")]
         [TestCase("buyerneoneo")]
-        // [TestCase("buyermongomongo")]
+        [TestCase("buyermongomongo")]
         public void TestPerformance(string entityName)
         {
             foreach (var queryTemplate in _queriesTemplates)
@@ -52,7 +52,7 @@ namespace Tests.Performance_Tests
                 var entities = _client.ExecuteQuery(query).Result;
                 var diff = startTime.Elapsed;
                 System.Diagnostics.Trace.WriteLine(diff);
-                Assert.AreEqual(entities.Length, NumOfEntries);
+                Assert.AreEqual(entities.Length, DbsConfigurator.NumOfRows);
             }
         }
 

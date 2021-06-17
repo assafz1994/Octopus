@@ -3,7 +3,7 @@
     {
       "Id": "sql1",
       "DbType": "Sqlite",
-      "ConnectionString": "Data Source=C:\\Users\\ydyb9\\source\\repos\\Octopus\\Tests\\bin\\Debug\\netcoreapp3.1\\DataBases\\sqlite1_test_db.db",
+      "ConnectionString": "DataBases\\sqlite1_test_db.db",
       "Entities": [
         {
           "Name": "student",

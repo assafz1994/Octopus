@@ -179,7 +179,7 @@ namespace Tests.DbsConfiguration
             {
                 for (var i = 0; i < numOfRows; i++)
                 {
-                    var guid = $"0000000-0000-0000-0000-000000{i:D6}";
+                    var guid = $"00000000-0000-0000-0000-000000{i:D6}";
                     var name = $"buyer{i}";
                     commands.Add(string.Format(CreateNodeTemplate, entity, name, guid));
                 }
@@ -189,7 +189,7 @@ namespace Tests.DbsConfiguration
             {
                 for (var i = 0; i < numOfRows; i++)
                 {
-                    var guid = $"1000000-0000-0000-0000-000000{i:D6}";
+                    var guid = $"10000000-0000-0000-0000-000000{i:D6}";
                     var name = $"seller{i}";
                     commands.Add(string.Format(CreateNodeTemplate, entity, name, guid));
                 }
@@ -197,8 +197,8 @@ namespace Tests.DbsConfiguration
 
             for (var i = 0; i < numOfRows; i++)
             {
-                var guidBuyer = $"0000000-0000-0000-0000-000000{i:D6}";
-                var guidSeller = $"1000000-0000-0000-0000-000000{i:D6}";
+                var guidBuyer = $"00000000-0000-0000-0000-000000{i:D6}";
+                var guidSeller = $"10000000-0000-0000-0000-000000{i:D6}";
                 commands.Add(string.Format(CreateEdgeTemplate, "buyerneoneo", "sellerneoneo", guidBuyer, guidSeller, "buyFrom"));
                 commands.Add(string.Format(CreateEdgeTemplate, "sellerneoneo", "buyerneoneo", guidSeller, guidBuyer, "sellTo"));
 
